@@ -7,7 +7,7 @@ import json
 import sys, os
 from datetime import datetime
 from pathlib import Path
-from dotenv import load_dotenv
+from dotenv import find_dotenv, load_dotenv
 
 # 프로젝트 루트를 sys.path에 추가
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
@@ -19,7 +19,7 @@ from sector_collectors.relative_strength import get_relative_strength_analysis
 from sector_collectors.valuation        import get_valuation_analysis
 from utils.logger                import get_logger
 
-load_dotenv()
+load_dotenv(find_dotenv())
 logger = get_logger("sector_agent")
 
 

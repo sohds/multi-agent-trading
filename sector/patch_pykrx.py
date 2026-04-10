@@ -254,8 +254,8 @@ def verify_patch():
 if __name__ == "__main__":
     # .env 로드
     try:
-        from dotenv import load_dotenv
-        load_dotenv()
+        from dotenv import find_dotenv, load_dotenv
+        load_dotenv(find_dotenv())
         print("✅ .env 로드 완료")
     except ImportError:
         print("⚠️  python-dotenv 없음, 환경변수는 시스템 설정값을 사용합니다.")

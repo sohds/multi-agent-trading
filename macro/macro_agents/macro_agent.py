@@ -2,13 +2,13 @@ import json
 import os
 from datetime import datetime
 from pathlib import Path
-from dotenv import load_dotenv
+from dotenv import find_dotenv, load_dotenv
 
 from macro_collectors.ecos_api import get_macro_raw_data
 from macro_collectors.quant_models import run_macro_quant_pipeline
 from utils.logger import get_logger
 
-load_dotenv()
+load_dotenv(find_dotenv())
 logger = get_logger("macro_agent")
 
 def run_macro_agent() -> dict:

@@ -23,9 +23,9 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-from dotenv import load_dotenv
+from dotenv import find_dotenv, load_dotenv
 
-load_dotenv()
+load_dotenv(find_dotenv())
 
 # ── sys.path 설정 ─────────────────────────────────────────────
 BULL_BEAR_ROOT = Path(__file__).parent

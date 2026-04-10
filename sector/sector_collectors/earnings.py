@@ -10,10 +10,10 @@ import xml.etree.ElementTree as ET
 import requests
 from datetime import datetime
 from typing import Optional
-from dotenv import load_dotenv
+from dotenv import find_dotenv, load_dotenv
 from utils.logger import get_logger
 
-load_dotenv()
+load_dotenv(find_dotenv())
 logger = get_logger("earnings")
 
 DART_API_KEY = os.getenv("DART_API_KEY", "")

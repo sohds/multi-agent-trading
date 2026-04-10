@@ -12,10 +12,10 @@ from typing import Optional
 
 from bs4 import BeautifulSoup
 from pykrx import stock as pykrx_stock
-from dotenv import load_dotenv
+from dotenv import find_dotenv, load_dotenv
 from utils.logger import get_logger
 
-load_dotenv()
+load_dotenv(find_dotenv())
 logger = get_logger("naver_finance")
 
 REQUEST_DELAY = float(os.getenv("NAVER_REQUEST_DELAY", "1.0"))

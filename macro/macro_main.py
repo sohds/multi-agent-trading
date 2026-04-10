@@ -1,9 +1,9 @@
 import os
 import sys
 import json
-from dotenv import load_dotenv
+from dotenv import find_dotenv, load_dotenv
 
-load_dotenv()
+load_dotenv(find_dotenv())
 sys.path.insert(0, os.path.dirname(__file__))
 
 from macro_agents.macro_agent import run_macro_agent, save_payload

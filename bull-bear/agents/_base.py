@@ -8,9 +8,9 @@ import json
 import os
 
 from anthropic import Anthropic
-from dotenv import load_dotenv
+from dotenv import find_dotenv, load_dotenv
 
-load_dotenv()
+load_dotenv(find_dotenv())
 
 
 def _call_llm(

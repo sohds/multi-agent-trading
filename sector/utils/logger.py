@@ -3,9 +3,9 @@
 """
 import logging
 import os
-from dotenv import load_dotenv
+from dotenv import find_dotenv, load_dotenv
 
-load_dotenv()
+load_dotenv(find_dotenv())
 
 def get_logger(name: str) -> logging.Logger:
     log_level = os.getenv("LOG_LEVEL", "INFO").upper()

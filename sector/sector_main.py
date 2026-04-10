@@ -6,9 +6,9 @@
 """
 import os
 import sys
-from dotenv import load_dotenv
+from dotenv import find_dotenv, load_dotenv
 
-load_dotenv()
+load_dotenv(find_dotenv())
 
 # sector 디렉토리를 sys.path에 추가 (collectors, utils 등 하위 모듈 탐색용)
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
