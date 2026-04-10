@@ -1,64 +1,80 @@
-# pykrx, yfinance 데이터 수집 로직
+import requests
 import yfinance as yf
 from pykrx import stock
 from datetime import datetime, timedelta
-import pandas as pd
+
+KRX_AUTH_KEY = "74D1B99DFBF345BBA3FB4476510A4BED4C78D13A"
 
 class MarketSentimentCollector:
     def __init__(self):
         self.kospi_ticker = "^KS11"
+        self.vkospi_url = "https://data-dbg.krx.co.kr/svc/apis/idx/drvprod_dd_trd"
+
+    def _fetch_vkospi(self, date_str: str) -> dict:
+        try:
+            resp = requests.get(
+                self.vkospi_url,
+                params={"AUTH_KEY": KRX_AUTH_KEY, "basDd": date_str},
+                timeout=10
+            )
+            items = resp.json().get("OutBlock_1", [])
+            vkospi_item = next(
+                (item for item in items if "변동성" in item.get("IDX_NM", "")),
+                None
+            )
+            if not vkospi_item:
+                return {"value": None, "change": None, "change_rate": None}
+
+            return {
+                "value":       float(vkospi_item["CLSPRC_IDX"]),
+                "change":      float(vkospi_item["CMPPREVDD_IDX"]),
+                "change_rate": float(vkospi_item["FLUC_RT"]),
+            }
+        except Exception as e:
+            print(f"❌ VKOSPI 조회 실패: {e}")
+            return {"value": None, "change": None, "change_rate": None}
 
     def fetch_all_data(self):
-        # 1. 날짜 설정 (최근 7일)
-        end_date = datetime.now().strftime("%Y%m%d")
+        end_date   = (datetime.now() - timedelta(days=1)).strftime("%Y%m%d")
         start_date = (datetime.now() - timedelta(days=7)).strftime("%Y%m%d")
 
-        # 2. 외국인 수급 데이터 (pykrx)
-        # KOSPI 시장 전체의 투자자별 순매수량 합계
-        df_investor = stock.get_market_net_purchases_of_equities(start_date, end_date, "KOSPI")
-        foreign_net_buy = int(df_investor['외국인'].sum()) if '외국인' in df_investor.columns else 0
+        # --- 외국인 수급 ---
+        df_investor = stock.get_market_trading_value_by_investor(
+            start_date, end_date, "KOSPI"
+        )
+        if df_investor is None or df_investor.empty:
+            net_buy, trend = 0, "데이터 없음"
+        else:
+            raw_value = float(df_investor.loc['외국인', '순매수'])
+            net_buy   = round(raw_value / 1e8)
+            trend     = "순매수" if raw_value > 0 else "순매도"
 
-        # 3. 코스피 지수 변화율 (yfinance)
+        # --- 코스피 ---
         kospi_df = yf.download(self.kospi_ticker, period="7d", progress=False)
         if not kospi_df.empty:
-            curr_kospi = kospi_df['Close'].iloc[-1].item()
-            prev_kospi = kospi_df['Close'].iloc[0].item()
+            curr_kospi   = kospi_df['Close'].iloc[-1].item()
+            prev_kospi   = kospi_df['Close'].iloc[0].item()
             kospi_change = (curr_kospi - prev_kospi) / prev_kospi
-            # 변화율이 0보다 크면 '상승', 작거나 같으면 '하락'
             market_trend = "상승" if kospi_change > 0 else "하락"
         else:
-            kospi_change = 0.0
-            market_trend = "정체"
+            kospi_change, market_trend = 0.0, "정체"
 
-        # 4. VKOSPI (API 대기 중 -> 일단 더미 데이터 처리)
-        vkospi_dummy = {"value": 20.0, "change_weekly": 0.0}
+        # --- VKOSPI ---
+        vkospi = self._fetch_vkospi(end_date)
 
         return {
-            "vkospi": vkospi_dummy,
-            "foreign_net_buy": foreign_net_buy,
+            "vkospi": vkospi,
+            "foreign_flow": {"net_buy": net_buy, "trend": trend},
             "kospi_change_rate": kospi_change,
             "market_trend": market_trend
         }
-    
-# --- 테스트 섹션 ---
+
+
 if __name__ == "__main__":
-    print("🔍 데이터 수집을 시작합니다...")
-    
-    # 1. 클래스 생성
     collector = MarketSentimentCollector()
-    
-    try:
-        # 2. 데이터 수집 실행
-        result = collector.fetch_all_data()
-        
-        # 3. 결과 출력
-        print("\n✅ 수집 성공!")
-        print("-" * 30)
-        print(f"🔹 VKOSPI: {result['vkospi']['value']} (변화: {result['vkospi']['change_weekly']})")
-        print(f"🔹 외국인 순매수합: {result['foreign_net_buy']:,} 원")
-        print(f"🔹 코스피 변화율: {result['kospi_change_rate']:.2%}")
-        print(f"🔹 시장 트렌드: {result['market_trend']}")
-        print("-" * 30)
-        
-    except Exception as e:
-        print(f"\n❌ 에러 발생: {e}")
+    result = collector.fetch_all_data()
+
+    print(f"VKOSPI: {result['vkospi']['value']} ({result['vkospi']['change_rate']}%)")
+    print(f"외국인 순매수: {result['foreign_flow']['net_buy']:,} 억원 ({result['foreign_flow']['trend']})")
+    print(f"코스피 변화율: {result['kospi_change_rate']:.2%}")
+    print(f"시장 트렌드:   {result['market_trend']}")
