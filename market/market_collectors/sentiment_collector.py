@@ -192,17 +192,3 @@ class MarketSentimentCollector:
             "reason": reasons
         }
         return report
-
-if __name__ == "__main__":
-    # .env 파일에서 환경변수 로드
-    try:
-        from dotenv import load_dotenv
-        load_dotenv()
-    except ImportError:
-        print("⚠️ python-dotenv가 설치되어 있지 않습니다. 시스템 환경변수를 사용합니다.")
-
-    collector = MarketSentimentCollector()
-    final_json = collector.analyze_sentiment()
-    
-    # JSON 형식으로 출력 (한글 깨짐 방지)
-    print(json.dumps(final_json, indent=2, ensure_ascii=False))
