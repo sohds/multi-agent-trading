@@ -170,25 +170,35 @@ class MarketSentimentCollector:
         # 3. 최종 JSON 구조화
         # --------------------------------------------------------
         report = {
-            "sentiment_label": label,
-            "sentiment_score": score,
-            "vkospi": {
-                "value": vkospi['value'],
-                "change_weekly": vkospi['change']
+            "metadata": {
+                "source": "Market_Agent",
+                "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "target_date": end_date, # 분석 기준이 된 날짜 (ex: 20260414)
+                "version": "1.0"
             },
-            "foreign_flow": {
-                "net_buy": net_buy,
-                "trend": foreign_trend
+            "analysis": {
+                "sentiment_label": label,
+                "sentiment_score": score,
+                "confidence": 0.85, 
+                "risk_signal": {
+                    "fomo": score >= 0.8,
+                    "panic": score <= 0.3
+                }
             },
-            "market_momentum": {
-                "kospi_change": round(kospi_change, 4),
-                "trend": market_trend
+            "raw_data": {
+                "vkospi": {
+                    "value": vkospi['value'],
+                    "change_weekly": vkospi['change']
+                },
+                "foreign_flow": {
+                    "net_buy": net_buy,
+                    "trend": foreign_trend
+                },
+                "market_momentum": {
+                    "kospi_change": round(kospi_change, 4),
+                    "trend": market_trend
+                }
             },
-            "risk_signal": {
-                "fomo": score >= 0.8,    # 과열 상태일 때 FOMO 경고
-                "panic": score <= 0.3    # 공포 상태일 때 Panic 경고
-            },
-            "confidence": 0.85, 
             "reason": reasons
         }
         return report
