@@ -4,6 +4,7 @@ import os
 import sys
 import subprocess
 import json
+from datetime import datetime
 
 def apply_pykrx_patch():
     """market_main.py 실행 전 pykrx 패치 스크립트를 자동 실행"""
@@ -54,8 +55,12 @@ if __name__ == "__main__":
     
     # 만약 output 폴더가 없다면 자동으로 생성
     os.makedirs(output_dir, exist_ok=True)
-    
-    output_path = os.path.join(output_dir, "market_agent.json")
+
+    # 파일이 저장된 timestamp를 파일명에 추가
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    filename = f"market_agent_{timestamp}.json"
+
+    output_path = os.path.join(output_dir, filename)
     
     try:
         with open(output_path, "w", encoding="utf-8") as f:
