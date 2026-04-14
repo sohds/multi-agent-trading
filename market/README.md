@@ -74,6 +74,7 @@ KRX_PW=your_krx_password
 ```
 
 > **KRX_ID / KRX_PW** : [KRX 데이터 포털](https://data.krx.co.kr)에서 회원가입을 진행한 후, 아이디와 비밀번호를 입력합니다.
+
 > **KRX_AUTH_KEY** : [KRX 데이터 포털](https://data.krx.co.kr)에서 API 인증키 신청 후 발급받을 수 있습니다. 추가로 https://openapi.krx.co.kr/contents/OPP/USES/service/OPPUSES001_S2.cmd?BO_ID=rPBjbLtScMwmSXWDOYPd 에서 '파생상품지수 시세정보'의 API 이용신청을 해야합니다.
 
 ### 3. pykrx 패치 (최초 1회)
@@ -84,7 +85,6 @@ KRX_PW=your_krx_password
 python market/utils/patch_pykrx.py
 ```
 
-> pykrx를 재설치한 경우 다시 실행해야 합니다.
 
 ---
 
