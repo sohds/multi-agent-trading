@@ -161,7 +161,7 @@ class MarketSentimentCollector:
             label = "과열"
         elif score >= 0.6:
             label = "낙관"
-        elif score >= 0.3:
+        elif score >= 0.3: 
             label = "중립"
         else:
             label = "공포"
