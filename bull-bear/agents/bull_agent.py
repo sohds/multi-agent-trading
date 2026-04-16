@@ -47,7 +47,7 @@ topic_type별로 아래 순서대로 논거를 구성하세요.
 def run_bull_agent(
     input_package: dict,
     bear_argument: dict | None = None,
-    model: str = "claude-sonnet-4-6",
+    model: str = "gpt-5.4-mini",
 ) -> dict:
     """
     Bull 에이전트 실행
@@ -55,7 +55,7 @@ def run_bull_agent(
     Args:
         input_package:  불/베어 공통 입력 패키지 (spec §5)
         bear_argument:  직전 라운드 Bear 출력 (2라운드 이상 시 전달, 없으면 None)
-        model:          사용할 Claude 모델 ID
+        model:          사용할 OpenAI 모델 ID
 
     Returns:
         dict: {stance, confidence, arguments, rebuttal, summary}

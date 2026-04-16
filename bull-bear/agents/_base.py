@@ -7,7 +7,7 @@
 import json
 import os
 
-from anthropic import Anthropic
+from openai import OpenAI
 from dotenv import find_dotenv, load_dotenv
 
 load_dotenv(find_dotenv())
@@ -21,22 +21,22 @@ def _call_llm(
     model: str,
 ) -> dict:
     """
-    Claude API를 호출하고 JSON 응답을 파싱합니다.
+    OpenAI API를 호출하고 JSON 응답을 파싱합니다.
 
     Args:
         system_prompt:      에이전트별 시스템 프롬프트 (불/베어 구분)
         input_package:      불/베어 공통 입력 패키지 (spec §5)
         opponent_argument:  직전 라운드 상대방 출력 dict (없으면 None)
         opponent_label:     상대방 역할명 (예: "Bear", "Bull")
-        model:              Claude 모델 ID
+        model:              OpenAI 모델 ID
 
     Returns:
         dict: 에이전트 출력 JSON
               오류 시 {"error": str, "raw_response": str (있을 경우)}
     """
-    api_key = os.getenv("ANTHROPIC_API_KEY")
+    api_key = os.getenv("OPENAI_API_KEY")
     if not api_key:
-        return {"error": "ANTHROPIC_API_KEY가 설정되지 않았습니다. .env 파일을 확인하세요."}
+        return {"error": "OPENAI_API_KEY가 설정되지 않았습니다. .env 파일을 확인하세요."}
 
     opponent_section = (
         json.dumps(opponent_argument, ensure_ascii=False, indent=2)
@@ -54,14 +54,16 @@ def _call_llm(
 
     raw = ""
     try:
-        client = Anthropic(api_key=api_key)
-        response = client.messages.create(
+        client = OpenAI(api_key=api_key)
+        response = client.chat.completions.create(
             model=model,
             max_tokens=1024,
-            system=system_prompt,
-            messages=[{"role": "user", "content": user_message}],
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_message},
+            ],
         )
-        raw = response.content[0].text.strip()
+        raw = response.choices[0].message.content.strip()
 
         # 모델이 마크다운 코드블록으로 감쌀 경우 제거
         if raw.startswith("```"):
