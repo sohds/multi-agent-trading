@@ -10,11 +10,12 @@
     TARGET_NAME         분석 종목명         (기본: 삼성전자)
     SECTOR_ETF_TICKER   섹터 ETF 코드       (기본: 091160)
     DEBATE_ROUNDS       토론 라운드 수       (기본: 1)
-    CLAUDE_MODEL        사용할 Claude 모델  (기본: claude-sonnet-4-6)
+    OPENAI_MODEL        사용할 OpenAI 모델  (기본: gpt-4o)
     SAVE_JSON           결과 저장 여부       (기본: true)
     OUTPUT_DIR          JSON 저장 경로       (기본: output)
     USE_MACRO           매크로 에이전트 실행  (기본: true)
     USE_SECTOR          섹터 에이전트 실행   (기본: true)
+    USE_MARKET          시장심리 에이전트 실행 (기본: true)
 """
 
 import json
@@ -34,6 +35,7 @@ PROJECT_ROOT   = BULL_BEAR_ROOT.parent
 sys.path.insert(0, str(BULL_BEAR_ROOT))           # package_builder, agents
 sys.path.insert(0, str(PROJECT_ROOT / "macro"))   # macro_agents.macro_agent
 sys.path.insert(0, str(PROJECT_ROOT / "sector"))  # sector_agents.sector_agent
+sys.path.insert(0, str(PROJECT_ROOT / "market"))  # market_collectors.sentiment_collector
 
 from package_builder import build_input_package  # noqa: E402
 from agents.bull_agent import run_bull_agent     # noqa: E402
@@ -45,11 +47,12 @@ TICKER       = os.getenv("TARGET_TICKER", "005930")
 TICKER_NAME  = os.getenv("TARGET_NAME",   "삼성전자")
 SECTOR_ETF   = os.getenv("SECTOR_ETF_TICKER", "091160")
 ROUNDS       = int(os.getenv("DEBATE_ROUNDS", "1"))
-MODEL        = os.getenv("CLAUDE_MODEL", "claude-sonnet-4-6")
+MODEL        = os.getenv("OPENAI_MODEL", "gpt-5.4-mini")
 SAVE_JSON    = os.getenv("SAVE_JSON", "true").lower() == "true"
 OUTPUT_DIR   = os.getenv("OUTPUT_DIR", "output")
-USE_MACRO    = os.getenv("USE_MACRO",  "true").lower() == "true"
+USE_MACRO    = os.getenv("USE_MACRO",   "true").lower() == "true"
 USE_SECTOR   = os.getenv("USE_SECTOR", "true").lower() == "true"
+USE_MARKET   = os.getenv("USE_MARKET", "true").lower() == "true"
 
 
 # ── 외부 에이전트 실행 (실패 시 None 반환) ─────────────────────
@@ -64,6 +67,28 @@ def _run_macro() -> dict | None:
         return result
     except Exception as e:
         print(f"[macro] 건너뜀 — {e}")
+        return None
+
+
+def _run_market() -> dict | None:
+    """market agent 실행 후 스펙 §3 sentiment 포맷으로 변환"""
+    try:
+        from market_collectors.sentiment_collector import MarketSentimentCollector
+        print("[market] 시장심리 에이전트 실행 중...")
+        raw = MarketSentimentCollector().analyze_sentiment()
+        # market agent 출력(analysis.* / raw_data.*)을 스펙 §3 flat 구조로 변환
+        return {
+            "sentiment_label": raw["analysis"]["sentiment_label"],
+            "sentiment_score": raw["analysis"]["sentiment_score"],
+            "confidence":      raw["analysis"]["confidence"],
+            "risk_signal":     raw["analysis"]["risk_signal"],
+            "vkospi":          raw["raw_data"]["vkospi"],
+            "foreign_flow":    raw["raw_data"]["foreign_flow"],
+            "market_momentum": raw["raw_data"]["market_momentum"],
+            "reason":          raw["reason"],
+        }
+    except Exception as e:
+        print(f"[market] 건너뜀 — {e}")
         return None
 
 
@@ -133,8 +158,9 @@ def main() -> None:
     print("=" * 60)
 
     # 외부 에이전트 수집
-    macro_payload  = _run_macro()  if USE_MACRO  else None
-    sector_payload = _run_sector() if USE_SECTOR else None
+    macro_payload     = _run_macro()   if USE_MACRO   else None
+    sector_payload    = _run_sector()  if USE_SECTOR  else None
+    sentiment_payload = _run_market()  if USE_MARKET  else None
 
     # 입력 패키지 조립
     print("\n[package] 입력 패키지 조립 중...")
@@ -143,6 +169,7 @@ def main() -> None:
         ticker_name=TICKER_NAME,
         sector_payload=sector_payload,
         macro_payload=macro_payload,
+        sentiment_payload=sentiment_payload,
     )
 
     bull_result = None
@@ -169,8 +196,9 @@ def main() -> None:
             "model":      MODEL,
             "rounds":     ROUNDS,
             "as_of":      datetime.now().strftime("%Y-%m-%d %H:%M"),
-            "macro_used": macro_payload is not None,
-            "sector_used": sector_payload is not None,
+            "macro_used":     macro_payload is not None,
+            "sector_used":    sector_payload is not None,
+            "sentiment_used": sentiment_payload is not None,
         },
         "input_package": pkg,
         "bull": bull_result,
