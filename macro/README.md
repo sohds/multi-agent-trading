@@ -89,44 +89,44 @@ macro/
 ```json
 {
   "meta": {
-    "as_of": "2026-04-16 21:15",
-    "data_as_of": "2026-04-15",
+    "as_of": "2026-04-17 23:43",
     "base_models": [
       "3-State Univariate Markov Regime Switching",
       "PCA-based FSI Extraction",
       "PCA Weight Decomposition"
-    ]
+    ],
+    "data_as_of": "2026-04-16"
   },
   "raw_indicators": {
     "stock_market": {
-      "KOSPI": {"current": 2510.3, "dod_change_pct": -1.2}
+      "KOSPI": {"current": 6226.05, "dod_change_pct": 2.21}
     },
     "fx_market": {
-      "USD_KRW": {"current": 1530.5, "dod_change_pct": 1.13}
+      "USD_KRW": {"current": 1473.1, "dod_change_pct": -0.56}
     },
     "bond_market": {
-      "Term_Spread": {"current": 0.327, "wow_change_pt": 0.015},
-      "Credit_Spread": {"current": 0.641, "wow_change_pt": 0.041},
-      "CP_Spread": {"current": 1.250, "wow_change_pt": 0.082}
+      "Term_Spread": {"current": 0.335, "wow_change_pt": 0.013},
+      "Credit_Spread": {"current": 0.665, "wow_change_pt": 0.004},
+      "CP_Spread": {"current": 0.28, "wow_change_pt": -0.01}
     },
     "banking_sector": {
-      "Bank_Bond_Spread": {"current": 0.452, "wow_change_pt": 0.021}
+      "Bank_Bond_Spread": {"current": 0.139, "wow_change_pt": 0.005}
     }
   },
   "quantitative_models": {
-    "fsi_factor_score": 2.145,
+    "fsi_factor_score": -0.7823,
     "markov_converged": true,
     "regime_probabilities": {
-      "state_0_normal": 0.021,
-      "state_1_caution": 0.056,
-      "state_2_crisis": 0.923
+      "state_0_normal": 1.0,
+      "state_1_caution": 0.0,
+      "state_2_crisis": 0.0
     }
   },
   "objective_analysis": {
-    "current_regime_diagnosis": "현재 한국 경기 국면은 위기/위험 (Crisis) 상태이며, 해당 국면 진입 확률이 92.3%로 지배적임. 마코프 모형과 PCA 역산 결과, 'CP 스프레드 확대'(전일 대비 일중 기준) 요인이 당일 스트레스 상승을 주도(악화)하는 핵심 리스크 요인으로 판별됨.",
-    "risk_assessment": "투자 환경 위험도는 High 수준. 당일 스트레스 변동의 핵심 동인인 'CP 스프레드 확대'(전일 대비 일중 기준)에 대한 모니터링이 필요함.",
-    "momentum": "위험 가속 (전일 대비 금융스트레스 지수 +0.850p 상승)",
-    "xai_reasoning": "1. [PCA 당일 동인]: 전체 금융스트레스 지수(FSI)는 전일 대비 +0.850p 변동함. 'CP 스프레드 확대'(이)가 당일(전일 대비 일중 기준) 스트레스 상승을 주도하는 핵심 리스크 요인으로 추출됨. (※ 동인 방향은 일중 변화 기준이므로, 원시 지표의 주간 변동률과 방향이 상이할 수 있음)  2. [마코프 국면전환 논리]: 채권·신용·단기자금 시장에서 정상 구간을 이탈한 군집화된 변동성(Clustered Volatility)이 감지됨. 이에 따라 92.3% 확률로 '위기/위험 (Crisis)' 상태로 확정함."
+    "current_regime_diagnosis": "현재 한국 경기 국면은 정상/안정 (Normal) 상태이며, 해당 국면 진입 확률이 100.0%로 지배적임. 마코프 모형과 PCA 역산 결과, 'CP 스프레드 축소'(전일 대비 일중 기준) 요인이 당일 스트레스 하락을 이끌며 시장을 안정화시키는 1위 기여 요인으로 판별됨.",
+    "risk_assessment": "투자 환경 위험도는 Low 수준. 당일 스트레스 변동의 핵심 동인인 'CP 스프레드 축소'(전일 대비 일중 기준)에 대한 모니터링이 필요함.",
+    "momentum": "위험 둔화 (전일 대비 금융스트레스 지수 -0.275p 하락)",
+    "xai_reasoning": "1. [PCA 당일 동인]: 전체 금융스트레스 지수(FSI)는 전일 대비 -0.275p 변동함. 'CP 스프레드 축소'(이)가 당일(전일 대비 일중 기준) 스트레스 하락을 이끌며 시장을 안정화시키는 1위 기여 요인으로 추출됨. (※ 동인 방향은 일중 변화 기준이므로, 원시 지표의 주간 변동률과 방향이 상이할 수 있음)\n  2. [마코프 국면전환 논리]: 마코프 모형 분석 결과, 시장의 구조적 변동성이 낮게 유지되고 있으며 정상적인 경제 사이클의 범주 내에 있음. 이에 따라 100.0%의 확률로 '정상/안정 (Normal)' 국면으로 진단됨."
   },
   "errors": []
 }
