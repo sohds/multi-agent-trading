@@ -18,7 +18,11 @@ def run_macro_agent() -> dict:
     payload = {
         "meta": {
             "as_of": as_of,
-            "base_models": ["3-State Markov Regime Switching", "PCA-based FSI"]
+            "base_models": [
+                "3-State Univariate Markov Regime Switching", 
+                "PCA-based FSI Extraction", 
+                "PCA Weight Decomposition"
+            ]
         },
         "raw_indicators": None,
         "quantitative_models": None,
@@ -29,13 +33,22 @@ def run_macro_agent() -> dict:
     try:
         logger.info("[1/2] 원천 데이터 수집 모듈 가동")
         df_merged = get_macro_raw_data()
+        payload["meta"]["data_as_of"] = df_merged.index[-1].strftime("%Y-%m-%d")
         
         logger.info("[2/2] 퀀트 모델 파이프라인 가동")
         model_result = run_macro_quant_pipeline(df_merged)
         
-        payload["raw_indicators"] = model_result["level_1_raw_indicators"]
-        payload["quantitative_models"] = model_result["level_2_quantitative_models"]
-        payload["objective_analysis"] = model_result["level_3_objective_analysis"]
+        # 새로 개편된 JSON 구조 매핑
+        payload["raw_indicators"] = model_result["raw_indicators"]
+        payload["quantitative_models"] = model_result["quantitative_models"]
+        payload["objective_analysis"] = model_result["objective_analysis"]
+
+        # 수렴 실패 시 errors에 명시적으로 기록 (다운스트림 에이전트가 신뢰도를 판단할 수 있도록)
+        if not model_result["quantitative_models"].get("markov_converged", True):
+            payload["errors"].append(
+                "마코프 국면전환 모형 수렴 실패: regime_probabilities 추정치가 불안정할 수 있습니다. "
+                "해당 국면 확률 및 리스크 진단을 과신하지 마십시오."
+            )
         
     except Exception as e:
         msg = f"에이전트 구동 중 오류 발생: {e}"

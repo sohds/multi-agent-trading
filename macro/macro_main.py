@@ -25,16 +25,19 @@ def main():
 
     h1(f"매크로 에이전트 분석 결과 — {payload['meta']['as_of']}")
     
+    # [수정] payload["raw_indicators"] 부분은 이미 맞게 되어있으므로 그대로 유지하거나 확인
     if payload.get("raw_indicators"):
-        h2("1. 핵심 거시 지표 (Level 1)")
+        h2("1. 핵심 거시 지표 (4대 부문)")
         print(json.dumps(payload["raw_indicators"], indent=2, ensure_ascii=False))
 
+    # [수정] 키 이름 유지 
     if payload.get("objective_analysis"):
-        h2("2. 마코프 국면전환 모형 진단 (Level 2 & 3)")
+        h2("2. 마코프 국면전환 및 PCA 원인 분석")
         diag = payload["objective_analysis"]
         print(f"  국면 진단 : {diag.get('current_regime_diagnosis')}")
         print(f"  위험도    : {diag.get('risk_assessment')}")
         print(f"  모멘텀    : {diag.get('momentum')}")
+        print(f"  XAI    : {diag.get('xai_reasoning')}")
 
     if payload["errors"]:
         h2("⚠️ 수집/연산 오류 목록")

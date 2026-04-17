@@ -22,7 +22,7 @@
 * **학술적 근거:** *Hakkio, C. S., & Keeton, W. R. (2009).* 👉 미국 캔자스시티 연준(KCFSI)이 개별 변수의 엇갈리는 노이즈를 제어하고 시스템적 공통 요인(Co-movement)을 추출하기 위해 PCA를 활용한 논리를 벤치마킹했습니다.
 
 ### [3단계] 실시간 국면 추론 (Markov Model)
-* **적용 아키텍처:** 자의적인 임계치(Threshold)를 배제하고, 압축된 단일 FSI 시계열을 3-State 마코프 모형에 투입합니다. 모델이 스스로 과거 1년 치를 롤링 학습해 당일의 위기 확률을 계산합니다.
+* **적용 아키텍처:** 자의적인 임계치(Threshold)를 배제하고, 압축된 단일 FSI 시계열을 3-State 마코프 모형에 투입합니다. 모델이 스스로 약 5년(1,260 거래일)치를 롤링 학습해 당일의 위기 확률을 계산합니다. 수렴 실패 시 `search_reps=200`으로 자동 재시도하는 2단계 수렴 전략을 채택하며, 최종 수렴 여부는 출력 JSON의 `markov_converged` 필드로 다운스트림 에이전트에 전파됩니다.
 * **학술적 근거 1:** *Hamilton, J. D. (1989) & Chauvet, M. (1998).* 👉 고정된 임계치 없이 시계열 이면에 숨겨진 국면을 확률적으로 추정하는 2-Step 동적 요인 모형 구조를 차용했습니다.
 * **학술적 근거 2:** *Guidolin, M. (2011).* 👉 다변량 마코프 모형이 실시간 무인 연산에서 일으키는 '차원의 저주(Curse of Dimensionality)' 한계를 방어하고, 단일 시계열(Univariate) 3-State 모형을 통한 최적화 수렴 보장의 논리를 제공받았습니다.
 
@@ -60,7 +60,7 @@ macro/
 ### `macro_collectors/ecos_api.py` — 데이터 수집 (Input)
 * **데이터 소스:** 한국은행 ECOS OpenAPI (`ECOS_API_KEY` 필수)
 * **Input:** `get_macro_raw_data()`
-* **Output:** `pandas.DataFrame` (KOSPI, USD_KRW, Bond_3Y, Bond_10Y, Corp_3Y, Bank_Bond 결측치 보정 병합본)
+* **Output:** `pandas.DataFrame` — 컬럼: `KOSPI`, `USD_KRW`, `Bond_3Y`, `Bond_10Y`, `Corp_3Y`, `Bond_1Y`, `Bank_Bond_1Y`, `CD_91D`, `CP_91D`. 마지막 행이 결측치 없는 마지막 완전 관측일(LCO, 통상 T-1).
 
 ### `macro_collectors/quant_models.py` — 퀀트 모델 연산 (Process)
 * **데이터 소스:** `ecos_api.py`에서 전달받은 DataFrame
@@ -68,20 +68,20 @@ macro/
 * **Output:** 전처리된 데이터에서 PCA를 통해 단일 금융스트레스지수(FSI) 요인을 추출하고, 이를 3-State 마코프 국면전환 모형(Markov Regime-Switching Model)에 투입 및 가중치 역산(Attribution)을 수행하여 도출된 국면 확률 JSON 구조체를 반환합니다.
 
 ### `macro_agents/macro_agent.py` — 통합 오케스트레이터 (Output)
-수집 모듈과 연산 모듈을 순차 호출하며, 완성된 페이로드는 다른 에이전트의 필드 입력값으로 전달됩니다. 출력 구조는 아래의 3. 출력 (Output Payload)에 자세히 설명되어있습니다.
+수집 모듈과 연산 모듈을 순차 호출하며, 완성된 페이로드는 다른 에이전트의 필드 입력값으로 전달됩니다. `get_macro_raw_data()` 반환 직후 DataFrame 마지막 인덱스를 `meta.data_as_of`(실제 데이터 기준일, LCO)로 기록하며, `markov_converged=false`일 경우 `errors[]`에 국면 확률 신뢰도 경고를 명시적으로 추가합니다. 출력 구조는 아래의 3. 출력 (Output Payload)에 자세히 설명되어있습니다.
 
 ---
 
 ## 🔄 통합 데이터 파이프라인 및 I/O
 
 ### 1. 입력 (Input Data)
-실행 시점을 기준으로 한국은행 ECOS API를 호출하여 과거 1년 치의 핵심 일간 지표를 수집합니다. (KOSPI, 원/달러 환율, 장단기 금리차, 신용/CP 스프레드, 은행채 스프레드)
+실행 시점을 기준으로 한국은행 ECOS API를 호출하여 약 10년 치의 핵심 일간 지표를 수집합니다. (KOSPI, 원/달러 환율, 장단기 금리차, 신용/CP 스프레드, 은행채 스프레드)
 
 ### 2. 연산 (Process)
 * **정제:** 휴장일이 다른 각 시장 데이터를 병합(Outer Join, Forward Fill)하고 표준화(StandardScaler) 진행.
-* **압축:** PCA를 통해 다중 지표를 단일 시계열(FSI)로 통합.
-* **추론:** 3-State 마코프 모형에 투입하여 실시간 국면 확률 추정.
-* **해석:** PCA 가중치를 역산하여 당일 스트레스 폭등을 주도한 핵심 변수 추출.
+* **압축:** PCA를 통해 다중 지표를 단일 시계열(FSI)로 통합. 부호는 기대 경제 방향 `[-1, 1, -1, 1, 1, 1]`과의 과반수 투표(Count-based majority vote)로 교정하여 단일 고적재 변수가 부호를 뒤집는 현상 방지.
+* **추론:** 3-State 마코프 모형에 투입하여 실시간 국면 확률 추정. 1차(`search_reps=50`) 수렴 실패 시 자동으로 `search_reps=200`으로 재시도(2단계 수렴). 수렴 여부는 `markov_converged` 필드로 출력에 전파.
+* **해석:** PCA 가중치 역산으로 당일(전일 대비 일중 기준) 스트레스를 주도한 핵심 변수를 추출. KOSPI와 FSI가 수치상 같은 방향이지만 시장 해석이 반대인 경우(주가 상승=안정 신호, FSI 상승=스트레스 신호) Equity-FSI 다이버전스를 자동 감지하여 `objective_analysis` 전 필드에 경고 주입.
 
 ### 3. 출력 (Output Payload)
 다른 에이전트가 참고할 보고서를 생성합니다.
@@ -89,20 +89,25 @@ macro/
 ```json
 {
   "meta": {
-    "as_of": "2026-04-01 15:30",
-    "base_models": ["3-State Univariate Markov", "PCA-based FSI", "PCA Attribution"]
+    "as_of": "2026-04-16 21:15",
+    "data_as_of": "2026-04-15",
+    "base_models": [
+      "3-State Univariate Markov Regime Switching",
+      "PCA-based FSI Extraction",
+      "PCA Weight Decomposition"
+    ]
   },
   "raw_indicators": {
     "stock_market": {
-      "KOSPI": {"current": 5277.3, "dod_change_pct": -1.2, "interpretation": "하락"}
+      "KOSPI": {"current": 2510.3, "dod_change_pct": -1.2}
     },
     "fx_market": {
       "USD_KRW": {"current": 1530.5, "dod_change_pct": 1.13}
     },
     "bond_market": {
-      "Term_Spread": {"current": 0.327, "wow_change_pt": 0.015, "status": "정상"},
+      "Term_Spread": {"current": 0.327, "wow_change_pt": 0.015},
       "Credit_Spread": {"current": 0.641, "wow_change_pt": 0.041},
-      "CP_Spread": {"current": 1.250, "wow_change_pt": 0.082} 
+      "CP_Spread": {"current": 1.250, "wow_change_pt": 0.082}
     },
     "banking_sector": {
       "Bank_Bond_Spread": {"current": 0.452, "wow_change_pt": 0.021}
@@ -110,18 +115,24 @@ macro/
   },
   "quantitative_models": {
     "fsi_factor_score": 2.145,
+    "markov_converged": true,
     "regime_probabilities": {
-      "state_0_normal": 0.021, "state_1_caution": 0.056, "state_2_crisis": 0.923
+      "state_0_normal": 0.021,
+      "state_1_caution": 0.056,
+      "state_2_crisis": 0.923
     }
   },
   "objective_analysis": {
-    "current_regime_diagnosis": "현재 한국 경기 국면은 위기/위험 (Crisis) 상태이며, 해당 국면 진입 확률이 92.3%로 지배적임. 마코프 모형 분석 결과, 원/달러 환율 급등과 은행채 스프레드 확대가 현재 시스템 리스크를 견인하는 핵심 요인으로 판별됨.",
-    "risk_assessment": "투자 환경 위험도는 High 수준. 스트레스 지수 상승의 1위 기여 요인인 원/달러 환율이 급격히 악화되며 전체 변동성을 키우고 있음.",
-    "momentum": "위험 가속 (전일 대비 금융 스트레스 요인 수치 상승)"
+    "current_regime_diagnosis": "현재 한국 경기 국면은 위기/위험 (Crisis) 상태이며, 해당 국면 진입 확률이 92.3%로 지배적임. 마코프 모형과 PCA 역산 결과, 'CP 스프레드 확대'(전일 대비 일중 기준) 요인이 당일 스트레스 상승을 주도(악화)하는 핵심 리스크 요인으로 판별됨.",
+    "risk_assessment": "투자 환경 위험도는 High 수준. 당일 스트레스 변동의 핵심 동인인 'CP 스프레드 확대'(전일 대비 일중 기준)에 대한 모니터링이 필요함.",
+    "momentum": "위험 가속 (전일 대비 금융스트레스 지수 +0.850p 상승)",
+    "xai_reasoning": "1. [PCA 당일 동인]: 전체 금융스트레스 지수(FSI)는 전일 대비 +0.850p 변동함. 'CP 스프레드 확대'(이)가 당일(전일 대비 일중 기준) 스트레스 상승을 주도하는 핵심 리스크 요인으로 추출됨. (※ 동인 방향은 일중 변화 기준이므로, 원시 지표의 주간 변동률과 방향이 상이할 수 있음)  2. [마코프 국면전환 논리]: 채권·신용·단기자금 시장에서 정상 구간을 이탈한 군집화된 변동성(Clustered Volatility)이 감지됨. 이에 따라 92.3% 확률로 '위기/위험 (Crisis)' 상태로 확정함."
   },
   "errors": []
 }
 ```
+
+> **참고:** `meta.as_of`는 에이전트 실행 시각, `meta.data_as_of`는 실제 데이터 기준일(LCO, 통상 T-1)입니다. 다운스트림 에이전트는 분석 귀속 날짜로 `data_as_of`를 사용해야 합니다. `raw_indicators`의 주가·환율은 `dod_change_pct`(일간 변동률), 채권·은행 지표는 `wow_change_pt`(주간 변동 포인트)로 시간 기준이 다릅니다. `xai_reasoning`의 동인 방향은 일간 기준이므로 채권 지표의 주간 변동률과 방향이 다를 수 있습니다.
 
 ---
 
@@ -145,9 +156,11 @@ python macro_main.py
 
 **[✅ 구현 완료]**
 * **데이터 수집 (ecos_api.py):** 한국은행 ECOS OpenAPI 연동 및 4대 부문 핵심 지표 일간 데이터 수집 및 전처리 파이프라인.
-* **퀀트 연산 (quant_models.py):** StandardScaler 및 scikit-learn PCA를 활용한 금융스트레스지수(FSI) 차원 축소.
-* **국면 추론 엔진:** statsmodels 기반 3-State 단일 시계열 마코프 국면전환 모형(Markov Regime-Switching) 롤링 연산.
+* **퀀트 연산 (quant_models.py):** StandardScaler 및 scikit-learn PCA를 활용한 금융스트레스지수(FSI) 차원 축소. PCA 부호는 기대 경제 방향과의 과반수 투표로 교정.
+* **국면 추론 엔진:** statsmodels 기반 3-State 단일 시계열 마코프 국면전환 모형(Markov Regime-Switching) 롤링 연산. 2단계 수렴 전략(`search_reps=50` → `200`) 및 수렴 여부 페이로드 전파.
+* **XAI 기반 페이로드 조립:** PCA 가중치 역산을 통한 위험 요인 기여도 텍스트 생성 및 JSON Output 규격화. `(전일 대비 일중 기준)` qualifier로 원시 지표 주간 변동률과의 방향 불일치 명시.
+* **Equity-FSI 다이버전스 감지:** 주가 신호(KOSPI)와 신용·채권 신호(FSI)가 반대 해석을 가리킬 때 모든 `objective_analysis` 필드에 경고 자동 주입.
+* **데이터 기준일 메타 필드:** `meta.data_as_of`(실제 LCO 날짜)와 `meta.as_of`(실행 시각) 분리로 다운스트림 에이전트의 날짜 혼동 방지.
 
 **[🚧 미구현 / 향후 과제]**
-* **XAI 기반 페이로드 조립:** PCA 가중치 역산을 통한 위험 요인 기여도 텍스트 생성 및 JSON Output 규격화.
 * **아웃오브샘플(Out-of-sample) 백테스트:** 코로나19, 레고랜드 사태 등 과거 특정 위기 구간에 대한 백테스트 모듈 구축 후 다양한 입력데이터 조합, 확률 민감도(Threshold) 최적화 튜닝.
