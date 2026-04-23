@@ -57,7 +57,7 @@ def _call_llm(
         client = OpenAI(api_key=api_key)
         response = client.chat.completions.create(
             model=model,
-            max_tokens=1024,
+            max_completion_tokens=1024,
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_message},
