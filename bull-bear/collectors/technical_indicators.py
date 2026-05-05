@@ -37,19 +37,25 @@ except ImportError:
 # OHLCV 수집
 # ─────────────────────────────────────────────────────────────
 
-def _get_ohlcv(ticker: str, days: int = 300) -> Optional[pd.DataFrame]:
+def _get_ohlcv(ticker: str, days: int = 300, as_of: Optional[str] = None) -> Optional[pd.DataFrame]:
     """
     pykrx로 OHLCV 수집.
     MA200 계산에 최소 200 거래일이 필요하므로 calendar 기준 300일로 요청.
+
+    Args:
+        ticker: 종목 코드
+        days:   수집 기간 (calendar days, 기본 300)
+        as_of:  기준 종료일 (YYYYMMDD). None이면 오늘. 백테스팅 시 과거 날짜 주입용.
 
     Returns:
         DataFrame (index=날짜, columns=[시가, 고가, 저가, 종가, 거래량, ...])
         또는 None
     """
-    today = datetime.today().strftime("%Y%m%d")
-    start = (datetime.today() - timedelta(days=days)).strftime("%Y%m%d")
+    end_dt = datetime.strptime(as_of, "%Y%m%d") if as_of else datetime.today()
+    end   = end_dt.strftime("%Y%m%d")
+    start = (end_dt - timedelta(days=days)).strftime("%Y%m%d")
     try:
-        df = stock.get_market_ohlcv(start, today, ticker)
+        df = stock.get_market_ohlcv(start, end, ticker)
         if df is None or df.empty:
             return None
         df.index = pd.to_datetime(df.index)
@@ -210,13 +216,14 @@ def _volume_stats(volume: pd.Series) -> Tuple[Optional[float], bool]:
 # 공개 API
 # ─────────────────────────────────────────────────────────────
 
-def get_technical_indicators(ticker: str, ticker_name: str) -> dict:
+def get_technical_indicators(ticker: str, ticker_name: str, as_of: Optional[str] = None) -> dict:
     """
     기술적 지표 통합 수집 (불/베어 입력 패키지 `technical` 필드)
 
     Args:
         ticker      : 종목 코드 (예: "005930")
         ticker_name : 종목명   (예: "삼성전자")
+        as_of       : 기준 날짜 YYYYMMDD (예: "20240115"). None이면 오늘. 백테스팅용.
 
     Returns:
         dict: {
@@ -235,7 +242,7 @@ def get_technical_indicators(ticker: str, ticker_name: str) -> dict:
         }
         또는 {"error": str}
     """
-    df = _get_ohlcv(ticker, days=300)
+    df = _get_ohlcv(ticker, days=300, as_of=as_of)
     if df is None or len(df) < 20:
         return {"error": f"OHLCV 데이터 부족 (ticker={ticker})"}
 

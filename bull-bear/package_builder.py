@@ -32,6 +32,8 @@ def build_input_package(
     macro_payload: dict | None = None,
     sentiment_payload: dict | None = None,
     topic_type: str = "종목",
+    as_of: str | None = None,
+    mask_for_backtest: bool = False,
 ) -> dict:
     """
     불/베어 공통 입력 패키지 생성 (spec §5)
@@ -43,13 +45,20 @@ def build_input_package(
         macro_payload:    run_macro_agent() 반환값. None이면 macro 필드 null
         sentiment_payload: sentiment 에이전트 반환값. None이면 null (현재 미구현)
         topic_type:       "종목" | "시장전체" | "테마"
+        as_of:            기술적 지표 기준일 YYYYMMDD. None이면 오늘. 백테스팅용.
+        mask_for_backtest: True면 종목·날짜·절대가격을 익명화하여 LLM 데이터 누수 차단.
 
     Returns:
         dict: 불/베어 에이전트에 전달할 공통 입력 패키지
     """
 
     # ── 1. technical ───────────────────────────────────────────
-    technical = get_technical_indicators(ticker, ticker_name)
+    technical = get_technical_indicators(ticker, ticker_name, as_of=as_of)
+    topic_ticker_label = f"{ticker_name}({ticker})"
+    if mask_for_backtest:
+        from backtest.masking import mask_technical
+        technical = mask_technical(technical)
+        topic_ticker_label = "종목 A"
 
     # ── 2. macro: meta, errors 제외 (spec §4-1) ─────────────────
     macro = None
@@ -80,7 +89,7 @@ def build_input_package(
     }
 
     return {
-        "topic":      f"{ticker_name}({ticker}) 지금 매수해도 되나?",
+        "topic":      f"{topic_ticker_label} 지금 매수해도 되나?",
         "topic_type": topic_type,
         "technical":  technical,
         "macro":      macro,
