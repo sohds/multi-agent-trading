@@ -1,0 +1,89 @@
+{
+  "meta": {
+    "track": "A",
+    "ticker": "005930",
+    "model": "gpt-5.4-mini",
+    "case_count": 2,
+    "ran_at": "2026-05-05T22:59:25"
+  },
+  "results": [
+    {
+      "ticker": "005930",
+      "as_of": "2024-01-02",
+      "prediction": "bearish",
+      "conf_diff": -0.16,
+      "bull_conf": 0.72,
+      "bear_conf": 0.88,
+      "bull_summary": "종목 A는 이동평균선 정배열, MACD bullish, 저항선 근접까지 겹친 강한 추세 종목으로 매수 신호가 우세합니다.",
+      "bear_summary": "과매수와 저항선 접근, 과열 괴리율이 겹쳐 지금은 매수보다 되돌림 위험이 더 큰 구간입니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bearish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": true,
+        "10": true,
+        "20": true
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2024-02-01",
+      "prediction": "neutral",
+      "conf_diff": 0.01,
+      "bull_conf": 0.56,
+      "bear_conf": 0.55,
+      "bull_summary": "장기 이동평균 위에서 거래되고 RSI도 중립권이라, 단기 조정 속에서도 매수 논리가 유지되는 종목이다.",
+      "bear_summary": "단기 추세·모멘텀·수급이 모두 약해 매수보다 하방 리스크가 더 커 보입니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "neutral",
+        "10": "neutral",
+        "20": "neutral"
+      },
+      "correct": {
+        "5": true,
+        "10": true,
+        "20": true
+      }
+    }
+  ],
+  "stats": {
+    "by_horizon": {
+      "5": {
+        "valid_n": 1,
+        "correct": 1,
+        "accuracy": 1.0,
+        "bull_accuracy": null,
+        "bear_accuracy": 1.0,
+        "balanced_accuracy": null
+      },
+      "10": {
+        "valid_n": 1,
+        "correct": 1,
+        "accuracy": 1.0,
+        "bull_accuracy": null,
+        "bear_accuracy": 1.0,
+        "balanced_accuracy": null
+      },
+      "20": {
+        "valid_n": 1,
+        "correct": 1,
+        "accuracy": 1.0,
+        "bull_accuracy": null,
+        "bear_accuracy": 1.0,
+        "balanced_accuracy": null
+      }
+    },
+    "prediction_distribution": {
+      "bearish": 1,
+      "neutral": 1
+    },
+    "error_count": 0,
+    "total_cases": 2
+  }
+}

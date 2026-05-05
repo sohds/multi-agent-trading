@@ -1,0 +1,574 @@
+{
+  "meta": {
+    "track": "A",
+    "ticker": "005930",
+    "model": "gpt-5.4-mini",
+    "case_count": 24,
+    "ran_at": "2026-05-05T21:24:52"
+  },
+  "results": [
+    {
+      "ticker": "005930",
+      "as_of": "2024-01-02",
+      "prediction": "neutral",
+      "conf_diff": -0.01,
+      "bull_conf": 0.9,
+      "bear_conf": 0.91,
+      "bull_summary": "현재 주가는 모든 주요 이동평균선 위에서 강한 상승 모멘텀을 보이며, 1.1577 저항 돌파 시 추가 상승 여지가 커 매수 관점이 우세합니다.",
+      "bear_summary": "추세는 강해 보이지만 RSI 과열과 저항선 근접, 과도한 이격으로 지금은 추격 매수보다 관망이 유리합니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bearish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2024-02-01",
+      "prediction": "bearish",
+      "conf_diff": -0.15,
+      "bull_conf": 0.68,
+      "bear_conf": 0.83,
+      "bull_summary": "중장기 추세는 살아 있고 단기 과열도 없어, 1.0475 부근은 분할 매수 검토가 가능한 우호적 구간입니다.",
+      "bear_summary": "지금은 추세와 수급이 강하지 않아 추격매수보다 관망이 더 합리적입니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "neutral",
+        "10": "neutral",
+        "20": "neutral"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2024-03-04",
+      "prediction": "neutral",
+      "conf_diff": 0.0,
+      "bull_conf": 0.84,
+      "bear_conf": 0.84,
+      "bull_summary": "추세선 전반이 가격 아래에서 지지하고 MACD까지 상향 전환된 만큼, 지금은 매수 우위로 해석할 수 있습니다.",
+      "bear_summary": "단기 추세는 살아 있으나 저항선 근접과 과열 신호가 겹쳐 지금은 추격매수보다 관망이 더 안전하다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bearish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2024-04-01",
+      "prediction": "bearish",
+      "conf_diff": -0.05,
+      "bull_conf": 0.82,
+      "bear_conf": 0.87,
+      "bull_summary": "이 종목은 전 구간 이동평균을 상회하는 강한 상승 추세와 bullish 모멘텀을 보여 지금 매수 관점이 우세합니다.",
+      "bear_summary": "단기 추세는 우상향이지만 RSI 과열과 밴드 상단 근접, 저항대 접근, 거래량 부진을 감안하면 지금은 매수보다 관망이 더 유리합니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bearish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": false,
+        "10": true,
+        "20": true
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2024-05-02",
+      "prediction": "bearish",
+      "conf_diff": -0.07,
+      "bull_conf": 0.77,
+      "bear_conf": 0.84,
+      "bull_summary": "단기 모멘텀은 다소 약하지만, 핵심 이동평균선 위에서 중립적 수급·밸류 구간에 있어 눌림목 매수로 접근할 만합니다.",
+      "bear_summary": "현재는 추세·모멘텀·수급이 모두 강하지 않아 신규 매수보다 관망이 유리합니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": true
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2024-06-03",
+      "prediction": "bearish",
+      "conf_diff": -0.18,
+      "bull_conf": 0.66,
+      "bear_conf": 0.84,
+      "bull_summary": "기술적으로 과열이 아니고 지지선이 분명하며, 현재가가 주요 이동평균 근처에 있어 반등 매수를 검토할 수 있습니다.",
+      "bear_summary": "추세와 수급이 약해 지금은 매수보다 관망이 더 합리적입니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "neutral",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2024-07-01",
+      "prediction": "bullish",
+      "conf_diff": 0.16,
+      "bull_conf": 0.84,
+      "bear_conf": 0.68,
+      "bull_summary": "기술적으로 단기·중기 이동평균을 모두 상회하고 MACD가 강세인 만큼, 지금은 추세 추종 관점에서 매수를 검토할 만한 구간이다.",
+      "bear_summary": "저항선 근접과 약한 거래량을 감안하면 지금은 매수보다 관망이 더 합리적이다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "neutral"
+      },
+      "correct": {
+        "5": true,
+        "10": true,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2024-08-01",
+      "prediction": "bearish",
+      "conf_diff": -0.05,
+      "bull_conf": 0.76,
+      "bear_conf": 0.81,
+      "bull_summary": "단기 모멘텀은 완전한 강세는 아니지만, 중장기 이동평균 위의 안정적 위치와 과열 부담이 낮은 점을 감안하면 지금은 분할 매수를 고려할 만한 구간입니다.",
+      "bear_summary": "지금은 추세·수급 모두 강하지 않아 매수보다 관망이 더 타당하다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bearish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": true,
+        "10": true,
+        "20": true
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2024-09-02",
+      "prediction": "bearish",
+      "conf_diff": -0.23,
+      "bull_conf": 0.71,
+      "bear_conf": 0.94,
+      "bull_summary": "단기 약세는 있으나 200일선 아래 저가 구간과 지지·저항 손익비가 나쁘지 않아 분할 매수 관점이 유효합니다.",
+      "bear_summary": "추세·모멘텀·수급 모두 약해 지금은 매수보다 관망이 더 합리적이다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bearish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": true,
+        "10": true,
+        "20": true
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2024-10-02",
+      "prediction": "bearish",
+      "conf_diff": -0.09,
+      "bull_conf": 0.82,
+      "bear_conf": 0.91,
+      "bull_summary": "단기 과매도와 bullish MACD, 명확한 지지선이 확인돼 지금은 반등을 노려볼 수 있는 매수 구간입니다.",
+      "bear_summary": "과매도에 가까운 낙폭은 있지만 추세는 여전히 하락 우위이며, 거래량·촉매 부재까지 겹쳐 지금은 매수보다 관망이 유리합니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bearish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": true,
+        "10": true,
+        "20": true
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2024-11-01",
+      "prediction": "bearish",
+      "conf_diff": -0.06,
+      "bull_conf": 0.78,
+      "bear_conf": 0.84,
+      "bull_summary": "단기 조정이지만 MACD 우호적 신호와 명확한 지지선, 그리고 장기 이평선 대비 낮은 가격대를 고려하면 지금은 분할매수 관점이 유효합니다.",
+      "bear_summary": "추세가 전반적으로 약세이고 수급 확인도 없어 지금은 매수보다 관망이 더 합리적입니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bearish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": true,
+        "10": true,
+        "20": true
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2024-12-02",
+      "prediction": "bearish",
+      "conf_diff": -0.17,
+      "bull_conf": 0.74,
+      "bear_conf": 0.91,
+      "bull_summary": "주가는 주요 이동평균선 아래에 있어 눌림목 매수 구간이며, RSI 40.3과 bullish MACD가 반등 가능성을 지지해 지금은 분할 매수를 고려할 만합니다.",
+      "bear_summary": "추세가 전 구간 이동평균선 아래이고 거래량도 약해 지금은 매수보다 관망이 더 합리적입니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "neutral",
+        "10": "bullish",
+        "20": "neutral"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2025-01-02",
+      "prediction": "bearish",
+      "conf_diff": -0.1,
+      "bull_conf": 0.79,
+      "bear_conf": 0.89,
+      "bull_summary": "단기 이평선 아래 조정으로 보이지만 MACD 개선과 과매도 아님, 명확한 지지선까지 감안하면 분할매수 관점이 유효합니다.",
+      "bear_summary": "추세는 전 구간 약세이고 수급도 약해, 지금은 매수보다 관망이 더 합리적입니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "neutral"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2025-02-03",
+      "prediction": "bearish",
+      "conf_diff": -0.25,
+      "bull_conf": 0.66,
+      "bear_conf": 0.91,
+      "bull_summary": "단기 추세는 약하지만 0.9288 지지선 인근·RSI 34.6·볼린저 하단 접근으로 기술적 반등을 노릴 수 있어 분할 매수 관점이 유효합니다.",
+      "bear_summary": "지표상 전 구간이 약세이며 지지 확인도 불충분해, 지금은 매수보다 관망이 더 합리적입니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2025-03-04",
+      "prediction": "bearish",
+      "conf_diff": -0.16,
+      "bull_conf": 0.72,
+      "bear_conf": 0.88,
+      "bull_summary": "단기 모멘텀은 약하지만, 60일선 근접과 명확한 지지-저항 구조를 감안하면 지금은 분할 매수 관점이 유효합니다.",
+      "bear_summary": "추세·수급·모멘텀이 모두 약해 지금은 매수보다 관망이 더 합리적입니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": true,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2025-04-01",
+      "prediction": "bullish",
+      "conf_diff": 0.06,
+      "bull_conf": 0.78,
+      "bear_conf": 0.72,
+      "bull_summary": "중기 추세가 20·60·120일선 위에서 유지되고 MACD가 bullish라, 현재 구간은 무리한 추격매수보다도 분할매수 관점의 우호적 진입 구간입니다.",
+      "bear_summary": "단기 수급 약화와 제한된 상단 공간을 고려하면 지금은 매수보다 관망이 더 합리적입니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bearish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2025-05-02",
+      "prediction": "bearish",
+      "conf_diff": -0.2,
+      "bull_conf": 0.63,
+      "bear_conf": 0.83,
+      "bull_summary": "단기 모멘텀은 약하지만 과매도는 아니고 하방이 제한된 조정 구간이라, 1.0327 돌파 가능성을 노린 분할 매수가 유효하다.",
+      "bear_summary": "추세가 이동평균 아래에 있고 모멘텀·수급·촉매 모두 약해 지금은 매수보다 관망이 유리합니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2025-06-02",
+      "prediction": "bullish",
+      "conf_diff": 0.11,
+      "bull_conf": 0.84,
+      "bear_conf": 0.73,
+      "bull_summary": "기술적으로 단기·중기선 상회와 bullish MACD가 확인돼, 저항까지 여유가 있는 구간이라 지금은 매수 관점이 우세합니다.",
+      "bear_summary": "기술적으로 급한 매수 구간은 아니며, 1.0415 돌파와 거래량 확증이 나오기 전까지는 관망이 더 안전합니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": true,
+        "10": true,
+        "20": true
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2025-07-01",
+      "prediction": "neutral",
+      "conf_diff": 0.04,
+      "bull_conf": 0.82,
+      "bear_conf": 0.78,
+      "bull_summary": "추세가 20·60·120일선 위에서 유지되고 MACD도 bullish인 만큼, 과열 부담이 크지 않은 상태에서 저항 돌파를 노려볼 수 있는 매수 우위 구간입니다.",
+      "bear_summary": "지금은 추세 확인과 거래량 동반 돌파가 없어서 매수보다 관망이 더 합리적입니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2025-08-01",
+      "prediction": "neutral",
+      "conf_diff": 0.01,
+      "bull_conf": 0.82,
+      "bear_conf": 0.81,
+      "bull_summary": "중장기 이동평균선 위에서 MACD 강세와 RSI 60.7이 확인되어, 지금은 추세 회복과 추가 상승을 노릴 수 있는 매수 우위 구간입니다.",
+      "bear_summary": "매수보다는 관망이 적절하며, 1.2347 회복과 거래량 동반 확인 전까지는 추격매수 리스크가 더 큽니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2025-09-01",
+      "prediction": "bearish",
+      "conf_diff": -0.19,
+      "bull_conf": 0.71,
+      "bear_conf": 0.9,
+      "bull_summary": "단기 약세는 있으나 지지선 인접과 장기 이동평균 상회, 과열 해소 구간이 겹쳐 분할 매수에 우호적인 구간이다.",
+      "bear_summary": "추세·모멘텀·수급이 모두 약해 지금은 매수보다 관망이 더 합리적입니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2025-10-01",
+      "prediction": "bearish",
+      "conf_diff": -0.08,
+      "bull_conf": 0.84,
+      "bear_conf": 0.92,
+      "bull_summary": "단기 과열 신호는 있지만, 핵심 추세선 상회·MACD 강세·저항선 근접이 겹쳐 있어 돌파 매수 관점이 우세합니다.",
+      "bear_summary": "추세는 강해 보이지만 1.4133 저항 앞 과열 신호가 뚜렷해, 지금은 매수보다 관망이 더 합리적입니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2025-11-03",
+      "prediction": "bearish",
+      "conf_diff": -0.11,
+      "bull_conf": 0.83,
+      "bear_conf": 0.94,
+      "bull_summary": "추세와 모멘텀이 모두 우세해, 단기 과열 리스크는 있으나 지금은 매수 우위로 해석할 수 있습니다.",
+      "bear_summary": "단기 추세는 좋지만 RSI 80.5와 114.4의 과열 신호, 저항선 1.367 근접으로 지금은 매수보다 관망이 유리합니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bearish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": true,
+        "10": true,
+        "20": true
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2025-12-01",
+      "prediction": "bearish",
+      "conf_diff": -0.06,
+      "bull_conf": 0.78,
+      "bear_conf": 0.84,
+      "bull_summary": "중장기 추세가 우상향이고 과열 신호가 약해, 현 구간은 분할매수로 접근하기에 우호적입니다.",
+      "bear_summary": "추세·수급 모두 강한 매수 근거가 부족해, 지금은 추격매수보다 관망이 더 합리적입니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    }
+  ],
+  "stats": {
+    "by_horizon": {
+      "5": {
+        "valid_n": 17,
+        "correct": 8,
+        "accuracy": 0.4706,
+        "bull_accuracy": 0.2,
+        "bear_accuracy": 0.8571,
+        "balanced_accuracy": 0.5286
+      },
+      "10": {
+        "valid_n": 19,
+        "correct": 8,
+        "accuracy": 0.4211,
+        "bull_accuracy": 0.1667,
+        "bear_accuracy": 0.8571,
+        "balanced_accuracy": 0.5119
+      },
+      "20": {
+        "valid_n": 16,
+        "correct": 8,
+        "accuracy": 0.5,
+        "bull_accuracy": 0.125,
+        "bear_accuracy": 0.875,
+        "balanced_accuracy": 0.5
+      }
+    },
+    "prediction_distribution": {
+      "neutral": 4,
+      "bearish": 17,
+      "bullish": 3
+    },
+    "error_count": 0,
+    "total_cases": 24
+  }
+}

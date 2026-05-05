@@ -1,0 +1,89 @@
+{
+  "meta": {
+    "track": "A",
+    "ticker": "005930",
+    "model": "gpt-5.4-mini",
+    "case_count": 2,
+    "ran_at": "2026-05-05T23:33:50"
+  },
+  "results": [
+    {
+      "ticker": "005930",
+      "as_of": "2024-01-02",
+      "prediction": "bearish",
+      "conf_diff": -0.1,
+      "bull_conf": 0.64,
+      "bear_conf": 0.74,
+      "bull_summary": "삼성전자는 주요 이동평균선 전부 상회와 MACD 강세로 추세 전환이 확인된 구간이며, 저항선 돌파 시 추가 매수 모멘텀이 붙는 강세 흐름입니다.",
+      "bear_summary": "기술적으로 과열 신호가 뚜렷해 매수보다 차익실현 압력을 경계해야 한다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bearish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": true,
+        "10": true,
+        "20": true
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2024-02-01",
+      "prediction": "neutral",
+      "conf_diff": -0.03,
+      "bull_conf": 0.55,
+      "bear_conf": 0.58,
+      "bull_summary": "삼성전자는 중장기 이동평균선 위에 있고 RSI도 중립이라 추세 훼손 없이 저항 돌파를 노릴 수 있는 매수 신호가 우세하다.",
+      "bear_summary": "단기 이평선 아래에서 MACD도 약세이고 거래량도 식어 있어, 지금은 매수보다 하방 리스크가 더 두드러진다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "neutral",
+        "10": "neutral",
+        "20": "neutral"
+      },
+      "correct": {
+        "5": true,
+        "10": true,
+        "20": true
+      }
+    }
+  ],
+  "stats": {
+    "by_horizon": {
+      "5": {
+        "valid_n": 1,
+        "correct": 1,
+        "accuracy": 1.0,
+        "bull_accuracy": null,
+        "bear_accuracy": 1.0,
+        "balanced_accuracy": null
+      },
+      "10": {
+        "valid_n": 1,
+        "correct": 1,
+        "accuracy": 1.0,
+        "bull_accuracy": null,
+        "bear_accuracy": 1.0,
+        "balanced_accuracy": null
+      },
+      "20": {
+        "valid_n": 1,
+        "correct": 1,
+        "accuracy": 1.0,
+        "bull_accuracy": null,
+        "bear_accuracy": 1.0,
+        "balanced_accuracy": null
+      }
+    },
+    "prediction_distribution": {
+      "bearish": 1,
+      "neutral": 1
+    },
+    "error_count": 0,
+    "total_cases": 2
+  }
+}

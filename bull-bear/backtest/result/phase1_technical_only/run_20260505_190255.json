@@ -1,0 +1,88 @@
+{
+  "meta": {
+    "track": "A",
+    "ticker": "005930",
+    "model": "gpt-5.4-mini",
+    "case_count": 2,
+    "ran_at": "2026-05-05T19:02:55"
+  },
+  "results": [
+    {
+      "ticker": "005930",
+      "as_of": "2024-01-02",
+      "prediction": "bearish",
+      "conf_diff": -0.08,
+      "bull_conf": 0.86,
+      "bear_conf": 0.94,
+      "bull_summary": "전 구간 이동평균선 위에서 MACD와 RSI가 강세를 지지해, 저항 돌파 시 추가 상승을 노릴 수 있는 매수 유망 구간입니다.",
+      "bear_summary": "과열된 단기 랠리로 보이며, 1.1577 저항 돌파 확인 전에는 매수보다 관망이 유리합니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bearish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": true,
+        "10": true,
+        "20": true
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2024-02-01",
+      "prediction": "bearish",
+      "conf_diff": -0.15,
+      "bull_conf": 0.63,
+      "bear_conf": 0.78,
+      "bull_summary": "단기 모멘텀은 약하지만, 중장기 이동평균 상방 정렬과 중립 RSI, 명확한 지지선이 있어 지금 구간은 분할 매수 관점이 유효합니다.",
+      "bear_summary": "단기 추세와 수급이 약하고 저항 대비 지지 여력이 크지 않아 지금은 매수보다 관망이 더 합리적입니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "neutral",
+        "10": "neutral",
+        "20": "neutral"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    }
+  ],
+  "stats": {
+    "by_horizon": {
+      "5": {
+        "valid_n": 1,
+        "correct": 1,
+        "accuracy": 1.0,
+        "bull_accuracy": null,
+        "bear_accuracy": 1.0,
+        "balanced_accuracy": null
+      },
+      "10": {
+        "valid_n": 1,
+        "correct": 1,
+        "accuracy": 1.0,
+        "bull_accuracy": null,
+        "bear_accuracy": 1.0,
+        "balanced_accuracy": null
+      },
+      "20": {
+        "valid_n": 1,
+        "correct": 1,
+        "accuracy": 1.0,
+        "bull_accuracy": null,
+        "bear_accuracy": 1.0,
+        "balanced_accuracy": null
+      }
+    },
+    "prediction_distribution": {
+      "bearish": 2
+    },
+    "error_count": 0,
+    "total_cases": 2
+  }
+}

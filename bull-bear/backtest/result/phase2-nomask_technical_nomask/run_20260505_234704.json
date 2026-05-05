@@ -1,0 +1,2158 @@
+{
+  "meta": {
+    "track": "A",
+    "ticker": null,
+    "model": "gpt-5.4-mini",
+    "case_count": 96,
+    "ran_at": "2026-05-05T23:47:04"
+  },
+  "results": [
+    {
+      "ticker": "005930",
+      "as_of": "2024-01-02",
+      "prediction": "bullish",
+      "conf_diff": 0.14,
+      "bull_conf": 0.76,
+      "bear_conf": 0.62,
+      "bull_summary": "이동평균선 상단 안착과 MACD 강세, 저항선 근접이라는 3중 신호가 맞물려 삼성전자 매수 신호가 유효합니다.",
+      "bear_summary": "RSI 과매수와 저항선 근접, 그리고 강한 거래량 없이 고평가된 단기 과열 구간이라 추격 매수보다 매도 위험이 우세합니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bearish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2024-02-01",
+      "prediction": "neutral",
+      "conf_diff": -0.04,
+      "bull_conf": 0.52,
+      "bear_conf": 0.56,
+      "bull_summary": "삼성전자는 단기 모멘텀은 다소 약해도 60일선 이상과 중장기 이동평균선 위에 있는 우상향 구조로, 지지선 근처에서 매수 우위가 가능한 구간입니다.",
+      "bear_summary": "단기 이동평균 이탈과 bearish MACD, 약한 거래량을 보면 매수보다는 하방 리스크가 더 두드러집니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "neutral",
+        "10": "neutral",
+        "20": "neutral"
+      },
+      "correct": {
+        "5": true,
+        "10": true,
+        "20": true
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2024-03-04",
+      "prediction": "bullish",
+      "conf_diff": 0.14,
+      "bull_conf": 0.72,
+      "bear_conf": 0.58,
+      "bull_summary": "삼성전자는 단기·중기·장기 이동평균선을 모두 회복했고 MACD 상승 전환까지 확인돼, 추세 추종 관점의 매수 신호가 뚜렷합니다.",
+      "bear_summary": "삼성전자는 단기 이평 위에 있지만 과열성, 저항 근접, 거래량 부진이 겹쳐 매수보다는 되밀림 위험이 우세하다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bearish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": true
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2024-04-01",
+      "prediction": "bullish",
+      "conf_diff": 0.1,
+      "bull_conf": 0.68,
+      "bear_conf": 0.58,
+      "bull_summary": "주가는 주요 이동평균선 위에서 정배열에 가까운 상승 흐름을 보이고 MACD도 bullish라서, 단기 조정 가능성은 있어도 추세 추종 매수 신호가 우세합니다.",
+      "bear_summary": "삼성전자는 단기 과매수와 과도한 이격이 겹쳐 추격매수보다 조정 리스크가 우세합니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bearish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": true,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2024-05-02",
+      "prediction": "neutral",
+      "conf_diff": 0.0,
+      "bull_conf": 0.58,
+      "bear_conf": 0.58,
+      "bull_summary": "삼성전자는 78,000원에서 중장기 이동평균선 위를 지키며 과열도 아닌 상태라, 75,100원 지지 기반의 매수 신호가 유효합니다.",
+      "bear_summary": "단기 추세와 모멘텀이 약해 지금 가격에서의 추가 매수는 하방 리스크가 더 크게 보입니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2024-06-03",
+      "prediction": "bearish",
+      "conf_diff": -0.07,
+      "bull_conf": 0.58,
+      "bear_conf": 0.65,
+      "bull_summary": "삼성전자는 단기 추세는 약하지만 지지선 인근과 중립권 RSI가 겹쳐 저점 분할매수에 유리한 기술적 매수 구간입니다.",
+      "bear_summary": "삼성전자는 주요 이동평균선 아래의 약한 추세와 bearish MACD, 감소한 거래량으로 매수 신호보다 매도 우위가 더 뚜렷합니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "neutral",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2024-07-01",
+      "prediction": "bullish",
+      "conf_diff": 0.16,
+      "bull_conf": 0.72,
+      "bear_conf": 0.56,
+      "bull_summary": "단기·중기 이동평균 위에서 MACD도 강세로 돌아선 만큼, 82,500원 저항 돌파를 노리는 매수 신호가 유효합니다.",
+      "bear_summary": "삼성전자는 단기 이동평균 위에서 거래되지만 저항선 근접과 거래량 부진, 추세 확인 부족 때문에 매수보다 차익실현 압력이 더 두드러집니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "neutral"
+      },
+      "correct": {
+        "5": true,
+        "10": true,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2024-08-01",
+      "prediction": "neutral",
+      "conf_diff": -0.03,
+      "bull_conf": 0.55,
+      "bear_conf": 0.58,
+      "bull_summary": "삼성전자는 단기적으로 20일선 아래에 있지만 60·120·200일선 위의 중기 우상향 구조와 80,000원 지지로 매수 관점이 유효하다.",
+      "bear_summary": "단기 추세가 20일선 아래로 밀린 상태이고 MACD도 약세라 지금 가격대는 매수보다 약세 리스크가 더 큽니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bearish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2024-09-02",
+      "prediction": "bearish",
+      "conf_diff": -0.14,
+      "bull_conf": 0.58,
+      "bear_conf": 0.72,
+      "bull_summary": "삼성전자는 이동평균선 아래에 있어 추세는 약하지만, RSI 39.7과 지지선 70,200원 기준의 방어력으로 기술적 반등 매수 신호가 살아 있습니다.",
+      "bear_summary": "이 종목은 주요 이동평균선 아래에서 모멘텀이 약해진 상태라, 지금 매수보다 하방 압력이 더 우세한 매도 신호로 해석됩니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bearish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": true,
+        "10": true,
+        "20": true
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2024-10-02",
+      "prediction": "bearish",
+      "conf_diff": -0.12,
+      "bull_conf": 0.64,
+      "bear_conf": 0.76,
+      "bull_summary": "단기 과매도와 MACD bullish 신호가 겹쳐 반등 가능성이 커 매수 신호가 살아 있습니다.",
+      "bear_summary": "삼성전자는 단기 과매도 반등 가능성은 있어도, 주요 이동평균선 전부 하회와 약한 수급 때문에 매수보다 매도 우위로 해석됩니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bearish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": true,
+        "10": true,
+        "20": true
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2024-11-01",
+      "prediction": "neutral",
+      "conf_diff": 0.03,
+      "bull_conf": 0.58,
+      "bear_conf": 0.55,
+      "bull_summary": "기술적으로는 약세 추세 속에서도 MACD bullish와 40대 RSI가 보여주는 반등 신호가 살아 있어, 58,300원 구간은 매수 검토에 우호적입니다.",
+      "bear_summary": "단기 이동평균 이탈과 약한 모멘텀, 부재한 거래량 확대로 보면 지금은 매수보다 하방 리스크가 더 커 보입니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bearish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2024-12-02",
+      "prediction": "bearish",
+      "conf_diff": -0.06,
+      "bull_conf": 0.62,
+      "bear_conf": 0.68,
+      "bull_summary": "기술적으로는 중기선 아래 조정이 깊지만 MACD가 bullish이고 지지선 49,900원·저항선 58,900원 구조가 뚜렷해 반등 매수 신호가 유효합니다.",
+      "bear_summary": "주가는 단기·중기·장기 이동평균 아래에 머물러 추세가 약하고, 거래량도 뒷받침되지 않아 지금은 매수보다 약세 신호가 우세합니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "neutral",
+        "10": "bullish",
+        "20": "neutral"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2025-01-02",
+      "prediction": "bearish",
+      "conf_diff": -0.14,
+      "bull_conf": 0.56,
+      "bear_conf": 0.7,
+      "bull_summary": "MACD 개선과 51,900원 지지, 과열 아닌 RSI 44.1이 겹쳐 단기 반등 매수 신호가 형성돼 있습니다.",
+      "bear_summary": "삼성전자는 주요 이동평균선 아래에서 추세가 약화되고 거래량도 줄어드는 모습이라 매수보다 매도 우위로 해석됩니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "neutral"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2025-02-03",
+      "prediction": "bearish",
+      "conf_diff": -0.17,
+      "bull_conf": 0.57,
+      "bear_conf": 0.74,
+      "bull_summary": "기술적으로 과매도·지지선 인접 구간이라 단기 반등 매수 신호가 살아 있다.",
+      "bear_summary": "삼성전자는 주요 이동평균선을 모두 밑도는 약세 추세에 있고 모멘텀도 둔화돼 매수보다 하방 리스크가 더 커 보입니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2025-03-04",
+      "prediction": "bearish",
+      "conf_diff": -0.06,
+      "bull_conf": 0.58,
+      "bear_conf": 0.64,
+      "bull_summary": "삼성전자는 54,500원에서 60일선 근처 지지와 과매도 아님을 동시에 보여주는 구간이라 단기 분할매수에 우호적인 기술적 자리입니다.",
+      "bear_summary": "주가는 주요 이동평균선 아래에서 약세 신호가 우세하고, 거래량도 약해 매수보다 매도 쪽 신호가 더 뚜렷합니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": true,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2025-04-01",
+      "prediction": "bullish",
+      "conf_diff": 0.14,
+      "bull_conf": 0.72,
+      "bear_conf": 0.58,
+      "bull_summary": "삼성전자는 주요 이동평균선 위에서 MACD가 bullish로 전환된 상태라, 추세 복원과 저항 돌파를 노리는 매수 관점이 유효합니다.",
+      "bear_summary": "삼성전자는 기술적으로 중립~약세 구간이며, 거래량 둔화와 단기선 이탈 때문에 지금 매수 신호가 강하지 않다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bearish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2025-05-02",
+      "prediction": "bearish",
+      "conf_diff": -0.14,
+      "bull_conf": 0.58,
+      "bear_conf": 0.72,
+      "bull_summary": "주가는 주요 이동평균선 아래에 있지만 52,900원 지지 위에서 RSI도 과매도는 아니어서, 반등을 노리는 분할 매수 논리가 살아 있습니다.",
+      "bear_summary": "삼성전자는 주요 이동평균선 아래에서 MACD 약세 전환까지 겹쳐 단기 매수보다 추가 조정 리스크가 더 큰 구간입니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2025-06-02",
+      "prediction": "bullish",
+      "conf_diff": 0.16,
+      "bull_conf": 0.72,
+      "bear_conf": 0.56,
+      "bull_summary": "삼성전자는 주요 이동평균선을 모두 웃도는 데다 MACD도 bullish로 돌아서 기술적 매수 신호가 분명합니다.",
+      "bear_summary": "삼성전자는 단기 이동평균 위에 있지만 수급 확증이 약하고 저항까지의 공간도 크지 않아, 지금 시점의 매수는 상승 탄력보다 되밀림 위험이 더 두드러진다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": true,
+        "10": true,
+        "20": true
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2025-07-01",
+      "prediction": "bullish",
+      "conf_diff": 0.28,
+      "bull_conf": 0.72,
+      "bear_conf": 0.44,
+      "bull_summary": "삼성전자는 주요 이동평균선 위에서 MACD가 bullish이고 RSI도 과열이 아닌 56.6으로, 추세 회복과 추가 상승 여력이 동시에 보이는 매수 신호다.",
+      "bear_summary": "단기 이동평균은 유지되지만 5일선 이탈과 거래량 부진, 저항 근접으로 매수보다는 약세 리스크가 더 두드러집니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": true,
+        "10": true,
+        "20": true
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2025-08-01",
+      "prediction": "bullish",
+      "conf_diff": 0.18,
+      "bull_conf": 0.74,
+      "bear_conf": 0.56,
+      "bull_summary": "삼성전자는 주요 이동평균선 위에서 MACD 강세 신호와 과열이 아닌 RSI를 바탕으로 추세 회복이 확인되는 매수 우위 구간입니다.",
+      "bear_summary": "단기 이평선 대비 가격은 부담스럽고, 거래량 확증도 없어 추격매수보다 되돌림 위험이 더 커 보입니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": true,
+        "10": true,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2025-09-01",
+      "prediction": "bearish",
+      "conf_diff": -0.14,
+      "bull_conf": 0.58,
+      "bear_conf": 0.72,
+      "bull_summary": "단기 조정은 있지만 60일선·120일선·200일선 위의 중장기 우상향 구조와 67,500원 지지선 근접이 매수 신호를 지지합니다.",
+      "bear_summary": "삼성전자는 단기 이동평균 하회, MACD 약세, 거래량 감소가 겹쳐 매수보다 약세 리스크가 더 큰 구간입니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2025-10-01",
+      "prediction": "bearish",
+      "conf_diff": -0.16,
+      "bull_conf": 0.68,
+      "bear_conf": 0.84,
+      "bull_summary": "삼성전자는 장·단기 이동평균을 모두 돌파한 강한 상승 추세에 MACD와 RSI까지 동반된 모멘텀 구간이라 매수 신호가 분명합니다.",
+      "bear_summary": "현재는 저항선·과매수·상단 밴드 근접이 겹친 과열 구간이라 매수보다 매도 신호가 더 뚜렷합니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2025-11-03",
+      "prediction": "bearish",
+      "conf_diff": -0.08,
+      "bull_conf": 0.7,
+      "bear_conf": 0.78,
+      "bull_summary": "기술적으로 다중 이동평균 상회와 bullish MACD가 겹쳐 있어 삼성전자는 추세 추종 매수 신호가 강합니다.",
+      "bear_summary": "삼성전자는 이미 과매수·저항선 직전·이격 과열 구간이라 지금은 매수보다 되돌림 리스크가 더 크다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bearish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": true,
+        "10": true,
+        "20": true
+      }
+    },
+    {
+      "ticker": "005930",
+      "as_of": "2025-12-01",
+      "prediction": "neutral",
+      "conf_diff": 0.01,
+      "bull_conf": 0.57,
+      "bear_conf": 0.56,
+      "bull_summary": "중장기 이동평균을 모두 상회한 상승 추세 속에서 과열 없이 숨 고르기 중인 구간이라 매수 우위로 볼 수 있다.",
+      "bear_summary": "단기 추세와 모멘텀이 약하고 수급 확장도 없어, 지금 구간은 매수보다 하방 리스크가 더 눈에 띈다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005380",
+      "as_of": "2024-01-02",
+      "prediction": "neutral",
+      "conf_diff": 0.04,
+      "bull_conf": 0.72,
+      "bear_conf": 0.68,
+      "bull_summary": "이평선 우위와 MACD 강세, 저항선 근접이 겹친 상태라 단기 매수 신호가 분명합니다.",
+      "bear_summary": "RSI 과열, 상단 저항 근접, 거래량 둔화가 겹쳐 단기 매도 신호가 우세합니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bearish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005380",
+      "as_of": "2024-02-01",
+      "prediction": "neutral",
+      "conf_diff": 0.0,
+      "bull_conf": 0.74,
+      "bear_conf": 0.74,
+      "bull_summary": "현대차는 주요 이동평균선 상회, MACD 강세, 거래량 동반으로 추세와 모멘텀이 함께 살아난 매수 우위 구간입니다.",
+      "bear_summary": "현대차는 강세가 아니라 209000원 저항 직전의 과매수·과열 구간으로, 추격매수보다 되돌림 위험이 더 크다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005380",
+      "as_of": "2024-03-04",
+      "prediction": "bearish",
+      "conf_diff": -0.17,
+      "bull_conf": 0.62,
+      "bear_conf": 0.79,
+      "bull_summary": "현대차는 주요 이동평균선을 모두 상회하는 강한 상승 추세와 저항선 근접 돌파 기대가 겹쳐 매수 신호가 우세하다.",
+      "bear_summary": "현대차는 단기 과열과 상단 저항 접근, 모멘텀 둔화가 겹쳐 추격매수보다 차익실현 압력이 더 강한 구간입니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bearish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": true,
+        "10": true,
+        "20": true
+      }
+    },
+    {
+      "ticker": "005380",
+      "as_of": "2024-04-01",
+      "prediction": "bearish",
+      "conf_diff": -0.2,
+      "bull_conf": 0.58,
+      "bear_conf": 0.78,
+      "bull_summary": "단기 모멘텀은 약하지만 200일선 위의 중장기 추세와 지지선 근접, 하단 밴드 위치가 겹쳐 반등 매수 신호가 살아 있습니다.",
+      "bear_summary": "현대차는 단기 이동평균 하회, MACD 약세, 거래량 감소까지 겹쳐 매수보다 하락 위험이 더 우세하다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005380",
+      "as_of": "2024-05-02",
+      "prediction": "bullish",
+      "conf_diff": 0.13,
+      "bull_conf": 0.68,
+      "bear_conf": 0.55,
+      "bull_summary": "현대차는 중장기 이동평균선 위에서 MACD도 강세를 보이며, 254500.0원 돌파 시 추가 상승 여지가 살아 있는 매수 우위 구간입니다.",
+      "bear_summary": "현 주가는 저항선 직전에서 거래량까지 약해 매수 강도보다 상승 피로가 먼저 보인다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "neutral",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": true
+      }
+    },
+    {
+      "ticker": "005380",
+      "as_of": "2024-06-03",
+      "prediction": "neutral",
+      "conf_diff": 0.0,
+      "bull_conf": 0.66,
+      "bear_conf": 0.66,
+      "bull_summary": "현대차는 주요 이동평균선 상단 정배열과 부담 없는 RSI를 바탕으로 277,500원 저항 돌파를 노릴 수 있는 매수 구간입니다.",
+      "bear_summary": "단기 추세는 살아 있지만 MACD 약세 전환, 저항선 근접, 거래량 감소가 겹쳐 매수보다 매도 신호가 우세하다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005380",
+      "as_of": "2024-07-01",
+      "prediction": "bullish",
+      "conf_diff": 0.28,
+      "bull_conf": 0.7,
+      "bear_conf": 0.42,
+      "bull_summary": "현대차는 중기 이동평균선 위에서 MACD가 매수 신호를 보이고 있어, 추세 회복과 저항 돌파 기대가 동시에 살아 있는 매수 구간입니다.",
+      "bear_summary": "단기 추세와 수급이 강하지 않고 저항이 가까워, 지금 가격대에서 공격적으로 매수하기엔 매도 리스크가 더 크다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bearish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005380",
+      "as_of": "2024-08-01",
+      "prediction": "bearish",
+      "conf_diff": -0.07,
+      "bull_conf": 0.55,
+      "bear_conf": 0.62,
+      "bull_summary": "현대차는 단기선 아래에 있어도 RSI 43.2와 120일선 근접, 과도한 거래량 급변 부재가 겹쳐 반등 매수 신호가 살아 있는 구간입니다.",
+      "bear_summary": "단기 추세가 20/60일선 아래로 밀려 있고 MACD도 약세라 지금은 매수보다 되밀림 위험이 더 큰 구간입니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "neutral",
+        "20": "neutral"
+      },
+      "correct": {
+        "5": true,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005380",
+      "as_of": "2024-09-02",
+      "prediction": "neutral",
+      "conf_diff": 0.03,
+      "bull_conf": 0.55,
+      "bear_conf": 0.52,
+      "bull_summary": "장기 추세는 200일선 위에 유지되고 MACD가 bullish로 전환된 만큼, 현대차는 기술적 반등을 노릴 수 있는 매수 구간이다.",
+      "bear_summary": "단기·중기 이동평균 아래에 머물고 모멘텀도 약해, 지금 가격에서의 매수는 불리한 구간으로 보입니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "neutral",
+        "20": "neutral"
+      },
+      "correct": {
+        "5": false,
+        "10": true,
+        "20": true
+      }
+    },
+    {
+      "ticker": "005380",
+      "as_of": "2024-10-02",
+      "prediction": "bullish",
+      "conf_diff": 0.12,
+      "bull_conf": 0.67,
+      "bear_conf": 0.55,
+      "bull_summary": "현대차는 단기 이평선 아래 조정받고 있지만 MACD 반등 신호와 221,500원 지지, 265,500원까지의 상방 여지로 매수 매력이 살아 있는 구간입니다.",
+      "bear_summary": "현대차는 주요 이동평균선 아래에서 거래되며 모멘텀이 둔화된 약세 구간이라 추격매수보다 매도 우위로 해석됩니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bearish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": true,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005380",
+      "as_of": "2024-11-01",
+      "prediction": "bearish",
+      "conf_diff": -0.1,
+      "bull_conf": 0.58,
+      "bear_conf": 0.68,
+      "bull_summary": "현대차는 과매도에 가까운 가격대와 지지선 인접 구간에 있어 기술적 반등을 노린 매수 신호가 살아 있습니다.",
+      "bear_summary": "추세와 모멘텀이 동시에 꺾인 상태라 213500원 구간은 매수보다 하방 리스크가 더 큰 구간이다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bearish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": true,
+        "10": true,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005380",
+      "as_of": "2024-12-02",
+      "prediction": "bullish",
+      "conf_diff": 0.13,
+      "bull_conf": 0.68,
+      "bear_conf": 0.55,
+      "bull_summary": "20일선 위의 가격, bullish MACD, 중립 RSI가 함께 보여주는 전형적인 모멘텀 회복 구간으로 매수 쪽 해석이 유리합니다.",
+      "bear_summary": "중장기 이동평균선 아래에 머물고 저항 대비 하방 공간이 더 커 매수보다는 매도 관점이 우세합니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bearish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005380",
+      "as_of": "2025-01-02",
+      "prediction": "bullish",
+      "conf_diff": 0.07,
+      "bull_conf": 0.62,
+      "bear_conf": 0.55,
+      "bull_summary": "단기 추세가 MACD 기준으로 개선되고 있고, 과열 없이 20일선 부근에서 지지받는 구간이라 200,000원 지지 기반의 매수 접근이 유효합니다.",
+      "bear_summary": "현대차는 단기 반등보다 중장기 이동평균선 아래에 눌린 약세 구조가 더 뚜렷해 매수보다 매도 쪽 신호가 우세합니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "neutral",
+        "10": "bullish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": false,
+        "10": true,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005380",
+      "as_of": "2025-02-03",
+      "prediction": "bearish",
+      "conf_diff": -0.18,
+      "bull_conf": 0.52,
+      "bear_conf": 0.7,
+      "bull_summary": "주가는 20만 원 지지선 인근과 하단밴드 근처에 있어 기술적 반등을 노릴 수 있는 매수 구간이다.",
+      "bear_summary": "추세선 이탈과 약한 모멘텀, 부진한 수급이 겹쳐 202,000원 구간은 매수보다 매도 신호가 우세합니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bearish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": true,
+        "10": true,
+        "20": true
+      }
+    },
+    {
+      "ticker": "005380",
+      "as_of": "2025-03-04",
+      "prediction": "bearish",
+      "conf_diff": -0.22,
+      "bull_conf": 0.52,
+      "bear_conf": 0.74,
+      "bull_summary": "주가가 주요 이동평균선 아래에서 눌린 상태이고 RSI 34.5와 밴드 하단 근접이 겹쳐, 기술적 반등을 노릴 수 있는 매수 신호가 나온다.",
+      "bear_summary": "현대차는 주요 이동평균선을 모두 밑돈 약세 구조이고, 모멘텀도 bearish로 확인돼 매수보다 하방 리스크가 더 큽니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005380",
+      "as_of": "2025-04-01",
+      "prediction": "bearish",
+      "conf_diff": -0.15,
+      "bull_conf": 0.55,
+      "bear_conf": 0.7,
+      "bull_summary": "단기 추세는 약하지만 지지선 위의 조정 구간으로, 현대차는 반등을 노리는 매수 접근이 가능한 자리입니다.",
+      "bear_summary": "현대차는 주요 이동평균 하회와 bearish MACD, 약한 거래량이 겹쳐 매수보다 하방 리스크가 더 큰 구간이다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bearish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": true,
+        "10": true,
+        "20": true
+      }
+    },
+    {
+      "ticker": "005380",
+      "as_of": "2025-05-02",
+      "prediction": "bullish",
+      "conf_diff": 0.14,
+      "bull_conf": 0.66,
+      "bear_conf": 0.52,
+      "bull_summary": "20일선 회복과 bullish MACD가 동시에 확인돼 현대차는 단기 매수 신호가 유효합니다.",
+      "bear_summary": "단기 저항과 중기 이동평균선 아래에 머물고 거래량도 약해, 매수보다 매도 쪽 신호가 더 우세합니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "neutral",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": true,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005380",
+      "as_of": "2025-06-02",
+      "prediction": "bearish",
+      "conf_diff": -0.19,
+      "bull_conf": 0.55,
+      "bear_conf": 0.74,
+      "bull_summary": "현대차는 추세는 약하지만 과열이 아닌 조정 구간이고 179300원 지지와 198300원 저항 사이에서 반등 여지가 있어 기술적 매수 신호가 살아 있다.",
+      "bear_summary": "추세가 주요 이동평균선을 밑돌고 모멘텀도 약해 매수보다 매도 우위로 해석됩니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005380",
+      "as_of": "2025-07-01",
+      "prediction": "bullish",
+      "conf_diff": 0.15,
+      "bull_conf": 0.7,
+      "bear_conf": 0.55,
+      "bull_summary": "현대차는 단기·중기 이동평균선 위에서 MACD가 bullish이고 RSI도 과열 전 단계라, 추세 이어짐을 노린 매수 신호가 우세합니다.",
+      "bear_summary": "현대차는 추세는 살아있지만 221,500원 저항 대비 하방 위험이 더 커서 지금 가격대의 신규 매수는 불리합니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "neutral",
+        "10": "neutral",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": true
+      }
+    },
+    {
+      "ticker": "005380",
+      "as_of": "2025-08-01",
+      "prediction": "bearish",
+      "conf_diff": -0.16,
+      "bull_conf": 0.52,
+      "bear_conf": 0.68,
+      "bull_summary": "기술적으로 중장기 이동평균선 위에서 지지력을 유지하며, 과매도는 아니지만 과열도 아닌 중립 구간이라 반등 여지가 남아 있는 매수 후보입니다.",
+      "bear_summary": "단기 추세와 모멘텀이 약해 매수보다 하방 리스크가 더 큰 구간이다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005380",
+      "as_of": "2025-09-01",
+      "prediction": "bullish",
+      "conf_diff": 0.2,
+      "bull_conf": 0.72,
+      "bear_conf": 0.52,
+      "bull_summary": "현대차는 주요 이동평균선을 모두 상회하고 MACD도 강세라, 기술적으로 매수 우위가 뚜렷한 구간입니다.",
+      "bear_summary": "기술적으로는 상승 추세를 완전히 부정하긴 어렵지만, 225000원 저항 앞에서 거래량이 받쳐주지 않아 단기 매수 매력은 약하다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "neutral",
+        "10": "bearish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005380",
+      "as_of": "2025-10-01",
+      "prediction": "bearish",
+      "conf_diff": -0.13,
+      "bull_conf": 0.55,
+      "bear_conf": 0.68,
+      "bull_summary": "단기 모멘텀은 약하지만 중장기 추세와 지지 구조가 살아 있어 21만 원대는 매수 관점으로 볼 수 있습니다.",
+      "bear_summary": "단기·중기 추세와 수급이 약하고 저항이 가까워 매수보다 하방 위험이 더 큰 구간입니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "005380",
+      "as_of": "2025-11-03",
+      "prediction": "bearish",
+      "conf_diff": -0.2,
+      "bull_conf": 0.66,
+      "bear_conf": 0.86,
+      "bull_summary": "현대차는 주요 이동평균선을 모두 상회하는 강한 상승 추세와 bullish MACD를 바탕으로 298000원 돌파를 노릴 수 있는 매수 신호가 뚜렷합니다.",
+      "bear_summary": "현대차는 83.1의 RSI와 119.1% 이격도로 과열됐고, 상단 저항 298,000원까지도 얼마 남지 않아 매수보다 차익실현 리스크가 더 큽니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bearish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": true,
+        "10": true,
+        "20": true
+      }
+    },
+    {
+      "ticker": "005380",
+      "as_of": "2025-12-01",
+      "prediction": "bearish",
+      "conf_diff": -0.12,
+      "bull_conf": 0.56,
+      "bear_conf": 0.68,
+      "bull_summary": "단기 조정은 있지만 중장기 이동평균선 위에서 지지선 근처까지 내려온 눌림목이라 매수 신호가 살아 있습니다.",
+      "bear_summary": "현대차는 단기 이평선 이탈과 bearish 모멘텀, 약한 거래량으로 봤을 때 지금 매수보다 하방 리스크가 더 큰 구간입니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "105560",
+      "as_of": "2024-01-02",
+      "prediction": "bullish",
+      "conf_diff": 0.22,
+      "bull_conf": 0.7,
+      "bear_conf": 0.48,
+      "bull_summary": "추세선 위에서 MACD와 RSI가 동시에 우호적이라 KB금융은 현재 구간에서 매수 신호가 살아 있습니다.",
+      "bear_summary": "저항선과 밴드 상단 압박이 가까운데 거래량도 약해, 지금 구간은 추격 매수보다 되돌림 위험이 더 큰 편입니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bearish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": true
+      }
+    },
+    {
+      "ticker": "105560",
+      "as_of": "2024-02-01",
+      "prediction": "bearish",
+      "conf_diff": -0.06,
+      "bull_conf": 0.72,
+      "bear_conf": 0.78,
+      "bull_summary": "KB금융은 모든 주요 이동평균선 상단에서 MACD와 거래량이 함께 붙은 강한 추세 모멘텀 구간이라, 61,500원 저항 돌파 시 매수 신호가 매우 뚜렷합니다.",
+      "bear_summary": "과매수와 과도한 이격, 저항선 근접이 겹쳐 단기 매도 신호가 우세하다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "105560",
+      "as_of": "2024-03-04",
+      "prediction": "bearish",
+      "conf_diff": -0.06,
+      "bull_conf": 0.66,
+      "bear_conf": 0.72,
+      "bull_summary": "이평선 전 구간 상회와 강한 RSI·이격도 조합으로 KB금융은 상승 추세를 타고 있는 매수 우위 구간이다.",
+      "bear_summary": "KB금융은 추세가 좋기보다 단기 과열과 저항 부담이 더 두드러져, 지금 가격에서의 매수는 매도 압력에 취약하다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "neutral"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "105560",
+      "as_of": "2024-04-01",
+      "prediction": "bearish",
+      "conf_diff": -0.14,
+      "bull_conf": 0.58,
+      "bear_conf": 0.72,
+      "bull_summary": "단기 모멘텀은 약하지만 68,000원 지지선과 중장기 이동평균 상향 구조, 하단 밴드 근접으로 반등 매수 신호가 살아 있습니다.",
+      "bear_summary": "단기 추세와 모멘텀이 동시에 약해졌고, 수급도 둔화돼 지금은 매수보다 매도 쪽 신호가 더 뚜렷하다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bearish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": true,
+        "20": false
+      }
+    },
+    {
+      "ticker": "105560",
+      "as_of": "2024-05-02",
+      "prediction": "bullish",
+      "conf_diff": 0.25,
+      "bull_conf": 0.72,
+      "bear_conf": 0.47,
+      "bull_summary": "중기 이동평균 위에서 MACD 강세와 과열 아닌 RSI가 동시에 확인돼, KB금융은 현재 구간에서 매수 우위가 뚜렷합니다.",
+      "bear_summary": "단기 추세가 5일선 아래로 밀렸고 모멘텀도 중립 수준이라, 78,000원 저항을 넘기기 전까지는 매수 신호보다 하방 리스크가 더 크다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": true,
+        "10": true,
+        "20": true
+      }
+    },
+    {
+      "ticker": "105560",
+      "as_of": "2024-06-03",
+      "prediction": "bullish",
+      "conf_diff": 0.12,
+      "bull_conf": 0.68,
+      "bear_conf": 0.56,
+      "bull_summary": "단기·중기 이동평균선 위에서 안정적으로 거래되고 있어, 83,400원 저항 돌파 시 추가 상승 여력이 있는 매수 우위 구간입니다.",
+      "bear_summary": "KB금융은 추세가 강하게 이어지는 구간이 아니라 MACD 약세와 거래량 둔화가 겹친 상태라, 지금 매수는 매도 신호가 더 우세합니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bearish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": true
+      }
+    },
+    {
+      "ticker": "105560",
+      "as_of": "2024-07-01",
+      "prediction": "bullish",
+      "conf_diff": 0.1,
+      "bull_conf": 0.68,
+      "bear_conf": 0.58,
+      "bull_summary": "KB금융은 핵심 이동평균선 위에서 안정적으로 거래되며 과열 부담 없이 지지선을 확보한 상태라, 추세 추종 관점의 매수 신호가 유효합니다.",
+      "bear_summary": "KB금융은 추세가 완전히 무너지진 않았지만 MACD 약세, 거래량 둔화, 제한된 상방 공간 때문에 지금 가격에서 매수 매력은 약하다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": true,
+        "10": true,
+        "20": true
+      }
+    },
+    {
+      "ticker": "105560",
+      "as_of": "2024-08-01",
+      "prediction": "bullish",
+      "conf_diff": 0.2,
+      "bull_conf": 0.74,
+      "bear_conf": 0.54,
+      "bull_summary": "중기 이평선 정배열에 가까운 우상향 흐름과 bullish MACD가 확인돼, KB금융은 현재 구간에서 매수 신호가 우세합니다.",
+      "bear_summary": "단기 이평선 이탈과 수급 둔화가 보이며, 저항선 92,400원 돌파 전까지는 매수보다 매도 우위입니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bearish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "105560",
+      "as_of": "2024-09-02",
+      "prediction": "bullish",
+      "conf_diff": 0.16,
+      "bull_conf": 0.68,
+      "bear_conf": 0.52,
+      "bull_summary": "KB금융은 전 구간 이동평균선 상회와 MACD bullish가 동시에 나타나며, 90,000원 저항 돌파를 노릴 수 있는 매수 우위 구간입니다.",
+      "bear_summary": "이 종목은 추세가 완전히 꺾인 것은 아니지만, 87,700원에서 추격 매수하기엔 수급 확산이 약하고 90,000원 저항이 가까워 단기 되돌림 위험이 더 크다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bearish",
+        "20": "neutral"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "105560",
+      "as_of": "2024-10-02",
+      "prediction": "bearish",
+      "conf_diff": -0.05,
+      "bull_conf": 0.57,
+      "bear_conf": 0.62,
+      "bull_summary": "KB금융은 81,300원에서 5일선·120일선 지지와 중립 RSI가 겹치는 기술적 매수 후보로, 단기 조정 후 반등을 노릴 수 있는 구간입니다.",
+      "bear_summary": "KB금융은 단기·중기 추세가 20일선과 60일선 아래에서 약하고, MACD도 bearish라 매수보다 하방 리스크가 우세합니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "105560",
+      "as_of": "2024-11-01",
+      "prediction": "neutral",
+      "conf_diff": 0.02,
+      "bull_conf": 0.58,
+      "bear_conf": 0.56,
+      "bull_summary": "KB금융은 중장기 이동평균선 위에 있는 안정적 추세와 중립적 기술지표를 바탕으로 91,800원 구간에서 매수 신호가 유효하다.",
+      "bear_summary": "단기 이동평균 이탈과 bearish MACD가 겹쳐 매수 신호보다 되밀림 리스크가 더 큰 구간입니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bearish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "105560",
+      "as_of": "2024-12-02",
+      "prediction": "bullish",
+      "conf_diff": 0.26,
+      "bull_conf": 0.74,
+      "bear_conf": 0.48,
+      "bull_summary": "KB금융은 장단기 이동평균선 위에서 거래되는 우상향 구조에 MACD 강세 신호까지 확인돼, 저항 돌파 시 매수 모멘텀이 더 커질 수 있는 구간입니다.",
+      "bear_summary": "KB금융은 추세가 강하게 열리기보다 저항이 가까운 구간에 있어, 매수보다 상승 탄력 둔화와 수급 약화를 경계하는 쪽이 더 타당합니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bearish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "105560",
+      "as_of": "2025-01-02",
+      "prediction": "bearish",
+      "conf_diff": -0.09,
+      "bull_conf": 0.58,
+      "bear_conf": 0.67,
+      "bull_summary": "KB금융은 200일선 위에서 지지받는 가운데 RSI 39.1의 저평가 성격과 과열 없는 조정 구간이 겹쳐, 지금 가격대에서 매수 신호가 살아 있다.",
+      "bear_summary": "KB금융은 단기·중기 추세가 5일선·20일선·60일선 아래로 약하고, RSI와 MACD도 꺾여 있어 매수보다 매도 압력이 우세합니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "105560",
+      "as_of": "2025-02-03",
+      "prediction": "bullish",
+      "conf_diff": 0.27,
+      "bull_conf": 0.69,
+      "bear_conf": 0.42,
+      "bull_summary": "KB금융은 20일선·120일선 회복과 bullish MACD가 동시에 보이는 기술적 전환 구간으로, 지지선 대비 하방이 제한된 매수 유리 구간이다.",
+      "bear_summary": "기술적으로 뚜렷한 추세 확장 신호가 부족하고 저항 부담이 남아 있어 지금은 매수보다 매도 쪽 해석이 더 우세합니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bearish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "105560",
+      "as_of": "2025-03-04",
+      "prediction": "bearish",
+      "conf_diff": -0.18,
+      "bull_conf": 0.52,
+      "bear_conf": 0.7,
+      "bull_summary": "기술적으로는 과매도권과 하단 지지대 근접이 겹쳐 단기 반등 매수 신호가 살아 있는 구간입니다.",
+      "bear_summary": "주가는 주요 이동평균선 아래로 밀려 있고 RSI·MACD·볼린저·수급 모두 약세라 매수보다 추가 하락 위험이 더 큰 구간입니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "neutral",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "105560",
+      "as_of": "2025-04-01",
+      "prediction": "neutral",
+      "conf_diff": 0.04,
+      "bull_conf": 0.68,
+      "bear_conf": 0.64,
+      "bull_summary": "단기 이동평균 부근에서 지지를 확인하는 가운데 MACD가 bullish로 전환 신호를 주고 있어, KB금융은 반등 매수 논리가 살아있는 구간입니다.",
+      "bear_summary": "중기 이평선 아래에서 거래량도 약해, 반등보다 하방 리스크가 더 큰 구간입니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bearish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "105560",
+      "as_of": "2025-05-02",
+      "prediction": "bearish",
+      "conf_diff": -0.1,
+      "bull_conf": 0.72,
+      "bear_conf": 0.82,
+      "bull_summary": "KB금융은 주요 이동평균선 상회와 골든크로스, MACD 강세가 겹친 추세형 매수 신호가 뚜렷합니다.",
+      "bear_summary": "KB금융은 추세는 살아 있어도 93,200원 고점 저항과 RSI 76.9 과매수로 단기 매수보다 차익실현 압력이 우세합니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "neutral",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "105560",
+      "as_of": "2025-06-02",
+      "prediction": "bullish",
+      "conf_diff": 0.27,
+      "bull_conf": 0.72,
+      "bear_conf": 0.45,
+      "bull_summary": "중기 이평선 위에서 MACD가 강세로 돌아선 만큼, KB금융은 기술적 추세와 모멘텀이 함께 살아 있는 매수 구간입니다.",
+      "bear_summary": "단기 추세는 약하고 모멘텀은 과열 직전이라, 지금 가격에서 추격 매수는 매도 관점에서 불리하다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": true,
+        "10": true,
+        "20": true
+      }
+    },
+    {
+      "ticker": "105560",
+      "as_of": "2025-07-01",
+      "prediction": "neutral",
+      "conf_diff": -0.04,
+      "bull_conf": 0.68,
+      "bear_conf": 0.72,
+      "bull_summary": "KB금융은 주요 이동평균선 위에서 상승 추세를 이어가고 있고, RSI와 괴리도도 매수 모멘텀을 지지해 11만원대는 매수 신호가 살아 있는 구간입니다.",
+      "bear_summary": "KB금융은 추세가 완전히 무너지진 않았지만 RSI 과열 접근, MACD 약세, 거래량 둔화로 지금은 매수보다 차익실현 압력이 더 강한 구간이다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "neutral"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": true
+      }
+    },
+    {
+      "ticker": "105560",
+      "as_of": "2025-08-01",
+      "prediction": "bearish",
+      "conf_diff": -0.23,
+      "bull_conf": 0.55,
+      "bear_conf": 0.78,
+      "bull_summary": "단기 조정으로 5일선·20일선 아래에 있지만, 120일선·200일선 위의 중장기 상승 추세와 RSI 39.6의 과매도 근접 구간, 105800.0원 지지선 근접이 겹쳐 매수 신호가 살아 있습니다.",
+      "bear_summary": "KB금융은 단기·중기 이동평균선 아래에서 모멘텀이 꺾였고, 하단 밴드와 지지선 근처의 약세 구조라 매수보다 매도 쪽 신호가 우세합니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "105560",
+      "as_of": "2025-09-01",
+      "prediction": "bearish",
+      "conf_diff": -0.11,
+      "bull_conf": 0.57,
+      "bear_conf": 0.68,
+      "bull_summary": "단기 이동평균 아래의 눌림목이지만 과열 신호가 없고 106000원 지지선 위에서 반등 여지가 살아 있는 매수 구간입니다.",
+      "bear_summary": "단기·중기 이동평균선 하회, bearish MACD, 약한 거래량이 겹쳐 현재 구간은 매수보다 하방 리스크가 더 큰 약세 신호다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "neutral",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "105560",
+      "as_of": "2025-10-01",
+      "prediction": "neutral",
+      "conf_diff": 0.0,
+      "bull_conf": 0.58,
+      "bear_conf": 0.58,
+      "bull_summary": "KB금융은 주요 이동평균선 위에 있는 추세 우위 구간이고, RSI도 무난해 눌림을 매수 기회로 볼 수 있는 상태입니다.",
+      "bear_summary": "추세는 완전히 무너지지 않았지만 MACD 약세와 거래량 둔화가 보여 지금 가격대 추격 매수는 불리하다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "neutral",
+        "10": "neutral",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": true,
+        "10": true,
+        "20": false
+      }
+    },
+    {
+      "ticker": "105560",
+      "as_of": "2025-11-03",
+      "prediction": "bullish",
+      "conf_diff": 0.2,
+      "bull_conf": 0.76,
+      "bear_conf": 0.56,
+      "bull_summary": "주가는 주요 이동평균선을 모두 상회하고 MACD가 bullish인 만큼, KB금융은 추세와 모멘텀이 동시에 살아 있는 매수 우위 구간입니다.",
+      "bear_summary": "118,000원은 저항 120,600원 아래의 과열 구간으로, 상승 여력보다 되밀림 위험이 더 커 보입니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": true,
+        "10": true,
+        "20": true
+      }
+    },
+    {
+      "ticker": "105560",
+      "as_of": "2025-12-01",
+      "prediction": "bullish",
+      "conf_diff": 0.12,
+      "bull_conf": 0.74,
+      "bear_conf": 0.62,
+      "bull_summary": "단기 조정 부담은 있어도 핵심 이동평균선 위에서 중기 상승 추세가 유지되고 있어 매수 신호가 우세합니다.",
+      "bear_summary": "단기 모멘텀은 약해졌고 수급도 붙지 않아, 지금 가격대의 추격 매수는 불리합니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bearish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": true,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "207940",
+      "as_of": "2024-01-02",
+      "prediction": "bearish",
+      "conf_diff": -0.14,
+      "bull_conf": 0.72,
+      "bear_conf": 0.86,
+      "bull_summary": "이 종목은 주요 이동평균선을 모두 회복한 상태에서 MACD·거래량·가격 모멘텀이 동시에 강화돼 매수 신호가 뚜렷합니다.",
+      "bear_summary": "삼성바이오로직스는 RSI 78과 저항선 근접, 거래량 급증이 겹친 과열 구간이라 매수보다 되돌림 위험이 더 크다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bearish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": true,
+        "10": true,
+        "20": false
+      }
+    },
+    {
+      "ticker": "207940",
+      "as_of": "2024-02-01",
+      "prediction": "bullish",
+      "conf_diff": 0.21,
+      "bull_conf": 0.74,
+      "bear_conf": 0.53,
+      "bull_summary": "주가가 전 주요 이동평균선 위에 있고 MACD·RSI가 강세를 지지해, 추세 추종 매수 신호가 뚜렷하다.",
+      "bear_summary": "기술적으로는 단기 과열과 추격매수 부담이 커서 지금 진입은 매도 관점의 경고 신호가 우세합니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "neutral",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "207940",
+      "as_of": "2024-03-04",
+      "prediction": "bearish",
+      "conf_diff": -0.14,
+      "bull_conf": 0.55,
+      "bear_conf": 0.69,
+      "bull_summary": "중기 이동평균 위를 지키는 조정 구간이고 RSI도 38.3으로 과열이 아니어서, 기술적 반등을 노리는 매수 논리가 성립합니다.",
+      "bear_summary": "단기 추세와 모멘텀이 약화됐고 지지선 근접 부담까지 있어 매수보다 매도 우위로 해석된다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "207940",
+      "as_of": "2024-04-01",
+      "prediction": "bearish",
+      "conf_diff": -0.11,
+      "bull_conf": 0.55,
+      "bear_conf": 0.66,
+      "bull_summary": "중장기 이동평균선 위의 안정적 구조와 과열이 아닌 모멘텀이 맞물려, 삼성바이오로직스는 지금 매수 쪽에 더 유리한 자리입니다.",
+      "bear_summary": "단기 추세가 이동평균선 아래로 밀리고 모멘텀·거래량도 약해 지금은 매수보다 약세 신호가 우세하다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "neutral",
+        "10": "bearish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": false,
+        "10": true,
+        "20": true
+      }
+    },
+    {
+      "ticker": "207940",
+      "as_of": "2024-05-02",
+      "prediction": "bearish",
+      "conf_diff": -0.14,
+      "bull_conf": 0.58,
+      "bear_conf": 0.72,
+      "bull_summary": "장기선 위에서 지지받는 가운데 RSI도 낮아 추가 상승 여지가 남아 있어, 현재 구간은 매수 신호가 살아 있습니다.",
+      "bear_summary": "중기 추세가 20일선·60일선 아래로 약하고, MACD·RSI·거래량까지 힘이 빠져 있어 매수보다 매도 신호가 우세합니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": true
+      }
+    },
+    {
+      "ticker": "207940",
+      "as_of": "2024-06-03",
+      "prediction": "bearish",
+      "conf_diff": -0.09,
+      "bull_conf": 0.55,
+      "bear_conf": 0.64,
+      "bull_summary": "단기 기술적으로 과열이 아니고 지지선 위에서 버티는 흐름이라, 반등 구간을 노리는 매수 논리가 살아 있습니다.",
+      "bear_summary": "중기 이평선 아래에서 모멘텀과 거래량까지 약해 매수보다 매도 우위로 해석됩니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bearish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": true,
+        "10": true,
+        "20": false
+      }
+    },
+    {
+      "ticker": "207940",
+      "as_of": "2024-07-01",
+      "prediction": "bullish",
+      "conf_diff": 0.16,
+      "bull_conf": 0.74,
+      "bear_conf": 0.58,
+      "bull_summary": "단기 추세가 5일·20일선 위에서 회복되고 MACD와 거래량도 우호적이어서 매수 신호가 유효합니다.",
+      "bear_summary": "단기 반등은 있으나 중기 이동평균 아래에 머물고 과열 신호가 겹쳐 추격 매수는 매도 위험이 더 큽니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": true,
+        "10": true,
+        "20": true
+      }
+    },
+    {
+      "ticker": "207940",
+      "as_of": "2024-08-01",
+      "prediction": "neutral",
+      "conf_diff": 0.0,
+      "bull_conf": 0.74,
+      "bear_conf": 0.74,
+      "bull_summary": "단기 과열 신호는 있지만 중장기 이동평균 정배열과 bullish MACD가 함께 살아 있어 상승 추세를 따라 매수 우위로 볼 수 있습니다.",
+      "bear_summary": "과매수·저항 접근·거래량 부재가 겹쳐 단기 매도 신호가 우세합니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "neutral",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": true,
+        "20": false
+      }
+    },
+    {
+      "ticker": "207940",
+      "as_of": "2024-09-02",
+      "prediction": "bullish",
+      "conf_diff": 0.06,
+      "bull_conf": 0.64,
+      "bear_conf": 0.58,
+      "bull_summary": "중장기 이동평균선이 모두 정배열 성격으로 우상향하고 있어, 과열 없이 추세를 따라 매수하기 좋은 구간입니다.",
+      "bear_summary": "추세는 아직 완전히 꺾이지 않았지만, MACD 약세와 약한 거래량으로 보면 지금 가격대에서 공격적으로 매수하기보다 되밀림 위험이 더 크다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "neutral",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": true,
+        "20": true
+      }
+    },
+    {
+      "ticker": "207940",
+      "as_of": "2024-10-02",
+      "prediction": "bearish",
+      "conf_diff": -0.14,
+      "bull_conf": 0.58,
+      "bear_conf": 0.72,
+      "bull_summary": "중기 추세가 살아 있고 지지선 위에서 숨 고르기 중이라, 기술적 되돌림을 활용한 매수 우위 구간입니다.",
+      "bear_summary": "단기 이동평균 이탈과 bearish MACD, 약한 거래량이 겹쳐 매수보다 약세 해석이 우세합니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "207940",
+      "as_of": "2024-11-01",
+      "prediction": "bearish",
+      "conf_diff": -0.1,
+      "bull_conf": 0.58,
+      "bear_conf": 0.68,
+      "bull_summary": "단기 모멘텀은 약하지만 60일선 부근 지지와 장기 이동평균 상향 구조, 과열 해소가 겹쳐 눌림목 매수 신호가 살아 있습니다.",
+      "bear_summary": "단기 추세가 이동평균선 아래로 밀리고 모멘텀과 수급도 약해 매수보다 매도 우위로 해석됩니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "neutral",
+        "10": "bearish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": false,
+        "10": true,
+        "20": true
+      }
+    },
+    {
+      "ticker": "207940",
+      "as_of": "2024-12-02",
+      "prediction": "bullish",
+      "conf_diff": 0.21,
+      "bull_conf": 0.66,
+      "bear_conf": 0.45,
+      "bull_summary": "단기선 회복과 중장기 이동평균 상회, MACD bullish까지 겹쳐 기술적으로 매수 우위가 확인됩니다.",
+      "bear_summary": "기술적으로 중립에 가까우나 중기선 아래와 약한 거래량이 확인돼, 강한 상승 추세보다 매수 효율이 떨어지는 구간이다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bullish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": false,
+        "10": true,
+        "20": false
+      }
+    },
+    {
+      "ticker": "207940",
+      "as_of": "2025-01-02",
+      "prediction": "bearish",
+      "conf_diff": -0.14,
+      "bull_conf": 0.58,
+      "bear_conf": 0.72,
+      "bull_summary": "단기 조정이지만 200일선 위를 지키는 가운데 RSI 42.9와 볼린저 하단 근접으로 반등 매수 신호가 살아 있습니다.",
+      "bear_summary": "추세선 이탈과 약한 모멘텀, 감소한 거래량이 겹쳐 매수보다 매도 압력이 더 우세한 구간입니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "207940",
+      "as_of": "2025-02-03",
+      "prediction": "bearish",
+      "conf_diff": -0.06,
+      "bull_conf": 0.72,
+      "bear_conf": 0.78,
+      "bull_summary": "단기·중기 이동평균선 위에서 MACD와 RSI가 강세를 보이는 만큼, 삼성바이오로직스는 모멘텀을 활용한 매수 논리가 분명한 종목입니다.",
+      "bear_summary": "과매수·저항선 접근·이평선 괴리 과대로 단기 고점 부담이 커 매도 신호가 우세하다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "207940",
+      "as_of": "2025-03-04",
+      "prediction": "neutral",
+      "conf_diff": 0.02,
+      "bull_conf": 0.58,
+      "bear_conf": 0.56,
+      "bull_summary": "단기 이평선 아래 눌림은 있지만 중기 추세와 지지선이 살아 있어 반등 매수 논리가 유효합니다.",
+      "bear_summary": "단기선 이탈과 MACD 약세가 확인돼 추가 매수보다는 되돌림 리스크가 더 큰 종목이다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bearish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "207940",
+      "as_of": "2025-04-01",
+      "prediction": "bearish",
+      "conf_diff": -0.17,
+      "bull_conf": 0.55,
+      "bear_conf": 0.72,
+      "bull_summary": "단기 약세 신호는 있으나 5일선·120일선 위 가격과 과열되지 않은 RSI, 가까운 상방 저항까지의 여지를 감안하면 매수 신호가 살아 있습니다.",
+      "bear_summary": "추세가 20·60일선 아래로 꺾였고 MACD도 약세라 지금은 매수보다 매도 쪽 신호가 더 분명하다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bearish",
+        "20": "neutral"
+      },
+      "correct": {
+        "5": true,
+        "10": true,
+        "20": false
+      }
+    },
+    {
+      "ticker": "207940",
+      "as_of": "2025-05-02",
+      "prediction": "bullish",
+      "conf_diff": 0.19,
+      "bull_conf": 0.71,
+      "bear_conf": 0.52,
+      "bull_summary": "가격이 주요 이동평균선을 상회하고 MACD가 bullish인 만큼, 삼성바이오로직스는 현재 매수 우위의 기술적 전환 신호를 보여줍니다.",
+      "bear_summary": "기술적으로 상단 구간에 붙어 있어 추격 매수보다 조정 리스크가 더 크게 보인다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bearish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "207940",
+      "as_of": "2025-06-02",
+      "prediction": "bullish",
+      "conf_diff": 0.18,
+      "bull_conf": 0.63,
+      "bear_conf": 0.45,
+      "bull_summary": "기술적으로 과열 부담이 크지 않은 가운데 MACD가 강세를 보이고 지지선 위에 있어, 삼성바이오로직스는 매수 신호가 살아 있는 구간입니다.",
+      "bear_summary": "중기 추세선 아래에서 거래량까지 약해, 지금은 매수보다 되돌림과 추세 둔화 리스크가 더 큰 구간입니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bearish",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": true,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "207940",
+      "as_of": "2025-07-01",
+      "prediction": "bearish",
+      "conf_diff": -0.17,
+      "bull_conf": 0.55,
+      "bear_conf": 0.72,
+      "bull_summary": "단기 과열 없이 5일선 위에서 지지선을 시험하는 구간이라, 조정 이후 재상승을 노리는 매수 관점이 유효합니다.",
+      "bear_summary": "중기 추세가 이동평균선 아래로 밀리고 모멘텀과 수급도 약해 매수보다 매도 신호가 우세합니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "neutral",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "207940",
+      "as_of": "2025-08-01",
+      "prediction": "bearish",
+      "conf_diff": -0.14,
+      "bull_conf": 0.58,
+      "bear_conf": 0.72,
+      "bull_summary": "200일선과 주요 지지선 근처에서 조정이 마무리되는 구간으로, 과열 부담이 적은 상태에서 기술적 반등을 노릴 수 있는 매수 구간입니다.",
+      "bear_summary": "단기 이평선 이탈과 MACD 약세 전환, 거래량 부진이 겹쳐 매수보다 매도 우위의 신호가 더 뚜렷하다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "neutral",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": true,
+        "10": false,
+        "20": true
+      }
+    },
+    {
+      "ticker": "207940",
+      "as_of": "2025-09-01",
+      "prediction": "bearish",
+      "conf_diff": -0.22,
+      "bull_conf": 0.56,
+      "bear_conf": 0.78,
+      "bull_summary": "지지선 근처에서 RSI가 낮아진 상태라 기술적 반등을 노리는 매수 신호가 살아 있습니다.",
+      "bear_summary": "기술적으로 이동평균선 전반 하회, RSI 약세, MACD bearish가 겹쳐 매도 신호가 우세하다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "neutral"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "207940",
+      "as_of": "2025-10-01",
+      "prediction": "bearish",
+      "conf_diff": -0.16,
+      "bull_conf": 0.56,
+      "bear_conf": 0.72,
+      "bull_summary": "1,479,103원은 지지선 위에서 5일선과 근접하고 볼린저 하단 인근에 있어 기술적 반등을 노리기 좋은 매수 구간입니다.",
+      "bear_summary": "이 종목은 핵심 이동평균선 아래에서 모멘텀도 약해 매수보다 매도 신호가 우세합니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bullish",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": false,
+        "10": false,
+        "20": false
+      }
+    },
+    {
+      "ticker": "207940",
+      "as_of": "2025-11-03",
+      "prediction": "neutral",
+      "conf_diff": -0.02,
+      "bull_conf": 0.72,
+      "bear_conf": 0.74,
+      "bull_summary": "중기 이동평균을 모두 상회하는 강한 상승 추세와 bullish MACD가 확인되어 매수 우위 구간입니다.",
+      "bear_summary": "과매수( RSI 77.2 )와 단기 과열(20일 대비 108.2%)이 겹쳐, 지금은 매수보다 조정 리스크가 더 큰 구간입니다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "neutral",
+        "10": "neutral",
+        "20": "bearish"
+      },
+      "correct": {
+        "5": true,
+        "10": true,
+        "20": false
+      }
+    },
+    {
+      "ticker": "207940",
+      "as_of": "2025-12-01",
+      "prediction": "bearish",
+      "conf_diff": -0.23,
+      "bull_conf": 0.55,
+      "bear_conf": 0.78,
+      "bull_summary": "단기 지표는 약하지만 60일선 부근의 가격 지지와 과매도 성격이 겹쳐 반등 매수 신호가 살아 있습니다.",
+      "bear_summary": "단기 추세 이탈과 약한 모멘텀, 비우호적 수급이 겹쳐 매수보다 하방 리스크가 더 큰 구간이다.",
+      "bull_error": null,
+      "bear_error": null,
+      "gt_labels": {
+        "5": "bearish",
+        "10": "bullish",
+        "20": "bullish"
+      },
+      "correct": {
+        "5": true,
+        "10": false,
+        "20": false
+      }
+    }
+  ],
+  "stats": {
+    "by_horizon": {
+      "5": {
+        "valid_n": 68,
+        "correct": 29,
+        "accuracy": 0.4265,
+        "bull_accuracy": 0.3684,
+        "bear_accuracy": 0.5,
+        "balanced_accuracy": 0.4342
+      },
+      "10": {
+        "valid_n": 74,
+        "correct": 26,
+        "accuracy": 0.3514,
+        "bull_accuracy": 0.2791,
+        "bear_accuracy": 0.4516,
+        "balanced_accuracy": 0.3653
+      },
+      "20": {
+        "valid_n": 72,
+        "correct": 24,
+        "accuracy": 0.3333,
+        "bull_accuracy": 0.3023,
+        "bear_accuracy": 0.3793,
+        "balanced_accuracy": 0.3408
+      }
+    },
+    "prediction_distribution": {
+      "bullish": 33,
+      "neutral": 16,
+      "bearish": 47
+    },
+    "error_count": 0,
+    "total_cases": 96
+  }
+}
