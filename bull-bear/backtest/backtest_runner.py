@@ -35,6 +35,7 @@ PROJECT_ROOT  = BULL_BEAR_ROOT.parent
 
 sys.path.insert(0, str(BULL_BEAR_ROOT))           # package_builder, agents
 sys.path.insert(0, str(BACKTEST_ROOT.parent))     # backtest.masking import 경로
+sys.path.insert(0, str(PROJECT_ROOT / "macro"))   # macro_agents.macro_agent
 
 from package_builder import build_input_package    # noqa: E402
 from agents.bull_agent import run_bull_agent       # noqa: E402
@@ -93,15 +94,20 @@ def classify_prediction(bull: dict, bear: dict) -> tuple[str, float]:
 
 # ── 메인 실행 ─────────────────────────────────────────────────
 
-def run_case(ticker: str, ticker_name: str, as_of: str, mask: bool) -> dict:
+def run_case(ticker: str, ticker_name: str, as_of: str, mask: bool, macro_enabled: bool = False) -> dict:
     """단일 케이스 실행"""
     as_of_compact = as_of.replace("-", "")  # YYYY-MM-DD → YYYYMMDD
+    macro_payload = None
+    if macro_enabled:
+        from macro_agents.macro_agent import run_macro_agent
+        macro_payload = run_macro_agent(as_of=as_of_compact)
 
     pkg = build_input_package(
         ticker=ticker,
         ticker_name=ticker_name,
         as_of=as_of_compact,
         mask_for_backtest=mask,
+        macro_payload=macro_payload,
     )
 
     bull = run_bull_agent(pkg, model=MODEL)
@@ -120,10 +126,17 @@ def run_case(ticker: str, ticker_name: str, as_of: str, mask: bool) -> dict:
         "bear_summary": bear.get("summary"),
         "bull_error":   bull.get("error"),
         "bear_error":   bear.get("error"),
+        "macro_error":  macro_payload.get("errors") if macro_payload else None,
     }
 
 
-def run_backtest(ticker: str | None, track: str, mask_override: str | None = None, max_cases: int | None = None) -> dict:
+def run_backtest(
+    ticker: str | None,
+    track: str,
+    mask_override: str | None = None,
+    max_cases: int | None = None,
+    macro_enabled: bool = False,
+) -> dict:
     """백테스트 메인 루프"""
     gt = load_gt_labels()
     cases = group_cases_by_date(gt["records"], ticker=ticker)
@@ -138,6 +151,7 @@ def run_backtest(ticker: str | None, track: str, mask_override: str | None = Non
     print(f"\n{'='*60}")
     print(f"  백테스트 실행 — 트랙 {track} ({'마스킹 ON' if mask else '마스킹 OFF'})")
     print(f"  모델: {MODEL}")
+    print(f"  Macro: {'ON' if macro_enabled else 'OFF'}")
     print(f"  케이스 수: {len(cases)}")
     print(f"{'='*60}\n")
 
@@ -146,7 +160,7 @@ def run_backtest(ticker: str | None, track: str, mask_override: str | None = Non
         ticker_name = TICKER_NAMES.get(ticker_, ticker_)
         print(f"  [{i}/{len(cases)}] {ticker_} {ticker_name} {as_of} ...")
 
-        case_result = run_case(ticker_, ticker_name, as_of, mask)
+        case_result = run_case(ticker_, ticker_name, as_of, mask, macro_enabled=macro_enabled)
         case_result["gt_labels"] = gt_labels
 
         # GT와 즉시 비교
@@ -165,6 +179,7 @@ def run_backtest(ticker: str | None, track: str, mask_override: str | None = Non
             "track":      track,
             "ticker":     ticker,
             "model":      MODEL,
+            "macro":      macro_enabled,
             "case_count": len(cases),
             "ran_at":     datetime.now().isoformat(timespec="seconds"),
         },
@@ -260,10 +275,19 @@ def main():
                         help="A: Technical만 + 마스킹 ON / C: 전체 데이터 + 마스킹 OFF")
     parser.add_argument("--mask",   type=str, choices=["on", "off"], default=None,
                         help="마스킹 강제 지정 (track 기본값 무시). on/off")
+    parser.add_argument("--macro",  type=str, choices=["on", "off"], default="off",
+                        help="Macro payload 사용 여부. 기본 off")
     parser.add_argument("--max",    type=int, default=None, help="최대 케이스 수 제한")
     args = parser.parse_args()
 
-    payload = run_backtest(args.ticker, args.track, mask_override=args.mask, max_cases=args.max)
+    macro_enabled = args.macro == "on"
+    payload = run_backtest(
+        args.ticker,
+        args.track,
+        mask_override=args.mask,
+        max_cases=args.max,
+        macro_enabled=macro_enabled,
+    )
     stats = compute_stats(payload["results"])
     payload["stats"] = stats
 
@@ -273,6 +297,8 @@ def main():
     track_label = "technical_only" if args.track == "A" else "full_data"
     if args.mask == "off" and args.track == "A":
         track_label = "technical_nomask"
+    if macro_enabled:
+        track_label = "macro"
     out_dir = RESULT_DIR / f"phase{args.phase}_{track_label}"
     out_dir.mkdir(parents=True, exist_ok=True)
     ts = datetime.now().strftime("%Y%m%d_%H%M%S")

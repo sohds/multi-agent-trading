@@ -24,7 +24,7 @@ def fetch_ecos_data(api_key, stat_code, item_code, start_date, end_date, cycle_t
     df_ecos['DATA_VALUE'] = df_ecos['DATA_VALUE'].astype(float)
     return df_ecos[['DATA_VALUE']]
 
-def get_macro_raw_data() -> pd.DataFrame:
+def get_macro_raw_data(as_of: str | None = None) -> pd.DataFrame:
     """
     김성아 외(2015) 논문 기반 4대 부문 핵심 거시 지표 수집 및 병합
     (주식: KOSPI, 외환: 환율, 채권: 장단기/신용/CP, 은행: 은행채)
@@ -33,11 +33,11 @@ def get_macro_raw_data() -> pd.DataFrame:
     if not ECOS_API_KEY or ECOS_API_KEY == "your_ecos_api_key_here":
         raise ValueError("ECOS_API_KEY가 설정되지 않았습니다. .env 파일을 확인하세요.")
 
-    end_dt = datetime.today()
+    end_dt = pd.to_datetime(as_of).to_pydatetime() if as_of else datetime.today()
     # [수정] 표본 크기 확장: 거시 사이클(코로나19, 금리인상기 등) 학습을 위해 10년(3650일)으로 기간 대폭 확대
     start_dt = end_dt - timedelta(days=365 * 10) 
     
-    logger.info("  ▸ [ECOS] 4대 부문(주식/외환/채권/은행) 10년치 장기 데이터 호출 중...")
+    logger.info(f"  ▸ [ECOS] 4대 부문(주식/외환/채권/은행) 10년치 장기 데이터 호출 중... (기준일: {end_dt.strftime('%Y-%m-%d')})")
     
     df_kospi = fetch_ecos_data(ECOS_API_KEY, "802Y001", "0001000", start_dt, end_dt)
     df_kospi.columns = ['KOSPI']

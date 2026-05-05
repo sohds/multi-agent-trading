@@ -11,13 +11,24 @@ from utils.logger import get_logger
 load_dotenv(find_dotenv())
 logger = get_logger("macro_agent")
 
-def run_macro_agent() -> dict:
-    as_of = datetime.now().strftime("%Y-%m-%d %H:%M")
+def _format_as_of(as_of: str | None) -> str:
+    if as_of is None:
+        return datetime.now().strftime("%Y-%m-%d %H:%M")
+    for fmt in ("%Y%m%d", "%Y-%m-%d"):
+        try:
+            return datetime.strptime(as_of, fmt).strftime("%Y-%m-%d")
+        except ValueError:
+            pass
+    return as_of
+
+
+def run_macro_agent(as_of: str | None = None) -> dict:
+    meta_as_of = _format_as_of(as_of)
     logger.info("=== 매크로 에이전트 시작 ===")
     
     payload = {
         "meta": {
-            "as_of": as_of,
+            "as_of": meta_as_of,
             "base_models": [
                 "3-State Univariate Markov Regime Switching", 
                 "PCA-based FSI Extraction", 
@@ -32,7 +43,7 @@ def run_macro_agent() -> dict:
     
     try:
         logger.info("[1/2] 원천 데이터 수집 모듈 가동")
-        df_merged = get_macro_raw_data()
+        df_merged = get_macro_raw_data(as_of=as_of)
         payload["meta"]["data_as_of"] = df_merged.index[-1].strftime("%Y-%m-%d")
         
         logger.info("[2/2] 퀀트 모델 파이프라인 가동")
