@@ -22,6 +22,9 @@ output/
 bull-bear/experiments/
 bull-bear/to-do.md
 
+# 백테스팅 데이터 캐시 (재현 가능 — 커밋 제외, 결과·코드는 커밋)
+bull-bear/backtest/data/
+
 # IDE
 .vscode/
 .idea/
