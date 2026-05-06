@@ -36,7 +36,7 @@ def _index_return(index_ticker: str, start_date: str, end_date: str) -> Optional
         return None
 
 
-def get_relative_strength_analysis(ticker: str, sector_etf: str) -> dict:
+def get_relative_strength_analysis(ticker: str, sector_etf: str, as_of: str | None = None) -> dict:
     """
     섹터 상대강도 분석
 
@@ -58,14 +58,15 @@ def get_relative_strength_analysis(ticker: str, sector_etf: str) -> dict:
             "strongest_period": str, # 상대강도가 가장 높은 구간
         }
     """
-    today = datetime.today().strftime("%Y%m%d")
+    base_dt = datetime.strptime(as_of, "%Y%m%d") if as_of else datetime.today()
+    today = base_dt.strftime("%Y%m%d")
     KOSPI = "1001"   # KOSPI 지수 코드 (pykrx)
 
     periods = {
-        "1m": (datetime.today() - timedelta(days=30)).strftime("%Y%m%d"),
-        "3m": (datetime.today() - timedelta(days=90)).strftime("%Y%m%d"),
-        "6m": (datetime.today() - timedelta(days=180)).strftime("%Y%m%d"),
-        "1y": (datetime.today() - timedelta(days=365)).strftime("%Y%m%d"),
+        "1m": (base_dt - timedelta(days=30)).strftime("%Y%m%d"),
+        "3m": (base_dt - timedelta(days=90)).strftime("%Y%m%d"),
+        "6m": (base_dt - timedelta(days=180)).strftime("%Y%m%d"),
+        "1y": (base_dt - timedelta(days=365)).strftime("%Y%m%d"),
     }
 
     logger.info(f"[상대강도] 수집 시작: {ticker} vs {sector_etf}")

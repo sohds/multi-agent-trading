@@ -27,6 +27,7 @@ def run_sector_agent(
     ticker: str,
     ticker_name: str,
     sector_etf: str,
+    as_of: str | None = None,
 ) -> dict:
     """
     섹터/종목 에이전트 전체 실행
@@ -39,7 +40,10 @@ def run_sector_agent(
     Returns:
         dict: 불/베어 에이전트에 전달할 통합 페이로드
     """
-    as_of = datetime.now().strftime("%Y-%m-%d %H:%M")
+    meta_as_of = (
+        datetime.strptime(as_of, "%Y%m%d").strftime("%Y-%m-%d")
+        if as_of else datetime.now().strftime("%Y-%m-%d %H:%M")
+    )
     logger.info(f"=== 섹터/종목 에이전트 시작: {ticker_name} ({ticker}) ===")
 
     payload: dict = {
@@ -47,7 +51,7 @@ def run_sector_agent(
             "ticker":      ticker,
             "ticker_name": ticker_name,
             "sector_etf":  sector_etf,
-            "as_of":       as_of,
+            "as_of":       meta_as_of,
         },
         "supply_demand":     None,
         "earnings":          None,
@@ -60,7 +64,9 @@ def run_sector_agent(
     # ── 1. 수급 분석 ─────────────────────────────────────────────
     logger.info("[1/4] 수급 흐름 수집 중...")
     try:
-        payload["supply_demand"] = get_supply_demand_analysis(ticker)
+        payload["supply_demand"] = get_supply_demand_analysis(ticker, as_of=as_of)
+        if isinstance(payload["supply_demand"], dict) and payload["supply_demand"].get("error"):
+            payload["errors"].append(f"수급 수집 오류: {payload['supply_demand']['error']}")
     except Exception as e:
         msg = f"수급 수집 오류: {e}"
         logger.error(msg)
@@ -68,27 +74,35 @@ def run_sector_agent(
 
     # ── 2. 실적 분석 ─────────────────────────────────────────────
     logger.info("[2/4] 실적 데이터 수집 중...")
-    try:
-        payload["earnings"] = get_earnings_analysis(ticker)
-    except Exception as e:
-        msg = f"실적 수집 오류: {e}"
-        logger.error(msg)
-        payload["errors"].append(msg)
+    if as_of:
+        payload["earnings"] = None
+    else:
+        try:
+            payload["earnings"] = get_earnings_analysis(ticker)
+        except Exception as e:
+            msg = f"실적 수집 오류: {e}"
+            logger.error(msg)
+            payload["errors"].append(msg)
 
     # ── 3. 네이버 증권 (목표주가·투자의견) ───────────────────────
     logger.info("[3/4] 네이버 증권 데이터 수집 중...")
-    try:
-        payload["naver_finance"] = get_naver_finance_data(ticker, ticker_name)
-    except Exception as e:
-        msg = f"네이버 증권 수집 오류: {e}"
-        logger.error(msg)
-        payload["errors"].append(msg)
+    if as_of:
+        payload["naver_finance"] = None
+    else:
+        try:
+            payload["naver_finance"] = get_naver_finance_data(ticker, ticker_name)
+        except Exception as e:
+            msg = f"네이버 증권 수집 오류: {e}"
+            logger.error(msg)
+            payload["errors"].append(msg)
 
     # ── 4. 섹터 상대강도 + 밸류에이션 ───────────────────────────
     logger.info("[4/4] 섹터 상대강도·밸류에이션 수집 중...")
     try:
-        payload["relative_strength"] = get_relative_strength_analysis(ticker, sector_etf)
-        payload["valuation"]         = get_valuation_analysis(ticker)
+        payload["relative_strength"] = get_relative_strength_analysis(ticker, sector_etf, as_of=as_of)
+        payload["valuation"]         = get_valuation_analysis(ticker, as_of=as_of)
+        if isinstance(payload["valuation"], dict) and payload["valuation"].get("error"):
+            payload["errors"].append(f"밸류에이션 수집 오류: {payload['valuation']['error']}")
     except Exception as e:
         msg = f"상대강도/밸류에이션 수집 오류: {e}"
         logger.error(msg)

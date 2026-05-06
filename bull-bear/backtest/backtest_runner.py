@@ -36,6 +36,7 @@ PROJECT_ROOT  = BULL_BEAR_ROOT.parent
 sys.path.insert(0, str(BULL_BEAR_ROOT))           # package_builder, agents
 sys.path.insert(0, str(BACKTEST_ROOT.parent))     # backtest.masking import 경로
 sys.path.insert(0, str(PROJECT_ROOT / "macro"))   # macro_agents.macro_agent
+sys.path.insert(0, str(PROJECT_ROOT / "sector"))  # sector_agents.sector_agent
 
 from package_builder import build_input_package    # noqa: E402
 from agents.bull_agent import run_bull_agent       # noqa: E402
@@ -53,6 +54,13 @@ TICKER_NAMES = {
     "005380": "현대차",
     "105560": "KB금융",
     "207940": "삼성바이오로직스",
+}
+
+SECTOR_ETFS = {
+    "005930": "091160",  # KODEX 반도체
+    "005380": "091180",  # KODEX 자동차
+    "105560": "091170",  # KODEX 은행
+    "207940": "102110",  # TIGER 200 헬스케어
 }
 
 
@@ -94,13 +102,34 @@ def classify_prediction(bull: dict, bear: dict) -> tuple[str, float]:
 
 # ── 메인 실행 ─────────────────────────────────────────────────
 
-def run_case(ticker: str, ticker_name: str, as_of: str, mask: bool, macro_enabled: bool = False) -> dict:
+def run_case(
+    ticker: str,
+    ticker_name: str,
+    as_of: str,
+    mask: bool,
+    macro_enabled: bool = False,
+    sector_enabled: bool = False,
+    macro_cache: dict[str, dict] | None = None,
+) -> dict:
     """단일 케이스 실행"""
     as_of_compact = as_of.replace("-", "")  # YYYY-MM-DD → YYYYMMDD
     macro_payload = None
     if macro_enabled:
         from macro_agents.macro_agent import run_macro_agent
-        macro_payload = run_macro_agent(as_of=as_of_compact)
+        if macro_cache is not None and as_of_compact in macro_cache:
+            macro_payload = macro_cache[as_of_compact]
+        else:
+            macro_payload = run_macro_agent(as_of=as_of_compact)
+            if macro_cache is not None:
+                macro_cache[as_of_compact] = macro_payload
+
+    sector_payload = None
+    if sector_enabled:
+        from sector_agents.sector_agent import run_sector_agent
+        sector_etf = SECTOR_ETFS.get(ticker)
+        if sector_etf is None:
+            raise ValueError(f"섹터 ETF 매핑 없음: {ticker}")
+        sector_payload = run_sector_agent(ticker, ticker_name, sector_etf, as_of=as_of_compact)
 
     pkg = build_input_package(
         ticker=ticker,
@@ -108,6 +137,7 @@ def run_case(ticker: str, ticker_name: str, as_of: str, mask: bool, macro_enable
         as_of=as_of_compact,
         mask_for_backtest=mask,
         macro_payload=macro_payload,
+        sector_payload=sector_payload,
     )
 
     bull = run_bull_agent(pkg, model=MODEL)
@@ -127,6 +157,7 @@ def run_case(ticker: str, ticker_name: str, as_of: str, mask: bool, macro_enable
         "bull_error":   bull.get("error"),
         "bear_error":   bear.get("error"),
         "macro_error":  macro_payload.get("errors") if macro_payload else None,
+        "sector_error": sector_payload.get("errors") if sector_payload else None,
     }
 
 
@@ -136,6 +167,7 @@ def run_backtest(
     mask_override: str | None = None,
     max_cases: int | None = None,
     macro_enabled: bool = False,
+    sector_enabled: bool = False,
 ) -> dict:
     """백테스트 메인 루프"""
     gt = load_gt_labels()
@@ -152,15 +184,25 @@ def run_backtest(
     print(f"  백테스트 실행 — 트랙 {track} ({'마스킹 ON' if mask else '마스킹 OFF'})")
     print(f"  모델: {MODEL}")
     print(f"  Macro: {'ON' if macro_enabled else 'OFF'}")
+    print(f"  Sector: {'ON' if sector_enabled else 'OFF'}")
     print(f"  케이스 수: {len(cases)}")
     print(f"{'='*60}\n")
 
     results = []
+    macro_cache: dict[str, dict] = {}
     for i, ((ticker_, as_of), gt_labels) in enumerate(cases.items(), 1):
         ticker_name = TICKER_NAMES.get(ticker_, ticker_)
         print(f"  [{i}/{len(cases)}] {ticker_} {ticker_name} {as_of} ...")
 
-        case_result = run_case(ticker_, ticker_name, as_of, mask, macro_enabled=macro_enabled)
+        case_result = run_case(
+            ticker_,
+            ticker_name,
+            as_of,
+            mask,
+            macro_enabled=macro_enabled,
+            sector_enabled=sector_enabled,
+            macro_cache=macro_cache,
+        )
         case_result["gt_labels"] = gt_labels
 
         # GT와 즉시 비교
@@ -180,6 +222,7 @@ def run_backtest(
             "ticker":     ticker,
             "model":      MODEL,
             "macro":      macro_enabled,
+            "sector":     sector_enabled,
             "case_count": len(cases),
             "ran_at":     datetime.now().isoformat(timespec="seconds"),
         },
@@ -277,16 +320,20 @@ def main():
                         help="마스킹 강제 지정 (track 기본값 무시). on/off")
     parser.add_argument("--macro",  type=str, choices=["on", "off"], default="off",
                         help="Macro payload 사용 여부. 기본 off")
+    parser.add_argument("--sector", type=str, choices=["on", "off"], default="off",
+                        help="Sector payload 사용 여부. 기본 off")
     parser.add_argument("--max",    type=int, default=None, help="최대 케이스 수 제한")
     args = parser.parse_args()
 
     macro_enabled = args.macro == "on"
+    sector_enabled = args.sector == "on"
     payload = run_backtest(
         args.ticker,
         args.track,
         mask_override=args.mask,
         max_cases=args.max,
         macro_enabled=macro_enabled,
+        sector_enabled=sector_enabled,
     )
     stats = compute_stats(payload["results"])
     payload["stats"] = stats
@@ -299,6 +346,10 @@ def main():
         track_label = "technical_nomask"
     if macro_enabled:
         track_label = "macro"
+    if macro_enabled and sector_enabled:
+        track_label = "macro_sector"
+    elif sector_enabled:
+        track_label = "sector"
     out_dir = RESULT_DIR / f"phase{args.phase}_{track_label}"
     out_dir.mkdir(parents=True, exist_ok=True)
     ts = datetime.now().strftime("%Y%m%d_%H%M%S")

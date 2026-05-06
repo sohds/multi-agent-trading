@@ -95,7 +95,7 @@ def _find_col(df: pd.DataFrame, keyword: str) -> Optional[str]:
     return matches[0] if matches else None
 
 
-def get_supply_demand_analysis(ticker: str) -> dict:
+def get_supply_demand_analysis(ticker: str, as_of: str | None = None) -> dict:
     """
     수급 흐름 분석
 
@@ -109,10 +109,11 @@ def get_supply_demand_analysis(ticker: str) -> dict:
             "intensity_change":  str,
         }
     """
-    today = datetime.today().strftime("%Y%m%d")
-    d20  = (datetime.today() - timedelta(days=30)).strftime("%Y%m%d")
-    d60  = (datetime.today() - timedelta(days=90)).strftime("%Y%m%d")
-    d120 = (datetime.today() - timedelta(days=180)).strftime("%Y%m%d")
+    base_dt = pd.to_datetime(as_of).to_pydatetime() if as_of else datetime.today()
+    today = base_dt.strftime("%Y%m%d")
+    d20  = (base_dt - timedelta(days=30)).strftime("%Y%m%d")
+    d60  = (base_dt - timedelta(days=90)).strftime("%Y%m%d")
+    d120 = (base_dt - timedelta(days=180)).strftime("%Y%m%d")
 
     logger.info(f"[수급] 데이터 수집 시작: {ticker}")
 

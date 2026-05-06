@@ -9,13 +9,14 @@ from pykrx import stock
 from utils.logger import get_logger
 logger = get_logger("valuation")
 
-def _get_latest_available_fundamental(ticker: str, max_days: int = 7) -> Tuple[Optional[pd.DataFrame], str]:
+def _get_latest_available_fundamental(ticker: str, as_of: str | None = None, max_days: int = 7) -> Tuple[Optional[pd.DataFrame], str]:
     """
     현재부터 최대 max_days 전까지 거슬러 올라가며 유효한 펀더멘털 데이터를 찾음
     Returns: (DataFrame, found_date_str)
     """
+    base_dt = datetime.strptime(as_of, "%Y%m%d") if as_of else datetime.today()
     for i in range(max_days):
-        target_date = (datetime.today() - timedelta(days=i)).strftime("%Y%m%d")
+        target_date = (base_dt - timedelta(days=i)).strftime("%Y%m%d")
         try:
             df = stock.get_market_fundamental(target_date, target_date, ticker)
             if df is not None and not df.empty:
@@ -26,12 +27,12 @@ def _get_latest_available_fundamental(ticker: str, max_days: int = 7) -> Tuple[O
             continue
     return None, ""
 
-def get_valuation_analysis(ticker: str) -> dict:
+def get_valuation_analysis(ticker: str, as_of: str | None = None) -> dict:
     """
     밸류에이션 분석 (현재 데이터 부재 시 최근 영업일 데이터 자동 탐색)
     """
     # ── [수정] 현재 데이터 탐색 (데이터 없을 시 전날로 소급) ───────────────────
-    fund_now, found_date = _get_latest_available_fundamental(ticker)
+    fund_now, found_date = _get_latest_available_fundamental(ticker, as_of=as_of)
     
     if fund_now is None:
         # logger.error("[밸류에이션] 최근 7일 내 유효한 펀더멘털 데이터가 없음")
