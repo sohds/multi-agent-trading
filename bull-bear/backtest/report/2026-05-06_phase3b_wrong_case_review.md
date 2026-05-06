@@ -199,3 +199,24 @@ Sector 추가가 성능을 떨어뜨린 이유는 다음으로 보는 것이 가
 3. `상대강도`는 momentum continuation과 mean reversion 가능성을 모두 보게 만들기
 4. 동일 Phase 3b를 `sector=relative_strength only`, `sector=supply only`, `sector=valuation only`로 쪼개서 ablation
 
+---
+
+## 8. 추가 의견 — ablation 실험 전 프롬프트 수정 우선 검토
+
+오답 케이스 리뷰가 이미 충분히 원인을 좁혔기 때문에, 섹션 4의 신호 키워드 분포와 섹션 6의 패턴 분석만 봐도 주범은 `valuation/EPS` 계열 신호임이 분명하다. `sector=valuation only` ablation을 돌려봐야 얻는 정보가 "valuation이 주범이다"는 확인인데, 이건 이미 오답 목록에서 드러난다.
+
+따라서 ablation 실험 4종(~$0.90, ~7.5h)을 먼저 돌리기보다 다음 순서가 더 효율적이다.
+
+**권장 순서**
+
+1. **프롬프트 수정 먼저**: Bull/Bear 프롬프트에 sector 신호의 해석 제약을 명시한다.
+   - `valuation(PER/PBR/EPS)`: "단기 방향 신호로 쓰지 말 것. 현재 가격 위치의 배경 맥락으로만 활용."
+   - `수급`: "가격이 저항선 근처이거나 과열 구간이면 수급 개선도 단기 차익실현 신호일 수 있음."
+   - `상대강도`: "모멘텀 지속 가능성과 평균회귀 가능성을 함께 언급할 것."
+
+2. **수정된 프롬프트로 Phase 3b 재실행** (~$0.30, ~2.5h): Phase 3a 수준 이상으로 회복되면 sector ablation 생략 가능.
+
+3. **그래도 회복 안 되면 그때 ablation**: `RS only` / `supply only` / `valuation only` 순으로 쪼개서 진단.
+
+이 순서라면 프롬프트 수정이 효과 있을 경우 ablation을 통째로 건너뛸 수 있어 비용과 시간 모두 아낄 수 있다.
+
