@@ -25,6 +25,12 @@ bull-bear/to-do.md
 # 백테스팅 데이터 캐시 (재현 가능 — 커밋 제외, 결과·코드는 커밋)
 bull-bear/backtest/data/
 
+# 백테스팅 보고서 및 실험 계획서 (로컬 전용)
+bull-bear/backtest/report/
+bull-bear/backtest/exp_backtest_plan.md
+bull-bear/backtest/prompt_improvement_proposal.md
+bull-bear/backtest/TO-DOs.md
+
 # IDE
 .vscode/
 .idea/
