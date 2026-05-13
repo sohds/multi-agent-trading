@@ -16,7 +16,6 @@ DEFAULT_OPENAI_MODEL = "gpt-5.4-mini-2026-03-17"
 OPENAI_RESPONSES_ENDPOINT = "https://api.openai.com/v1/responses"
 DEFAULT_REQUEST_TIMEOUT_SECONDS = 180
 DEFAULT_MAX_RETRIES = 1
-DEFAULT_REASONING_EFFORT = "low"
 DEBUG_LOG_PATH = Path("data/debug/openai_api.jsonl")
 
 
@@ -28,7 +27,7 @@ def generate_json(
     prompt: str,
     response_schema: dict[str, Any],
     model: str | None = None,
-    temperature: float | None = None,
+    temperature: float | None = 0.0,
 ) -> dict[str, Any]:
     api_key = os.getenv("OPENAI_API_KEY")
     if not api_key:
@@ -37,7 +36,10 @@ def generate_json(
     model_id = model or os.getenv("OPENAI_MODEL") or DEFAULT_OPENAI_MODEL
     timeout_seconds = get_int_env("OPENAI_TIMEOUT_SECONDS", DEFAULT_REQUEST_TIMEOUT_SECONDS)
     max_retries = max(0, get_int_env("OPENAI_MAX_RETRIES", DEFAULT_MAX_RETRIES))
-    reasoning_effort = os.getenv("OPENAI_REASONING_EFFORT", DEFAULT_REASONING_EFFORT).strip()
+
+    resolved_temperature = temperature
+    if resolved_temperature is None and os.getenv("OPENAI_TEMPERATURE"):
+        resolved_temperature = get_float_env("OPENAI_TEMPERATURE", 0.0)
 
     payload: dict[str, Any] = {
         "model": model_id,
@@ -51,12 +53,6 @@ def generate_json(
             }
         },
     }
-    if reasoning_effort:
-        payload["reasoning"] = {"effort": reasoning_effort}
-
-    resolved_temperature = temperature
-    if resolved_temperature is None and os.getenv("OPENAI_TEMPERATURE"):
-        resolved_temperature = get_float_env("OPENAI_TEMPERATURE", 0.0)
     if resolved_temperature is not None:
         payload["temperature"] = resolved_temperature
 
@@ -82,7 +78,6 @@ def generate_json(
                     "elapsed_ms": elapsed_ms,
                     "status_code": response.status_code,
                     "prompt_chars": len(prompt),
-                    "reasoning_effort": reasoning_effort or None,
                     "temperature": resolved_temperature,
                 }
             )
@@ -98,7 +93,6 @@ def generate_json(
                     "timeout_seconds": timeout_seconds,
                     "elapsed_ms": elapsed_ms,
                     "prompt_chars": len(prompt),
-                    "reasoning_effort": reasoning_effort or None,
                     "temperature": resolved_temperature,
                     "error_type": type(exc).__name__,
                     "error": str(exc),
