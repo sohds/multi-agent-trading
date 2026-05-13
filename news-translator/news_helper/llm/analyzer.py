@@ -13,7 +13,10 @@ from news_helper.llm.openai_client import DEFAULT_OPENAI_MODEL, generate_json
 
 DEFAULT_THRESHOLD = 0.5
 DEFAULT_MAX_ARTICLE_CHARS = 6000
-DEFAULT_DICT_PATH = "data/terms_800_preprocessed.json"
+
+current_file_path = Path(__file__).resolve()
+project_root = current_file_path.parent.parent.parent
+DEFAULT_DICT_PATH = str(project_root / "data" / "terms_800_preprocessed.json")
 
 
 @dataclass(frozen=True)
