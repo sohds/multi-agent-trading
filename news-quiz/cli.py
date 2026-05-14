@@ -1,8 +1,9 @@
-# 실행 및 테스트용 스크립트
 import argparse
 import sys
+import json
 from pathlib import Path
 
+# 1. 상위 폴더(multi-agent-trading)를 거쳐 news-translator 폴더를 파이썬 경로에 추가
 BASE_DIR = Path(__file__).resolve().parent.parent
 TRANSLATOR_DIR = BASE_DIR / "news-translator"
 sys.path.append(str(TRANSLATOR_DIR))
@@ -17,51 +18,58 @@ from quiz_engine import generate_ox_quiz
 
 def main():
     parser = argparse.ArgumentParser(description="AI 뉴스 투자 퀴즈 출제 엔진")
-    parser.add_argument("--limit", type=int, default=1, help="퀴즈를 생성할 최신 뉴스의 개수 (기본값: 1)")
+    parser.add_argument("--limit", type=int, default=1, help="퀴즈를 생성할 최신 뉴스의 개수")
+    parser.add_argument("--output", type=str, help="결과를 저장할 JSON 파일 경로 (예: data/quizzes.json)")
+    parser.add_argument("--pretty", action="store_true", help="결과를 터미널에 보기 좋게 출력")
     args = parser.parse_args()
 
-    print(f"📰 기존 크롤러를 사용해 네이버 경제 뉴스 {args.limit}개를 가져옵니다...")
-    
+    print(f"📰 네이버 경제 뉴스 {args.limit}개를 가져오는 중...")
     articles = fetch_economy_news(limit=args.limit)
     
-    # 1. 크롤러가 데이터를 아예 못 가져왔는지 확인
-    print(f"✅ 크롤러 완료! 총 {len(articles)}개의 기사 데이터를 확인했습니다.")
-    
     if not articles:
-        print("❌ 기사 본문을 아예 불러오지 못했습니다.")
+        print("❌ 기사 데이터를 불러오지 못했습니다.")
         return
 
+    quiz_results = []
+
     for idx, item in enumerate(articles, 1):
-        print(f"\n--- [{idx}]번째 데이터 처리 시작 ---")
-        
-        # 2. 크롤링 중 내부 에러가 있었는지 확인
         if item["error"] or not item["article"]:
-            print(f"⚠️ 크롤링 내부 에러: {item['error']}")
             continue
 
         article_data = item["article"]
         title = article_data["title"]
         body = article_data["body"]
+        url = article_data["url"]
 
-        print(f"📰 뉴스 제목: {title}")
-        print("🤔 OpenAI API에 퀴즈 생성을 요청합니다.")
-        
-        # 3. LLM 호출
+        print(f"\n[{idx}] 분석 중: {title}")
         quiz = generate_ox_quiz(body, title)
         
-        # 4. LLM이 무엇을 뱉었는지 날것 그대로 확인
-        print(f"🔍 API 응답 Raw Data: {quiz}")
-        
         if quiz:
-            print("====================================")
-            print("💡 오늘의 투자 퀴즈")
-            print("====================================")
-            print(f"Q. {quiz['question']}\n")
-            print(f"정답: {quiz['answer']}")
-            print(f"해설: {quiz['explanation']}")
-            print("====================================")
-        else:
-            print("❌ 퀴즈가 제대로 생성되지 않았습니다 (None 반환됨).")
+            # 결과 저장을 위한 데이터 구조 생성
+            quiz_entry = {
+                "title": title,
+                "url": url,
+                "quiz": quiz
+            }
+            quiz_results.append(quiz_entry)
+
+            if args.pretty:
+                print("====================================")
+                print(f"Q. {quiz['question']}")
+                print(f"정답: {quiz['answer']}")
+                print(f"해설: {quiz['explanation']}")
+                print("====================================")
+
+    # 파일 저장 로직
+    if args.output and quiz_results:
+        output_path = Path(args.output)
+        
+        # 저장할 폴더가 없다면 생성
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        
+        with open(output_path, "w", encoding="utf-8") as f:
+            json.dump(quiz_results, f, ensure_ascii=False, indent=2)
+        print(f"\n✅ 총 {len(quiz_results)}개의 퀴즈가 '{args.output}'에 저장되었다.")
 
 if __name__ == "__main__":
     main()
