@@ -18,6 +18,9 @@ ENV/
 # 결과 저장 디렉터리
 output/
 
+# 세션 데이터 관리 디텍터리
+config/
+
 # 실험 기록 (로컬 실험용, 커밋 제외)
 bull-bear/experiments/
 bull-bear/to-do.md
