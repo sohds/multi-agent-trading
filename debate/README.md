@@ -136,7 +136,7 @@ python debate/debate_topic_agent.py
 `.env` 파일에 아래 키가 필요합니다:
 
 ```
-OPENAI_API_KEY=sk-...
+OPENAI_API_KEY=your_openai_api_key_here
 ```
 
 ## 의존성

@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>경제 뉴스 쉬운 설명</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="topbar">
+        <div>
+          <h1>경제 뉴스 쉬운 설명</h1>
+          <p class="subtitle">네이버 경제 헤드라인의 어려운 표현을 바로 풀어봅니다.</p>
+        </div>
+        <button id="startButton" class="primary-button" type="button">시작하기</button>
+      </section>
+
+      <section id="status" class="status" aria-live="polite"></section>
+      <section id="results" class="results"></section>
+    </main>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>

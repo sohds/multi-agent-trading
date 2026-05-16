@@ -1,7 +1,19 @@
 # 환경 변수 (API 키, 비밀번호 포함 — 절대 커밋 금지)
 .env
+**/.env
 .env.local
 .env.*.local
+*.env
+*.key
+*.pem
+*.secret
+secrets/
+secret/
+
+# LLM/API 디버그 로그 (요청/응답 또는 키가 섞일 수 있어 커밋 금지)
+**/data/debug/
+**/openai_api.jsonl
+**/*api*.jsonl
 
 # Python 캐시
 __pycache__/
@@ -17,6 +29,8 @@ ENV/
 
 # 결과 저장 디렉터리
 output/
+news-translator/data/debug/
+news-translator/data/web_latest_analysis.json
 
 # 세션 데이터 관리 디텍터리
 config/
