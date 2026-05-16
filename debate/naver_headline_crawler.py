@@ -262,19 +262,26 @@ def crawl() -> Optional[dict]:
     print(f"\n  ★ 선정 기사: [{top['cluster_num']}개] {top['title']}")
     print(f"  URL: {top['url']}\n")
 
-    # ── 본문 수집 ────────────────────────────────────────
-    print(f"  📄 본문 수집 중...")
-    time.sleep(0.8)
-    body_data = parse_article_body(top["url"])
+    # ── 전체 헤드라인 메타(published_at, image_url) + 선정 기사 본문 수집 ──
+    print(f"  📄 전체 헤드라인 메타 수집 중 ({len(items)}건)...")
+    for i, item in enumerate(items, start=1):
+        time.sleep(0.5)
+        meta = parse_article_body(item["url"])
+        item["published_at"] = meta["published_at"]
+        item["image_url"]    = meta["image_url"]
+        item["_body"]        = meta["body"]
+        print(f"    [{i}/{len(items)}] {item['title'][:35]}")
+
+    for item in items:
+        item["body"] = item.pop("_body")
 
     result = {
         **top,
-        **body_data,
         "all_headlines": items,
         "crawled_at":    datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
     }
 
-    print(f"  ✅ 본문 수집 완료 | 발행: {body_data.get('published_at')}")
+    print(f"  ✅ 수집 완료 | 발행: {top.get('published_at')}")
     return result
 
 
