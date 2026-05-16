@@ -19,7 +19,9 @@ from datetime import datetime
 from typing import Optional
 
 
-OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "output")
+OUTPUT_DIR  = os.path.join(os.path.dirname(__file__), "output")
+CONFIG_DIR  = os.path.join(os.path.dirname(__file__), "..", "config")
+CONFIG_FILE = os.path.join(CONFIG_DIR, "naver_headline.json")
 
 HEADERS = {
     "User-Agent": (
@@ -310,12 +312,21 @@ def save_json(result: dict) -> str:
     return path
 
 
+# ── config 저장 (덮어쓰기) ────────────────────────────────────
+def save_config(result: dict) -> str:
+    os.makedirs(CONFIG_DIR, exist_ok=True)
+    with open(CONFIG_FILE, "w", encoding="utf-8") as f:
+        json.dump(result, f, ensure_ascii=False, indent=2, default=str)
+    print(f"\n  💾 config 저장: {CONFIG_FILE}")
+    return CONFIG_FILE
+
+
 # ── 실행 ──────────────────────────────────────────────────────
 if __name__ == "__main__":
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
     result = crawl()
     if result:
         print_result(result)
-        save_json(result)
+        save_config(result)
     else:
         print("❌ 수집 실패")
