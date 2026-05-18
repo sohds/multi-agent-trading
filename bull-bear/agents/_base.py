@@ -13,6 +13,13 @@ from dotenv import find_dotenv, load_dotenv
 load_dotenv(find_dotenv())
 
 
+def _json_default(obj):
+    """numpy scalar 등 비직렬화 타입을 Python 기본 타입으로 변환"""
+    if hasattr(obj, "item"):
+        return obj.item()
+    raise TypeError(f"Object of type {type(obj).__name__} is not JSON serializable")
+
+
 def _call_llm(
     system_prompt: str,
     input_package: dict,
@@ -47,7 +54,7 @@ def _call_llm(
     user_message = (
         f"[분석 대상]\n{input_package.get('topic', '종목 분석')}\n\n"
         f"[입력 데이터 패키지]\n"
-        f"{json.dumps(input_package, ensure_ascii=False, indent=2)}\n\n"
+        f"{json.dumps(input_package, ensure_ascii=False, indent=2, default=_json_default)}\n\n"
         f"[상대방({opponent_label}) 논거]\n{opponent_section}\n\n"
         f"위 데이터를 분석하여 지정된 JSON 형식으로 출력하세요."
     )

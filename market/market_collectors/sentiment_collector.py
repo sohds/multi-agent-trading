@@ -64,15 +64,25 @@ class MarketSentimentCollector:
             print(f"❌ VKOSPI 파싱 실패: {e}")
             return {"value": 20.0, "change": 0.0, "change_rate": 0.0}
 
-    def analyze_sentiment(self):
+    def analyze_sentiment(self, as_of: str | None = None):
         """
         sentiment_collector를 통해 출력된 지표들을 JSON 형태로 반환
+
+        Args:
+            as_of: 기준일 YYYYMMDD. None이면 오늘 기준(실전용).
         """
         # --------------------------------------------------------
         # 1. 데이터 수집
         # --------------------------------------------------------
-        end_date = (datetime.now() - timedelta(days=1)).strftime("%Y%m%d")
-        start_date = (datetime.now() - timedelta(days=7)).strftime("%Y%m%d")
+        if as_of:
+            end_dt = datetime.strptime(as_of, "%Y%m%d")
+            start_dt = end_dt - timedelta(days=7)
+        else:
+            end_dt = datetime.now() - timedelta(days=1)
+            start_dt = end_dt - timedelta(days=7)
+
+        end_date = end_dt.strftime("%Y%m%d")
+        start_date = start_dt.strftime("%Y%m%d")
 
         # --- 외국인 수급 (pykrx) ---
         try:
@@ -89,7 +99,9 @@ class MarketSentimentCollector:
 
         # --- 코스피 (Yahoo Finance) ---
         try:
-            kospi_df = yf.download(self.kospi_ticker, period="7d", progress=False)
+            yf_start = start_dt.strftime("%Y-%m-%d")
+            yf_end   = (end_dt + timedelta(days=1)).strftime("%Y-%m-%d")
+            kospi_df = yf.download(self.kospi_ticker, start=yf_start, end=yf_end, progress=False)
             if not kospi_df.empty:
                 # pandas DataFrame 인덱싱
                 curr_kospi = float(kospi_df['Close'].iloc[-1].item())

@@ -7,7 +7,7 @@
   3. 각 케이스에 대해:
      - technical 지표 계산 (as_of 주입)
      - 마스킹 적용 (트랙 A) 또는 미적용 (트랙 C)
-     - bull/bear 에이전트 호출 (ROUNDS=1)
+     - bull/bear 에이전트 호출 (--rounds 횟수만큼 반복, 각 라운드에서 상대 논거 전달)
      - 예측 방향 분류 (conf_diff 임계값 ±0.05)
   4. 결과 JSON 저장 (result/<phase>/<timestamp>.json)
   5. 기본 통계 출력 (적중률, Balanced Accuracy)
@@ -37,6 +37,7 @@ sys.path.insert(0, str(BULL_BEAR_ROOT))           # package_builder, agents
 sys.path.insert(0, str(BACKTEST_ROOT.parent))     # backtest.masking import 경로
 sys.path.insert(0, str(PROJECT_ROOT / "macro"))   # macro_agents.macro_agent
 sys.path.insert(0, str(PROJECT_ROOT / "sector"))  # sector_agents.sector_agent
+sys.path.insert(0, str(PROJECT_ROOT / "market"))  # market_agents.sentiment_agent
 
 from package_builder import build_input_package    # noqa: E402
 from agents.bull_agent import run_bull_agent       # noqa: E402
@@ -109,9 +110,12 @@ def run_case(
     mask: bool,
     macro_enabled: bool = False,
     sector_enabled: bool = False,
+    sentiment_enabled: bool = False,
     macro_cache: dict[str, dict] | None = None,
+    sentiment_cache: dict[str, dict] | None = None,
+    rounds: int = 1,
 ) -> dict:
-    """단일 케이스 실행"""
+    """단일 케이스 실행 (rounds 횟수만큼 Bull-Bear 토론 반복)"""
     as_of_compact = as_of.replace("-", "")  # YYYY-MM-DD → YYYYMMDD
     macro_payload = None
     if macro_enabled:
@@ -131,6 +135,16 @@ def run_case(
             raise ValueError(f"섹터 ETF 매핑 없음: {ticker}")
         sector_payload = run_sector_agent(ticker, ticker_name, sector_etf, as_of=as_of_compact)
 
+    sentiment_payload = None
+    if sentiment_enabled:
+        from market_agents.sentiment_agent import run_sentiment_agent
+        if sentiment_cache is not None and as_of_compact in sentiment_cache:
+            sentiment_payload = sentiment_cache[as_of_compact]
+        else:
+            sentiment_payload = run_sentiment_agent(as_of=as_of_compact)
+            if sentiment_cache is not None:
+                sentiment_cache[as_of_compact] = sentiment_payload
+
     pkg = build_input_package(
         ticker=ticker,
         ticker_name=ticker_name,
@@ -138,10 +152,14 @@ def run_case(
         mask_for_backtest=mask,
         macro_payload=macro_payload,
         sector_payload=sector_payload,
+        sentiment_payload=sentiment_payload,
     )
 
-    bull = run_bull_agent(pkg, model=MODEL)
-    bear = run_bear_agent(pkg, model=MODEL)
+    # 멀티라운드 토론: 각 라운드에서 직전 상대 논거를 전달
+    bull = bear = None
+    for _ in range(rounds):
+        bull = run_bull_agent(pkg, bear_argument=bear, model=MODEL)
+        bear = run_bear_agent(pkg, bull_argument=bull, model=MODEL)
 
     prediction, conf_diff = classify_prediction(bull, bear)
 
@@ -156,8 +174,9 @@ def run_case(
         "bear_summary": bear.get("summary"),
         "bull_error":   bull.get("error"),
         "bear_error":   bear.get("error"),
-        "macro_error":  macro_payload.get("errors") if macro_payload else None,
-        "sector_error": sector_payload.get("errors") if sector_payload else None,
+        "macro_error":     macro_payload.get("errors") if macro_payload else None,
+        "sector_error":    sector_payload.get("errors") if sector_payload else None,
+        "sentiment_error": sentiment_payload.get("errors") if sentiment_payload else None,
     }
 
 
@@ -168,6 +187,8 @@ def run_backtest(
     max_cases: int | None = None,
     macro_enabled: bool = False,
     sector_enabled: bool = False,
+    sentiment_enabled: bool = False,
+    rounds: int = 1,
 ) -> dict:
     """백테스트 메인 루프"""
     gt = load_gt_labels()
@@ -185,11 +206,14 @@ def run_backtest(
     print(f"  모델: {MODEL}")
     print(f"  Macro: {'ON' if macro_enabled else 'OFF'}")
     print(f"  Sector: {'ON' if sector_enabled else 'OFF'}")
+    print(f"  Sentiment: {'ON' if sentiment_enabled else 'OFF'}")
+    print(f"  Rounds: {rounds}")
     print(f"  케이스 수: {len(cases)}")
     print(f"{'='*60}\n")
 
     results = []
     macro_cache: dict[str, dict] = {}
+    sentiment_cache: dict[str, dict] = {}
     for i, ((ticker_, as_of), gt_labels) in enumerate(cases.items(), 1):
         ticker_name = TICKER_NAMES.get(ticker_, ticker_)
         print(f"  [{i}/{len(cases)}] {ticker_} {ticker_name} {as_of} ...")
@@ -201,7 +225,10 @@ def run_backtest(
             mask,
             macro_enabled=macro_enabled,
             sector_enabled=sector_enabled,
+            sentiment_enabled=sentiment_enabled,
             macro_cache=macro_cache,
+            sentiment_cache=sentiment_cache,
+            rounds=rounds,
         )
         case_result["gt_labels"] = gt_labels
 
@@ -223,6 +250,8 @@ def run_backtest(
             "model":      MODEL,
             "macro":      macro_enabled,
             "sector":     sector_enabled,
+            "sentiment":  sentiment_enabled,
+            "rounds":     rounds,
             "case_count": len(cases),
             "ran_at":     datetime.now().isoformat(timespec="seconds"),
         },
@@ -308,6 +337,84 @@ def print_stats(stats: dict, track: str):
         print(f"  {N:>4} | {s['valid_n']:>5} | {acc:>8} | {bull:>8} | {bear:>8} | {bal:>8}")
 
 
+# ── 에러 케이스 재실행 ──────────────────────────────────────────
+
+def retry_errors(result_path: str) -> dict:
+    """기존 결과 JSON에서 에러 케이스만 골라 재실행하고 결과를 덮어씀"""
+    path = Path(result_path)
+    payload = json.loads(path.read_text(encoding="utf-8"))
+
+    # JSON 라운드트립 시 gt_labels 키가 str로 변환되므로 int로 복원
+    for r in payload["results"]:
+        if "gt_labels" in r and r["gt_labels"]:
+            r["gt_labels"] = {int(k): v for k, v in r["gt_labels"].items()}
+        if "correct" in r and r["correct"]:
+            r["correct"] = {int(k): v for k, v in r["correct"].items()}
+
+    meta = payload["meta"]
+
+    macro_enabled     = meta.get("macro", False)
+    sector_enabled    = meta.get("sector", False)
+    sentiment_enabled = meta.get("sentiment", False)
+    rounds            = meta.get("rounds", 1)
+    track             = meta.get("track", "C")
+    mask              = track == "A"
+
+    error_results = [
+        r for r in payload["results"]
+        if r.get("bull_error")
+        or r.get("bear_error")
+        or r.get("prediction") == "error"
+        or r.get("bull_conf") is None
+        or r.get("bear_conf") is None
+        or r.get("prediction") is None
+    ]
+    print(f"\n재실행 대상: {len(error_results)}건 / 전체 {len(payload['results'])}건")
+    print(f"설정: macro={macro_enabled}, sector={sector_enabled}, sentiment={sentiment_enabled}, rounds={rounds}\n")
+
+    macro_cache: dict[str, dict] = {}
+    sentiment_cache: dict[str, dict] = {}
+    retried: dict[tuple, dict] = {}
+
+    for i, r in enumerate(error_results, 1):
+        ticker = r["ticker"]
+        as_of  = r["as_of"]
+        ticker_name = TICKER_NAMES.get(ticker, ticker)
+        print(f"  [{i}/{len(error_results)}] {ticker} {ticker_name} {as_of} ...")
+        new_result = run_case(
+            ticker, ticker_name, as_of, mask,
+            macro_enabled=macro_enabled,
+            sector_enabled=sector_enabled,
+            sentiment_enabled=sentiment_enabled,
+            macro_cache=macro_cache,
+            sentiment_cache=sentiment_cache,
+            rounds=rounds,
+        )
+        new_result["gt_labels"] = r["gt_labels"]
+        new_result["correct"] = {
+            N: (new_result["prediction"] == gt_label)
+            for N, gt_label in r["gt_labels"].items()
+        }
+        pred = new_result["prediction"]
+        gt5  = r["gt_labels"].get(5, "?")
+        print(f"      예측={pred}  GT(N=5)={gt5}  conf_diff={new_result['conf_diff']:+.3f}")
+        retried[(ticker, as_of)] = new_result
+
+    # 원본 results에서 에러 케이스를 재실행 결과로 교체
+    for j, r in enumerate(payload["results"]):
+        key = (r["ticker"], r["as_of"])
+        if key in retried:
+            payload["results"][j] = retried[key]
+
+    stats = compute_stats(payload["results"])
+    payload["stats"] = stats
+    print_stats(stats, track)
+
+    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2, default=str), encoding="utf-8")
+    print(f"\n[업데이트 저장] {path}")
+    return payload
+
+
 # ── CLI ───────────────────────────────────────────────────────
 
 def main():
@@ -318,15 +425,26 @@ def main():
                         help="A: Technical만 + 마스킹 ON / C: 전체 데이터 + 마스킹 OFF")
     parser.add_argument("--mask",   type=str, choices=["on", "off"], default=None,
                         help="마스킹 강제 지정 (track 기본값 무시). on/off")
-    parser.add_argument("--macro",  type=str, choices=["on", "off"], default="off",
+    parser.add_argument("--macro",     type=str, choices=["on", "off"], default="off",
                         help="Macro payload 사용 여부. 기본 off")
-    parser.add_argument("--sector", type=str, choices=["on", "off"], default="off",
+    parser.add_argument("--sector",    type=str, choices=["on", "off"], default="off",
                         help="Sector payload 사용 여부. 기본 off")
+    parser.add_argument("--sentiment", type=str, choices=["on", "off"], default="off",
+                        help="Sentiment payload 사용 여부. 기본 off")
     parser.add_argument("--max",    type=int, default=None, help="최대 케이스 수 제한")
+    parser.add_argument("--rounds", type=int, choices=[1, 2, 3], default=1,
+                        help="Bull-Bear 토론 라운드 수. 기본 1")
+    parser.add_argument("--retry",  type=str, default=None, metavar="RESULT_JSON",
+                        help="기존 결과 JSON의 에러 케이스만 재실행. 경로를 지정하면 다른 옵션 무시.")
     args = parser.parse_args()
 
-    macro_enabled = args.macro == "on"
-    sector_enabled = args.sector == "on"
+    if args.retry:
+        retry_errors(args.retry)
+        return
+
+    macro_enabled     = args.macro == "on"
+    sector_enabled    = args.sector == "on"
+    sentiment_enabled = args.sentiment == "on"
     payload = run_backtest(
         args.ticker,
         args.track,
@@ -334,6 +452,8 @@ def main():
         max_cases=args.max,
         macro_enabled=macro_enabled,
         sector_enabled=sector_enabled,
+        sentiment_enabled=sentiment_enabled,
+        rounds=args.rounds,
     )
     stats = compute_stats(payload["results"])
     payload["stats"] = stats
@@ -344,12 +464,22 @@ def main():
     track_label = "technical_only" if args.track == "A" else "full_data"
     if args.mask == "off" and args.track == "A":
         track_label = "technical_nomask"
-    if macro_enabled:
-        track_label = "macro"
-    if macro_enabled and sector_enabled:
+    if macro_enabled and sector_enabled and sentiment_enabled:
+        track_label = "macro_sector_sentiment"
+    elif macro_enabled and sentiment_enabled:
+        track_label = "macro_sentiment"
+    elif sector_enabled and sentiment_enabled:
+        track_label = "sector_sentiment"
+    elif macro_enabled and sector_enabled:
         track_label = "macro_sector"
+    elif macro_enabled:
+        track_label = "macro"
     elif sector_enabled:
         track_label = "sector"
+    elif sentiment_enabled:
+        track_label = "sentiment"
+    if args.rounds > 1:
+        track_label = f"{track_label}_r{args.rounds}"
     out_dir = RESULT_DIR / f"phase{args.phase}_{track_label}"
     out_dir.mkdir(parents=True, exist_ok=True)
     ts = datetime.now().strftime("%Y%m%d_%H%M%S")
