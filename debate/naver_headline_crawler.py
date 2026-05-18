@@ -1,5 +1,5 @@
-# crawlers/naver_headline_crawler.py
-# 실행: python crawlers/naver_headline_crawler.py
+# debate/naver_headline_crawler.py
+# 실행: python debate/naver_headline_crawler.py
 #
 # 동작 흐름:
 #   1. 네이버 경제 섹션(section/101) 접속
