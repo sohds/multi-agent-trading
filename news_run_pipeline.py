@@ -57,7 +57,8 @@ def run_daily_news_pipeline(limit=10):
                 "url": article.get("url"),
                 "published_at": article.get("published_at"),
                 "press": article.get("press"),
-                "cluster_num": article.get("cluster_num")
+                "cluster_num": article.get("cluster_num"),
+                "image_url": article.get("image_url") or ""
             },
             "article_body": body,
             "translated_terms": translated_terms,

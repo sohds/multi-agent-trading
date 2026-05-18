@@ -183,7 +183,7 @@ def parse_article_body(url: str) -> dict:
             "image_url":    None,
         }
 
-    # 본문
+    # 본문 파싱
     body = None
     for selector in [
         "#dic_area",
@@ -194,6 +194,8 @@ def parse_article_body(url: str) -> dict:
     ]:
         tag = soup.select_one(selector)
         if tag:
+            # 본문 내부 텍스트 추출용 클리닝 (대표 이미지 주소 수집 전 백업을 위해 원본 soup 기반으로 아래에서 이미지 추출)
+            # 이미지 태그 가 없어지기 전에 미리 이미지부터 탐색하기 위해 순서 조정 가능하나, decompose 대상에 img는 없으므로 안전함
             for rm in tag.select(
                 "script, style, .journalist, .reporter_area, table"
             ):
@@ -207,9 +209,19 @@ def parse_article_body(url: str) -> dict:
         published_dt.strftime("%Y-%m-%d %H:%M:%S") if published_dt else None
     )
 
-    # 대표 이미지
-    og_img    = soup.select_one("meta[property='og:image']")
-    image_url = og_img.get("content") if og_img else None
+    # ✨ [대표 이미지 멀티 레이어 수집]
+    image_url = None
+    # 방법 A: 오픈그래프 메타 태그 탐색
+    og_img = soup.select_one("meta[property='og:image']")
+    if og_img and og_img.get("content"):
+        image_url = og_img.get("content")
+
+    # 방법 B: 메타 태그가 비어있다면, 본문 태그 영역 안의 첫 번째 실제 📸 img 태그 추출
+    if not image_url:
+        # 뉴스 본문 영역 안의 이미지 태그 타겟팅
+        img_tag = soup.select_one("#dic_area img, #articleBody img, .newsct_article img, .end_photo_org img")
+        if img_tag and (img_tag.get("src") or img_tag.get("data-src")):
+            image_url = img_tag.get("src") or img_tag.get("data-src")
 
     return {
         "body":         body,

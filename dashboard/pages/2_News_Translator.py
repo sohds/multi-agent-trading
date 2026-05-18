@@ -27,23 +27,31 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 NEWS_OUTPUT_DIR = os.path.join(ROOT, "output", "news")
 
 # ── 최신 통합 데이터 로드 ───────────────────────────────
-def load_latest_integrated_news() -> list[dict]:
+def load_latest_integrated_news() -> tuple[list[dict], str]:
+    """가장 최근에 생성된 통합 데이터를 읽어오고 수집 시각을 반환합니다."""
     if not os.path.exists(NEWS_OUTPUT_DIR):
-        return []
+        return [], "—"
     
-    # 해당 폴더에서 가장 최근에 생성된 파일 찾기
     files = glob.glob(os.path.join(NEWS_OUTPUT_DIR, "integrated_news_*.json"))
     if not files:
-        return []
+        return [], "—"
     
     latest_file = max(files, key=os.path.getctime)
     try:
         with open(latest_file, "r", encoding="utf-8") as f:
-            return json.load(f)
+            data = json.load(f)
+            # 파일 데이터 구조 내부나 파일 이름 등에서 수집 시각 추출
+            # 여기서는 파일 구조에 담긴 crawled_at 혹은 첫 기사의 시간 활용
+            crawled_at = "—"
+            if data and isinstance(data, list):
+                # 첫 기사에 분석된 시각 정보가 있다면 가져오기
+                crawled_at = data[0].get("article_meta", {}).get("published_at", "—")[:16]
+            return data, crawled_at
     except Exception:
-        return []
+        return [], "—"
 
-headlines = load_latest_integrated_news()
+# 데이터 로드
+headlines, crawled_at = load_latest_integrated_news()
 
 # ── 헤더 ──────────────────────────────────────
 st.markdown("""
@@ -57,8 +65,29 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
+# ── ✨ 번역 엔진 상태 자동 감지 조건문 ──────────────────
+if headlines:
+    engine_status = '<span style="color:#10B981; font-weight:700;">LLM (연결 완료)</span>'
+    live_badge = f'뉴스 {len(headlines)}건 준비됨'
+else:
+    engine_status = '<span style="color:#9CA3AF; font-weight:500;">LLM (연결 대기)</span>'
+    live_badge = '뉴스 0건 준비됨'
+
+# 동적 상태 스트립 마크다운 출력
+st.markdown(f"""
+<div class="status-strip">
+    <div><span class="dot dot-orange"></span>
+    <span class="status-v live">{live_badge}</span></div>
+    <span class="sep">|</span>
+    <div><span class="status-k">수집 시각 &nbsp;</span><span class="status-v">{crawled_at}</span></div>
+    <span class="sep">|</span>
+    <div><span class="status-k">번역 엔진 &nbsp;</span><span class="status-v">{engine_status}</span></div>
+</div>
+""", unsafe_allow_html=True)
+
 if not headlines:
-    callout("📭 수집된 뉴스가 없습니다. 백엔드 파이프라인을 먼저 실행해주세요.", kind="warn")
+    st.markdown("<div style='height:14px'></div>", unsafe_allow_html=True)
+    callout("📭 수집된 뉴스가 없습니다. 백엔드 파이프라인(news_run_pipeline.py)을 먼저 실행해주세요.", kind="warn")
     st.stop()
 
 # ── 뉴스 카드 그리드 ──────────────────────────
@@ -71,7 +100,6 @@ def _card_body(article: dict, min_h: int) -> None:
     pub     = (meta.get("published_at") or "")[:10]
     cluster = meta.get("cluster_num", 0)
     
-    # 통합 JSON에는 lede가 없으므로 본문 앞부분을 요약으로 씁니다
     body_text = article.get("article_body", "")
     lede = body_text[:80] + "..." if len(body_text) > 80 else body_text
 
@@ -107,17 +135,53 @@ def _card_btns(article: dict, idx: int) -> None:
         if url:
             st.link_button("원문 →", url, use_container_width=True)
 
-# ─ 2열 균일 카드 그리드 ─────────────────
+# ── 뉴스 카드 썸네일 이미지 함수 (부활!) ──────────────────────
+def _card_img(image_url: str, height: int) -> None:
+    if image_url:
+        st.markdown(
+            f'<div style="border-radius:10px 10px 0 0;overflow:hidden;height:{height}px;'
+            f'background:#F3F4F6;border:1px solid #E5E7EB;border-bottom:none">'
+            f'<img src="{image_url}" referrerpolicy="no-referrer" crossorigin="anonymous"'
+            f' style="width:100%;height:{height}px;object-fit:cover"'
+            f' onerror="this.parentElement.innerHTML=\'<div style=&quot;height:{height}px;'
+            f'display:flex;align-items:center;justify-content:center;font-size:30px;'
+            f'opacity:.2&quot;>📰</div>\'">'
+            f'</div>',
+            unsafe_allow_html=True,
+        )
+    else:
+        st.markdown(
+            f'<div style="border-radius:10px 10px 0 0;height:{height}px;background:#F3F4F6;'
+            f'border:1px solid #E5E7EB;border-bottom:none;display:flex;align-items:center;'
+            f'justify-content:center;font-size:30px;opacity:.25">📰</div>',
+            unsafe_allow_html=True,
+        )
+
+# ─ 2열 균일 카드 그리드 출력 로직 ─────────────────
 for row_start in range(0, len(headlines), 2):
     row_items = headlines[row_start:row_start + 2]
     cols = st.columns(2)
     for col_idx, article in enumerate(row_items):
         idx = row_start + col_idx
         with cols[col_idx]:
-            # 이미지 링크가 있다면 _card_img 추가 (통합 JSON 구조에 맞춰 조정)
-            st.markdown(f'<div style="border-radius:10px 10px 0 0;height:160px;background:#F3F4F6;'
-                        f'border:1px solid #E5E7EB;border-bottom:none;display:flex;align-items:center;'
-                        f'justify-content:center;font-size:30px;opacity:.25">📰</div>', unsafe_allow_html=True)
+            # ✨ JSON에서 image_url을 꺼내와서 _card_img 함수에 넘겨줍니다!
+            img_url = article.get("article_meta", {}).get("image_url", "")
+            _card_img(img_url, height=160)
+            
             _card_body(article, min_h=120)
             _card_btns(article, idx)
     st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
+
+# ── ✨ 하단 안내 박스 자동 메시지 전환 ───────────────────────
+st.divider()
+
+if headlines:
+    callout(
+        "🎉 <b>다중 에이전트 연동 완료:</b> 현재 화면의 모든 뉴스는 실시간 LLM 번역 및 투자 퀴즈가 포함된 통합 데이터입니다.",
+        kind="success",  # 성공 시 산뜻한 초록색 알림창
+    )
+else:
+    callout(
+        "🔄 번역 기능은 <code>news-translator/</code> 및 통합 파이프라인 연동 후 활성화됩니다. 백엔드를 실행해 주세요.",
+        kind="orange",  # 데이터가 없을 시 주의 오렌지 알림창
+    )

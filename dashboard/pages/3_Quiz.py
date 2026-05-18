@@ -219,15 +219,3 @@ with side_col:
     st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
     callout("정답률 통계는 데이터베이스 연동 후 활성화됩니다.", kind="orange")
 
-    st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
-    sec_title("어떻게 만드나요?")
-    st.markdown("""
-    <div style="font-size:12px;color:#6B7280;line-height:1.9">
-        <div>1️⃣ <b>자동 데이터 연동</b></div>
-        <div style="padding-left:14px;color:#9CA3AF">통합 파이프라인 JSON 로드</div>
-        <div>2️⃣ <b>학습 편의성 제공</b></div>
-        <div style="padding-left:14px;color:#9CA3AF">원하는 기사 선택 후 풀이</div>
-        <div>3️⃣ <b>심화 학습 연결</b></div>
-        <div style="padding-left:14px;color:#9CA3AF">해설 확인 후 상세 분석 이동</div>
-    </div>
-    """, unsafe_allow_html=True)
