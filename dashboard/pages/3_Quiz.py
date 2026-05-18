@@ -11,6 +11,7 @@ import glob
 from datetime import datetime
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+from utils.quiz_state import answer_quiz, get_quiz_state, quiz_stats, reset_quiz
 from utils.styles import inject_css, badge, sec_title, callout
 
 st.set_page_config(page_title="투자 퀴즈 | AI 주식 브리핑", page_icon="🧩", layout="wide")
@@ -96,10 +97,20 @@ with main_col:
     
     # Selectbox를 위해 기사 제목 리스트 생성
     titles = [item.get("article_meta", {}).get("title", f"퀴즈 {i+1}") for i, item in enumerate(quiz_articles)]
-    selected_title = st.selectbox("기사 선택", options=titles, label_visibility="collapsed")
+    if "quiz_current_idx" not in st.session_state:
+        st.session_state.quiz_current_idx = 0
+    st.session_state.quiz_current_idx = min(st.session_state.quiz_current_idx, len(quiz_articles) - 1)
+
+    selected_title = st.selectbox(
+        "기사 선택",
+        options=titles,
+        index=st.session_state.quiz_current_idx,
+        label_visibility="collapsed",
+    )
     
     # 선택된 기사 찾기
     selected_idx = titles.index(selected_title)
+    st.session_state.quiz_current_idx = selected_idx
     article = quiz_articles[selected_idx]
     
     quiz = article.get("quiz", {})
@@ -108,12 +119,7 @@ with main_col:
     question    = quiz.get("question", "—")
     answer      = quiz.get("answer", "")
     explanation = quiz.get("explanation", "—")
-    
-    # Session state 초기화 (문제가 바뀔 때마다 풀이 상태 초기화)
-    quiz_key = f"quiz_standalone_{selected_idx}"
-    if f"{quiz_key}_answered" not in st.session_state:
-        st.session_state[f"{quiz_key}_answered"] = False
-        st.session_state[f"{quiz_key}_selected"] = None
+    quiz_state = get_quiz_state(article)
 
     # 퀴즈 카드
     st.markdown(f"""
@@ -131,21 +137,19 @@ with main_col:
     st.markdown("<div style='height:14px'></div>", unsafe_allow_html=True)
 
     # 선택지 로직
-    if not st.session_state[f"{quiz_key}_answered"]:
+    if not quiz_state["answered"]:
         opt_cols = st.columns(2)
         with opt_cols[0]:
             if st.button("⭕ 맞다 (O)", key=f"btn_O_{selected_idx}", use_container_width=True, type="primary"):
-                st.session_state[f"{quiz_key}_answered"] = True
-                st.session_state[f"{quiz_key}_selected"] = "O"
+                answer_quiz(article, "O")
                 st.rerun()
         with opt_cols[1]:
             if st.button("❌ 틀리다 (X)", key=f"btn_X_{selected_idx}", use_container_width=True, type="primary"):
-                st.session_state[f"{quiz_key}_answered"] = True
-                st.session_state[f"{quiz_key}_selected"] = "X"
+                answer_quiz(article, "X")
                 st.rerun()
     else:
-        selected  = st.session_state[f"{quiz_key}_selected"]
-        is_correct = (selected == answer)
+        selected = quiz_state["selected"]
+        is_correct = bool(quiz_state["is_correct"])
 
         # 결과
         if is_correct:
@@ -187,10 +191,29 @@ with main_col:
                 if meta.get("url"):
                     st.link_button("📰 기사 원문 읽기 →", meta["url"], use_container_width=True)
 
+            nav_col1, nav_col2 = st.columns(2)
+            with nav_col1:
+                if st.button(
+                    "← 이전 퀴즈",
+                    key=f"prev_quiz_{selected_idx}",
+                    use_container_width=True,
+                    disabled=selected_idx == 0,
+                ):
+                    st.session_state.quiz_current_idx = max(0, selected_idx - 1)
+                    st.rerun()
+            with nav_col2:
+                if st.button(
+                    "다음 퀴즈 →",
+                    key=f"next_quiz_{selected_idx}",
+                    use_container_width=True,
+                    disabled=selected_idx >= len(quiz_articles) - 1,
+                ):
+                    st.session_state.quiz_current_idx = min(len(quiz_articles) - 1, selected_idx + 1)
+                    st.rerun()
+
         st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
         if st.button("🔄 다시 풀기", key=f"retry_{selected_idx}"):
-            st.session_state[f"{quiz_key}_answered"] = False
-            st.session_state[f"{quiz_key}_selected"] = None
+            reset_quiz(article)
             st.rerun()
 
 # ── 사이드 패널 ───────────────────────────────
@@ -201,10 +224,11 @@ with side_col:
     <div style="display:flex;flex-direction:column;gap:10px">
     """, unsafe_allow_html=True)
 
+    current_stats = quiz_stats(quiz_articles)
     stats = [
-        ("오늘 퀴즈 수", f"{len(quiz_articles)}개", "#F97316"),
-        ("정답률", "—", "#10B981"),
-        ("연속 정답", "—", "#7C3AED"),
+        ("오늘 퀴즈 수", f"{current_stats['total_count']}개", "#F97316"),
+        ("정답률", current_stats["accuracy_text"], "#10B981"),
+        ("남은 퀴즈 수", f"{current_stats['remaining_count']}개", "#7C3AED"),
     ]
     for label, value, color in stats:
         st.markdown(f"""
@@ -217,5 +241,5 @@ with side_col:
 
     st.markdown("</div>", unsafe_allow_html=True)
     st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
-    callout("정답률 통계는 데이터베이스 연동 후 활성화됩니다.", kind="orange")
+    callout("학습 통계는 현재 Streamlit 세션 안에서만 유지됩니다.", kind="orange")
 

@@ -12,7 +12,7 @@ sys.path.append(str(BASE_DIR / "news-quiz"))
 
 # 각 폴더의 핵심 함수들 불러오기
 from naver_headline_crawler import crawl
-from news_helper.llm import analyze_difficult_terms 
+from news_helper.llm import LlmApiError, analyze_difficult_terms
 from quiz_engine import generate_ox_quiz                   
 
 def run_daily_news_pipeline(limit=10):
@@ -41,11 +41,17 @@ def run_daily_news_pipeline(limit=10):
         print(f"[{idx}/{len(articles)}] 🔄 처리 중: {title[:30]}...")
 
         # 1. 번역기 엔진 실행
-        analysis_obj = analyze_difficult_terms(body)
-        if hasattr(analysis_obj, "to_dict"):
-            translated_terms = analysis_obj.to_dict()
-        else:
-            translated_terms = analysis_obj
+        try:
+            analysis_obj = analyze_difficult_terms(body, title=title)
+            if hasattr(analysis_obj, "to_dict"):
+                translated_terms = analysis_obj.to_dict()
+            else:
+                translated_terms = analysis_obj
+            translation_error = None
+        except LlmApiError as exc:
+            print(f"[{idx}/{len(articles)}] ⚠️ LLM 번역 실패, 퀴즈 생성은 계속 진행합니다: {exc}")
+            translated_terms = None
+            translation_error = "LLM 분석에 실패했습니다. 잠시 후 다시 시도해주세요."
 
         # 2. 퀴즈 엔진 실행
         quiz_data = generate_ox_quiz(body, title)
@@ -62,6 +68,7 @@ def run_daily_news_pipeline(limit=10):
             },
             "article_body": body,
             "translated_terms": translated_terms,
+            "translation_error": translation_error,
             "quiz": quiz_data
         })
 
