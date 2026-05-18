@@ -65,7 +65,7 @@ def run_daily_news_pipeline(limit=10):
             "quiz": quiz_data
         })
 
-    # ✨ [STEP 4] 완성된 10개 리스트를 시간 이름이 붙은 JSON 파일로 저장
+    # [STEP 4] 완성된 10개 리스트를 시간 이름이 붙은 JSON 파일로 저장
     print("\n📦 [STEP 4] UI 전용 통합 데이터 패키징 완료!")
     
     # 현재 시간 가져오기

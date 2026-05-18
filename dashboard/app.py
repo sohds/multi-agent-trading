@@ -9,6 +9,7 @@ from datetime import datetime
 import json
 import os
 import sys
+import glob
 
 sys.path.insert(0, os.path.dirname(__file__))
 from utils.styles import inject_css, badge, sec_title
@@ -21,10 +22,10 @@ st.set_page_config(
 )
 inject_css()
 
-# ── 경로 상수 ─────────────────────────────────
+# ── 경로 상수 ─────────────────
 ROOT           = os.path.dirname(os.path.dirname(__file__))
 SESSION_JSON   = os.path.join(ROOT, "config", "session.json")
-HEADLINE_FILE  = os.path.join(ROOT, "config", "naver_headline.json")
+NEWS_OUTPUT_DIR = os.path.join(ROOT, "output", "news")
 
 # ── 데이터 로드 헬퍼 ──────────────────────────
 def load_session() -> dict | None:
@@ -36,29 +37,34 @@ def load_session() -> dict | None:
     return None
 
 
-def latest_headline_count() -> int:
-    if not os.path.exists(HEADLINE_FILE):
-        return 0
-    try:
-        data = json.load(open(HEADLINE_FILE, encoding="utf-8"))
-        return len(data.get("all_headlines", []))
-    except Exception:
-        return 0
-
-
-def load_headline_preview(n: int = 3) -> list[tuple[str, str]]:
-    """뉴스 번역기 미리보기용: (title, press) 튜플 최대 n개 반환"""
-    if not os.path.exists(HEADLINE_FILE):
+def load_latest_integrated_news() -> list[dict]:
+    if not os.path.exists(NEWS_OUTPUT_DIR):
         return []
+    files = glob.glob(os.path.join(NEWS_OUTPUT_DIR, "*.json"))
+    if not files:
+        return []
+    latest_file = max(files, key=os.path.getctime)
     try:
-        data = json.load(open(HEADLINE_FILE, encoding="utf-8"))
-        return [
-            (h.get("title", "")[:48], h.get("press", ""))
-            for h in data.get("all_headlines", [])[:n]
-            if h.get("title")
-        ]
+        with open(latest_file, "r", encoding="utf-8") as f:
+            return json.load(f)
     except Exception:
         return []
+
+# 실시간 통합 뉴스 데이터 로드
+integrated_news = load_latest_integrated_news()
+headline_cnt = len(integrated_news)
+
+
+def load_headline_preview(data_list: list, n: int = 3) -> list[tuple[str, str]]:
+    """뉴스 번역기 미리보기용: 통합 데이터에서 (title, press) 튜플 최대 n개 반환"""
+    previews = []
+    for item in data_list[:n]:
+        meta = item.get("article_meta", {})
+        title = meta.get("title", "")[:48]
+        press = meta.get("press", "")
+        if title:
+            previews.append((title, press))
+    return previews
 
 
 @st.cache_data(ttl=300)
@@ -134,20 +140,23 @@ with st.sidebar:
 
     st.markdown("""
     <div style="font-size:11px;font-weight:700;text-transform:uppercase;
-    letter-spacing:1px;color:#9CA3AF;margin-bottom:8px">서비스</div>
+    letter-spacing:1px;color:#9CA3AF;margin-bottom:8px">서비스 Status</div>
     """, unsafe_allow_html=True)
 
     session       = load_session()
     debate_status = "구동 중" if session else "대기 중"
     debate_kind   = "ok" if session else "off"
-    headline_cnt  = latest_headline_count()
+    
+    # 자동 감지 상태 갱신
     news_status   = f"뉴스 {headline_cnt}건" if headline_cnt else "대기 중"
     news_kind     = "ok" if headline_cnt else "off"
+    quiz_status   = "준비됨" if headline_cnt else "대기 중"
+    quiz_kind     = "ok" if headline_cnt else "off"
 
     for icon, name, status, kind in [
         ("💬", "토론 브리핑", debate_status, debate_kind),
         ("📰", "뉴스 번역기", news_status,   news_kind),
-        ("🧩", "투자 퀴즈",   "준비됨",       "ok"),
+        ("🧩", "투자 퀴즈",   quiz_status,   quiz_kind),
     ]:
         st.markdown(
             f'<div style="display:flex;justify-content:space-between;align-items:center;'
@@ -274,7 +283,7 @@ if market_data:
     st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
 
 # ── 3대 서비스 카드 ───────────────────────────
-sec_title("서비스")
+sec_title("서비스 상황")
 
 stock_topic    = "—"
 theme_topic    = "—"
@@ -288,7 +297,8 @@ if session:
         theme_topic = (t[:80] + "…") if len(t) > 80 else t
     debate_created = session.get("created_at", "—")
 
-headline_previews = load_headline_preview(3)
+# 통합 데이터 리스트를 아규먼트로 넘겨 최신 뉴스 3개 프리뷰 추출
+headline_previews = load_headline_preview(integrated_news, 3)
 
 # ── Row 1: 토론 브리핑 (전체 너비) ─────────────
 st.markdown(f"""
@@ -343,22 +353,21 @@ with c_news:
         f'<span style="color:#9CA3AF;font-size:10.5px">{p}&nbsp;·&nbsp;</span>{t}'
         f'</div>'
         for t, p in headline_previews
-    ) if headline_previews else '<div style="font-size:12px;color:#9CA3AF">뉴스 데이터 없음</div>'
+    ) if headline_previews else '<div style="font-size:12px;color:#9CA3AF">최신 통합 뉴스 데이터 없음</div>'
 
     st.markdown(f"""
     <div class="svc-card" style="--accent:#7C3AED">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
             <span style="font-size:24px">📰</span>
             <div class="svc-card-title">뉴스 번역기</div>
-            <div style="margin-left:auto">{badge(f"뉴스 {headline_cnt}건" if headline_cnt else "대기 중",
-                                                  "ok" if headline_cnt else "off")}</div>
+            <div style="margin-left:auto">{badge(news_status, news_kind)}</div>
         </div>
         <div class="svc-card-desc" style="margin-bottom:12px">
             어려운 금융 뉴스를 쉬운 말로 번역합니다. 금융 용어 해설과 3줄 요약을 제공합니다.
         </div>
         <div style="background:#F5F3FF;border-radius:10px;padding:12px">
             <div style="font-size:10px;font-weight:700;color:#7C3AED;text-transform:uppercase;
-            letter-spacing:.8px;margin-bottom:8px">최신 헤드라인</div>
+            letter-spacing:.8px;margin-bottom:8px">최신 헤드라인 프리뷰</div>
             {preview_items}
         </div>
     </div>
@@ -374,7 +383,7 @@ with c_quiz:
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
             <span style="font-size:24px">🧩</span>
             <div class="svc-card-title">투자 퀴즈</div>
-            <div style="margin-left:auto">{badge("준비됨", "ok")}</div>
+            <div style="margin-left:auto">{badge(quiz_status, quiz_kind)}</div>
         </div>
         <div class="svc-card-desc" style="margin-bottom:12px">
             당일 뉴스 기반 OX 퀴즈로 금융 리터러시를 테스트하세요.
@@ -382,8 +391,8 @@ with c_quiz:
         <div style="background:#ECFDF5;border-radius:10px;padding:12px">
             <div style="font-size:10px;font-weight:700;color:#059669;text-transform:uppercase;
             letter-spacing:.8px;margin-bottom:8px">오늘의 퀴즈</div>
-            <div style="font-size:12.5px;color:#374151">🗓️ {now.strftime('%m월 %d일')} 퀴즈</div>
-            <div style="font-size:11px;color:#6B7280;margin-top:6px">뉴스 기반 문제 생성<br>정답 해설로 경제 이슈 이해</div>
+            <div style="font-size:12.5px;color:#374151">🗓️ {now.strftime('%m월 %d일')} 퀴즈 모음</div>
+            <div style="font-size:11px;color:#6B7280;margin-top:6px">뉴스 기반 문제 자동 연동<br>정답 해설로 경제 이슈 이해</div>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -410,8 +419,8 @@ st.markdown("""
             <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#6366F1;margin-bottom:10px">② 데이터 수집</div>
             <div style="font-size:13px;color:#374151;line-height:1.7">
                 시장 심리 (VKOSPI · 수급)<br>
-                매크로 국면 (PCA · 마코프)<br>
-                섹터 분석 (실적 · 밸류에이션)
+                → 매크로 국면 (PCA · 마코프)<br>
+                → 섹터 분석 (실적 · 밸류에이션)
             </div>
         </div>
         <div style="flex:1;min-width:180px;padding:0 20px;border-right:1px solid #F3F4F6">
@@ -426,8 +435,8 @@ st.markdown("""
             <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#EF4444;margin-bottom:10px">④ 최종 판정</div>
             <div style="font-size:13px;color:#374151;line-height:1.7">
                 오케스트레이터 종합<br>
-                합의 강도 계산<br>
-                투자 판단 콘텐츠 생성
+                → 합의 강도 계산<br>
+                → 투자 판단 콘텐츠 생성
             </div>
         </div>
     </div>

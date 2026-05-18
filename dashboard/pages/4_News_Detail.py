@@ -14,7 +14,6 @@ from utils.styles import inject_css, sec_title, callout
 st.set_page_config(page_title="뉴스 분석 | AI 주식 브리핑", page_icon="📰", layout="wide")
 inject_css()
 
-# ✨ 툴팁 및 커스텀 스타일 CSS
 st.markdown("""
 <style>
 /* 툴팁을 가진 하이라이트 단어 스타일 */
@@ -98,7 +97,7 @@ quiz = article.get("quiz", {})
 
 difficult_terms = analysis.get("difficult_terms", []) if analysis else []
 
-# ── ✨ 2. 본문 하이라이트 로직 (컬러맵 & 툴팁 & UUID 치환) ──────────────────────────────────────
+# ── 2. 본문 하이라이트 로직 (컬러맵 & 툴팁 & UUID 치환) ──────────────────────────────────────
 
 def get_difficulty_color(score: float) -> str:
     """
@@ -120,7 +119,7 @@ def get_difficulty_color(score: float) -> str:
 difficult_terms_sorted = sorted(difficult_terms, key=lambda x: len(x.get("term", "")), reverse=True)
 
 highlighted_body = body_text
-replacements = {} # HTML 태그 깨짐을 방지하기 위한 UUID 저장소
+replacements = {} 
 
 # 1단계: 실제 단어들을 유니크한 UUID로 변경
 for term_obj in difficult_terms_sorted:
@@ -166,7 +165,6 @@ st.markdown(f"""
 main_col, side_col = st.columns([3, 1])
 
 with main_col:
-    # --- [파트 A] 하이라이트된 기사 본문 ---
     st.markdown("""
     <div style="margin-bottom:10px; font-size:13px; color:#6B7280;">
         💡 <b>Tip:</b> 색칠된 단어 위에 마우스를 올리면 뜻을 볼 수 있습니다. (붉은색일수록 어려운 단어)
@@ -259,7 +257,6 @@ with side_col:
         
     st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
     
-    # 컬러맵 범례 표시
     st.markdown("""
     <div style="font-size:13px; font-weight:700; color:#374151; margin-bottom:10px;">난이도 색상 안내</div>
     <div style="display:flex; flex-direction:column; gap:6px; font-size:12px; color:#6B7280;">

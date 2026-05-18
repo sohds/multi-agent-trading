@@ -15,7 +15,6 @@ from utils.styles import inject_css, sec_title, callout
 st.set_page_config(page_title="뉴스 번역기 | AI 주식 브리핑", page_icon="📰", layout="wide")
 inject_css()
 
-# (기존 CSS 스타일 코드는 그대로 유지하셔도 됩니다)
 st.markdown("""
 <style>
 /* ... (기존 CSS 코드 유지) ... */
@@ -65,7 +64,6 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# ── ✨ 번역 엔진 상태 자동 감지 조건문 ──────────────────
 if headlines:
     engine_status = '<span style="color:#10B981; font-weight:700;">LLM (연결 완료)</span>'
     live_badge = f'뉴스 {len(headlines)}건 준비됨'
@@ -73,7 +71,6 @@ else:
     engine_status = '<span style="color:#9CA3AF; font-weight:500;">LLM (연결 대기)</span>'
     live_badge = '뉴스 0건 준비됨'
 
-# 동적 상태 스트립 마크다운 출력
 st.markdown(f"""
 <div class="status-strip">
     <div><span class="dot dot-orange"></span>
@@ -135,7 +132,7 @@ def _card_btns(article: dict, idx: int) -> None:
         if url:
             st.link_button("원문 →", url, use_container_width=True)
 
-# ── 뉴스 카드 썸네일 이미지 함수 (부활!) ──────────────────────
+# ── 뉴스 카드 썸네일 이미지 함수 ──────────────────────
 def _card_img(image_url: str, height: int) -> None:
     if image_url:
         st.markdown(
@@ -164,7 +161,6 @@ for row_start in range(0, len(headlines), 2):
     for col_idx, article in enumerate(row_items):
         idx = row_start + col_idx
         with cols[col_idx]:
-            # ✨ JSON에서 image_url을 꺼내와서 _card_img 함수에 넘겨줍니다!
             img_url = article.get("article_meta", {}).get("image_url", "")
             _card_img(img_url, height=160)
             
@@ -172,16 +168,15 @@ for row_start in range(0, len(headlines), 2):
             _card_btns(article, idx)
     st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
 
-# ── ✨ 하단 안내 박스 자동 메시지 전환 ───────────────────────
 st.divider()
 
 if headlines:
     callout(
         "🎉 <b>다중 에이전트 연동 완료:</b> 현재 화면의 모든 뉴스는 실시간 LLM 번역 및 투자 퀴즈가 포함된 통합 데이터입니다.",
-        kind="success",  # 성공 시 산뜻한 초록색 알림창
+        kind="success",  
     )
 else:
     callout(
         "🔄 번역 기능은 <code>news-translator/</code> 및 통합 파이프라인 연동 후 활성화됩니다. 백엔드를 실행해 주세요.",
-        kind="orange",  # 데이터가 없을 시 주의 오렌지 알림창
+        kind="orange", 
     )
