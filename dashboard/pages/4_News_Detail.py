@@ -6,10 +6,16 @@
 import streamlit as st
 import sys
 import os
-import uuid
+import html
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+DASHBOARD_DIR = os.path.dirname(os.path.dirname(__file__))
+ROOT = os.path.dirname(DASHBOARD_DIR)
+
+sys.path.insert(0, DASHBOARD_DIR)
+sys.path.insert(0, os.path.join(ROOT, "news-translator"))
+from utils.quiz_state import answer_quiz, get_quiz_state, reset_quiz
 from utils.styles import inject_css, sec_title, callout
+from news_helper.text_match import find_term
 
 st.set_page_config(page_title="뉴스 분석 | AI 주식 브리핑", page_icon="📰", layout="wide")
 inject_css()
@@ -90,10 +96,12 @@ press = meta.get("press", "언론사 미상")
 pub = meta.get("published_at", "")
 cluster = meta.get("cluster_num", 0)
 url = meta.get("url", "")
+image_url = meta.get("image_url") or ""
 
 body_text = article.get("article_body", "본문이 없습니다.")
 analysis = article.get("translated_terms", {})
 quiz = article.get("quiz", {})
+translation_error = article.get("translation_error")
 
 difficult_terms = analysis.get("difficult_terms", []) if analysis else []
 
@@ -115,41 +123,65 @@ def get_difficulty_color(score: float) -> str:
     # 채도 100%, 밝기 85%로 은은한 형광펜 효과
     return f"hsl({hue}, 100%, 85%)"
 
-# 긴 단어부터 먼저 치환되도록 정렬 (예: '가처분'이 '가처분 신청' 안에서 치환되는 버그 방지)
-difficult_terms_sorted = sorted(difficult_terms, key=lambda x: len(x.get("term", "")), reverse=True)
+def _html_text(value: str) -> str:
+    return html.escape(value).replace("\n", "<br><br>")
 
-highlighted_body = body_text
-replacements = {} 
 
-# 1단계: 실제 단어들을 유니크한 UUID로 변경
-for term_obj in difficult_terms_sorted:
-    word = term_obj.get("term", "")
-    if not word:
-        continue
-        
-    score = term_obj.get("difficulty_score", 0.5)
-    explanation = term_obj.get("explanation", "설명이 없습니다.")
-    
-    # 난이도에 따른 동적 배경색 가져오기
+def _score_value(raw_score) -> float:
+    try:
+        return float(raw_score)
+    except (TypeError, ValueError):
+        return 0.5
+
+
+def _highlight_html(surface: str, term_obj: dict) -> str:
+    score = _score_value(term_obj.get("difficulty_score", 0.5))
+    explanation = html.escape(str(term_obj.get("explanation") or "설명이 없습니다."))
     bg_color = get_difficulty_color(score)
-    
-    # 툴팁이 포함된 HTML 구성
-    uid = f"__UUID_{uuid.uuid4().hex}__"
-    hl_html = (
-        f'<span class="hl-term" style="background-color:{bg_color}">{word}'
+    return (
+        f'<span class="hl-term" style="background-color:{bg_color}">{html.escape(surface)}'
         f'<span class="hl-tooltip"><strong style="color:#FCA5A5">난이도: {score}</strong><br>{explanation}</span>'
         f'</span>'
     )
-    
-    replacements[uid] = hl_html
-    highlighted_body = highlighted_body.replace(word, uid)
 
-# 2단계: UUID를 만들어둔 HTML 태그로 일괄 변경
-for uid, html in replacements.items():
-    highlighted_body = highlighted_body.replace(uid, html)
 
-# 줄바꿈 태그 변환
-highlighted_body = highlighted_body.replace("\n", "<br><br>")
+def _highlight_article_body(body: str, terms: list[dict]) -> str:
+    candidates = [
+        {**term, "term": str(term.get("term") or "").strip()}
+        for term in terms
+        if str(term.get("term") or "").strip()
+    ]
+    candidates.sort(key=lambda item: len(item["term"]), reverse=True)
+
+    parts: list[str] = []
+    index = 0
+    while index < len(body):
+        best_match = None
+        for term_obj in candidates:
+            word = term_obj["term"]
+            match_index = find_term(body, word, index)
+            if match_index == -1:
+                continue
+            match_key = (match_index, -len(word))
+            if best_match is None or match_key < best_match[0]:
+                best_match = (match_key, word, term_obj)
+
+        if best_match is None:
+            parts.append(_html_text(body[index:]))
+            break
+
+        (match_index, _), word, term_obj = best_match
+        if match_index > index:
+            parts.append(_html_text(body[index:match_index]))
+
+        match_end = match_index + len(word)
+        parts.append(_highlight_html(body[match_index:match_end], term_obj))
+        index = match_end
+
+    return "".join(parts)
+
+
+highlighted_body = _highlight_article_body(body_text, difficult_terms)
 
 
 # ── 3. 화면 렌더링 ──────────────────────────────────────────────
@@ -165,6 +197,22 @@ st.markdown(f"""
 main_col, side_col = st.columns([3, 1])
 
 with main_col:
+    if image_url:
+        safe_image_url = html.escape(image_url, quote=True)
+        st.markdown(f"""
+        <div style="border-radius:14px;overflow:hidden;height:340px;background:#F3F4F6;
+                    border:1px solid #E5E7EB;margin-bottom:22px;display:flex;
+                    align-items:center;justify-content:center">
+            <img src="{safe_image_url}" referrerpolicy="no-referrer" crossorigin="anonymous"
+                 style="width:100%;height:100%;object-fit:contain"
+                 onerror="this.parentElement.style.display='none'">
+        </div>
+        """, unsafe_allow_html=True)
+
+    if translation_error:
+        callout(f"⚠️ {translation_error}", kind="warn")
+        st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
+
     st.markdown("""
     <div style="margin-bottom:10px; font-size:13px; color:#6B7280;">
         💡 <b>Tip:</b> 색칠된 단어 위에 마우스를 올리면 뜻을 볼 수 있습니다. (붉은색일수록 어려운 단어)
@@ -198,11 +246,7 @@ with main_col:
         question = quiz.get("question", "")
         answer = quiz.get("answer", "")
         explanation = quiz.get("explanation", "")
-
-        quiz_key = f"quiz_answered_{url}"
-        if quiz_key not in st.session_state:
-            st.session_state[quiz_key] = False
-            st.session_state[f"quiz_selected_{url}"] = None
+        quiz_state = get_quiz_state(article)
 
         st.markdown(f"""
         <div style="padding:20px; border:2px solid #E5E7EB; border-radius:12px; margin-bottom:20px; background-color:#F9FAFB">
@@ -211,21 +255,19 @@ with main_col:
             </div>
         """, unsafe_allow_html=True)
 
-        if not st.session_state[quiz_key]:
+        if not quiz_state["answered"]:
             col1, col2 = st.columns(2)
             with col1:
                 if st.button("⭕ 맞다 (O)", use_container_width=True, type="primary"):
-                    st.session_state[quiz_key] = True
-                    st.session_state[f"quiz_selected_{url}"] = "O"
+                    answer_quiz(article, "O")
                     st.rerun()
             with col2:
                 if st.button("❌ 틀리다 (X)", use_container_width=True, type="primary"):
-                    st.session_state[quiz_key] = True
-                    st.session_state[f"quiz_selected_{url}"] = "X"
+                    answer_quiz(article, "X")
                     st.rerun()
         else:
-            selected = st.session_state[f"quiz_selected_{url}"]
-            is_correct = (selected == answer)
+            selected = quiz_state["selected"]
+            is_correct = bool(quiz_state["is_correct"])
 
             if is_correct:
                 st.success(f"🎉 정답입니다! (선택: {selected})")
@@ -235,8 +277,7 @@ with main_col:
             st.info(f"**해설:** {explanation}")
             
             if st.button("↻ 퀴즈 다시 풀기", key="reset_quiz"):
-                st.session_state[quiz_key] = False
-                st.session_state[f"quiz_selected_{url}"] = None
+                reset_quiz(article)
                 st.rerun()
 
         st.markdown("</div>", unsafe_allow_html=True)
