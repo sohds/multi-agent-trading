@@ -108,14 +108,33 @@ def load_market_indices() -> list[dict]:
         return []
 
 
-def _sparkline(values: list[float]) -> str:
-    BARS = "▁▂▃▄▅▆▇█"
+def _svg_sparkline(values: list[float], positive: bool, width: int = 80, height: int = 36) -> str:
     if not values or len(values) < 2:
-        return "—"
+        return ""
     mn, mx = min(values), max(values)
     if mx == mn:
-        return BARS[3] * len(values)
-    return "".join(BARS[round((v - mn) / (mx - mn) * 7)] for v in values)
+        mn -= 1; mx += 1
+    color      = "#EF4444" if positive else "#1D4ED8"
+    fill_color = "rgba(239,68,68,0.12)" if positive else "rgba(29,78,216,0.12)"
+    pad = 2
+    pts = [
+        (pad + (i / (len(values) - 1)) * (width - 2 * pad),
+         (height - pad) - ((v - mn) / (mx - mn)) * (height - 2 * pad))
+        for i, v in enumerate(values)
+    ]
+    line_pts = " ".join(f"{x:.1f},{y:.1f}" for x, y in pts)
+    area_d   = f"M {pts[0][0]:.1f},{pts[0][1]:.1f}"
+    for x, y in pts[1:]:
+        area_d += f" L {x:.1f},{y:.1f}"
+    area_d += f" L {pts[-1][0]:.1f},{height} L {pts[0][0]:.1f},{height} Z"
+    return (
+        f'<svg width="{width}" height="{height}" viewBox="0 0 {width} {height}" '
+        f'xmlns="http://www.w3.org/2000/svg" style="display:block">'
+        f'<path d="{area_d}" fill="{fill_color}"/>'
+        f'<polyline points="{line_pts}" fill="none" stroke="{color}" '
+        f'stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>'
+        f'</svg>'
+    )
 
 
 # ── Sidebar ───────────────────────────────────
@@ -224,63 +243,50 @@ if market_data:
     for item in market_data:
         groups.setdefault(item["category"], []).append(item)
 
+    filled_cats = [c for c in CAT_ORDER if groups.get(c)]
     rows_html = ""
-    for cat in CAT_ORDER:
+    for cat in filled_cats:
         items = groups.get(cat, [])
-        if not items:
-            continue
         label = CAT_LABELS.get(cat, cat)
-        rows_html += (
-            f'<tr style="background:#F9FAFB">'
-            f'<td colspan="5" style="padding:7px 20px;font-size:10px;font-weight:700;'
-            f'text-transform:uppercase;letter-spacing:.8px;color:#9CA3AF;'
-            f'border-top:1px solid #E5E7EB;border-bottom:1px solid #E5E7EB">{label}</td></tr>'
-        )
-        for item in items:
-            up  = item["change"] >= 0
-            clr = "#EF4444" if up else "#1D4ED8"
-            arr = "▲" if up else "▼"
-            sgn = "+" if up else ""
-            close_s  = f"{item['close']:,.2f}"
-            change_s = f"{arr}&nbsp;{sgn}{item['change']:,.2f}"
-            pct_s    = f"{sgn}{item['change_pct']:.2f}%"
-            spark    = _sparkline(item["history"])
-            rows_html += (
-                f'<tr style="border-bottom:1px solid #F3F4F6">'
-                f'<td style="padding:11px 20px;font-size:13px;font-weight:600;color:#111827">{item["name"]}</td>'
-                f'<td style="text-align:right;padding:11px 20px;font-size:13px;font-family:monospace;color:#111827">{close_s}</td>'
-                f'<td style="text-align:right;padding:11px 16px;font-size:12px;font-weight:600;color:{clr}">{change_s}</td>'
-                f'<td style="text-align:right;padding:11px 20px;font-size:12px;font-weight:700;color:{clr}">{pct_s}</td>'
-                f'<td style="text-align:center;padding:11px 20px;font-size:13px;font-family:monospace;'
-                f'color:#9CA3AF;letter-spacing:2px">{spark}</td>'
-                f'</tr>'
+        is_last = (cat == filled_cats[-1])
+        items_html = ""
+        for i, item in enumerate(items):
+            up      = item["change"] >= 0
+            clr     = "#EF4444" if up else "#1D4ED8"
+            bg_pill = "#FEE2E2" if up else "#DBEAFE"
+            arr     = "▲" if up else "▼"
+            sgn     = "+" if up else ""
+            close_s = f"{item['close']:,.2f}"
+            pct_s   = f"{sgn}{item['change_pct']:.2f}%"
+            spark   = _svg_sparkline(item["history"], up, width=52, height=20)
+            sep     = '<div style="width:1px;background:#E5E7EB;align-self:stretch;margin:0 10px"></div>' if i > 0 else ""
+            items_html += (
+                f'{sep}'
+                f'<div style="display:inline-flex;align-items:center;gap:7px;white-space:nowrap">'
+                f'<span style="font-size:11px;font-weight:700;color:#374151">{item["name"]}</span>'
+                f'<span style="font-size:11px;font-weight:600;color:#111827;font-family:monospace">{close_s}</span>'
+                f'<span style="font-size:10px;font-weight:700;background:{bg_pill};color:{clr};'
+                f'padding:1px 6px;border-radius:10px">{arr} {pct_s}</span>'
+                f'{spark}'
+                f'</div>'
             )
+        border = "" if is_last else "border-bottom:1px solid #F3F4F6;"
+        rows_html += (
+            f'<div style="display:flex;align-items:center;gap:0;'
+            f'padding:6px 0;{border}">'
+            f'<span style="font-size:9px;font-weight:700;text-transform:uppercase;'
+            f'letter-spacing:.6px;color:#B0B7C3;min-width:62px;flex-shrink:0">{label}</span>'
+            f'<div style="width:1px;background:#E5E7EB;align-self:stretch;margin:0 10px 0 0;flex-shrink:0"></div>'
+            f'<div style="display:flex;align-items:center;flex-wrap:nowrap;overflow-x:auto">{items_html}</div>'
+            f'</div>'
+        )
 
-    st.markdown(f"""
-    <div style="background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;
-    overflow:hidden;margin-bottom:4px">
-        <table style="width:100%;border-collapse:collapse">
-            <thead>
-                <tr style="background:#F9FAFB;border-bottom:1.5px solid #E5E7EB">
-                    <th style="text-align:left;padding:10px 20px;font-size:10px;color:#9CA3AF;
-                    font-weight:600;text-transform:uppercase;letter-spacing:.8px">종목</th>
-                    <th style="text-align:right;padding:10px 20px;font-size:10px;color:#9CA3AF;
-                    font-weight:600;text-transform:uppercase;letter-spacing:.8px">현재가</th>
-                    <th style="text-align:right;padding:10px 16px;font-size:10px;color:#9CA3AF;
-                    font-weight:600;text-transform:uppercase;letter-spacing:.8px">전일대비</th>
-                    <th style="text-align:right;padding:10px 20px;font-size:10px;color:#9CA3AF;
-                    font-weight:600;text-transform:uppercase;letter-spacing:.8px">등락률</th>
-                    <th style="text-align:center;padding:10px 20px;font-size:10px;color:#9CA3AF;
-                    font-weight:600;text-transform:uppercase;letter-spacing:.8px">5일추세</th>
-                </tr>
-            </thead>
-            <tbody>
-                {rows_html}
-            </tbody>
-        </table>
-    </div>
-    """, unsafe_allow_html=True)
-    st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
+    st.markdown(
+        f'<div style="background:#FFFFFF;border:1px solid #E5E7EB;border-radius:12px;'
+        f'padding:8px 14px;margin-bottom:4px">{rows_html}</div>',
+        unsafe_allow_html=True,
+    )
+    st.markdown("<div style='height:12px'></div>", unsafe_allow_html=True)
 
 # ── 3대 서비스 카드 ───────────────────────────
 sec_title("서비스 상황")
