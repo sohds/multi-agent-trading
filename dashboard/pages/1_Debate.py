@@ -50,8 +50,10 @@ st.set_page_config(page_title="토론 브리핑 | AI 주식 브리핑", page_ico
 inject_css()
 
 # ── 상수 ─────────────────────────────────────────────────────
-SESSION_JSON      = os.path.join(ROOT, "config", "session.json")
-SUPPORT_JSON      = os.path.join(ROOT, "config", "support_data.json")
+_CONFIG_DIR       = os.path.join(ROOT, "config")
+os.makedirs(_CONFIG_DIR, exist_ok=True)
+SESSION_JSON      = os.path.join(_CONFIG_DIR, "session.json")
+SUPPORT_JSON      = os.path.join(_CONFIG_DIR, "support_data.json")
 MODEL             = os.getenv("OPENAI_MODEL", "gpt-5.4-mini")
 NEUTRAL_THRESHOLD = 0.05
 
@@ -147,13 +149,17 @@ def _run_orchestrator(bull: dict, bear: dict, verdict: str, diff: float) -> str:
         return f"(판정 이유 생성 실패: {e})"
 
 
-_SUPPORT_ERR_LOG = "/tmp/debate_support_errors.log"
+import tempfile as _tempfile
+_SUPPORT_ERR_LOG = os.path.join(_tempfile.gettempdir(), "debate_support_errors.log")
 
 
 def _log_err(tag: str, exc: Exception) -> None:
     import traceback
-    with open(_SUPPORT_ERR_LOG, "a", encoding="utf-8") as _f:
-        _f.write(f"\n=== {tag} ===\n{traceback.format_exc()}\n")
+    try:
+        with open(_SUPPORT_ERR_LOG, "a", encoding="utf-8") as _f:
+            _f.write(f"\n=== {tag} ===\n{traceback.format_exc()}\n")
+    except Exception:
+        pass
 
 
 def _load_macro() -> dict | None:
