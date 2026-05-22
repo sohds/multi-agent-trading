@@ -49,6 +49,44 @@ except ImportError as _e:
 st.set_page_config(page_title="토론 브리핑 | AI 주식 브리핑", page_icon="💬", layout="wide")
 inject_css()
 
+st.markdown("""
+<style>
+/* 토론 시작·주제 생성 버튼: rounded-rect, ghost-orange */
+[data-testid="stButton"] > button[kind="primary"] {
+    background: #FFFFFF !important;
+    color: #EA580C !important;
+    border: 1px solid #FED7AA !important;
+    border-radius: 10px !important;
+    padding: 0.45rem 1.4rem !important;
+    min-height: 38px !important;
+    letter-spacing: 0.2px !important;
+    transition: background 150ms ease, border-color 150ms ease, color 150ms ease !important;
+}
+[data-testid="stButton"] > button[kind="primary"],
+[data-testid="stButton"] > button[kind="primary"] * {
+    font-size: 14px !important;
+    font-weight: 700 !important;
+}
+[data-testid="stButton"] > button[kind="primary"]:hover {
+    background: #FFF7ED !important;
+    border-color: #F97316 !important;
+    color: #C2410C !important;
+    filter: none !important;
+}
+/* 보조 버튼: rounded-rect, neutral */
+[data-testid="stButton"] > button[kind="secondary"],
+[data-testid="stButton"] > button[kind="secondary"] * {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+}
+[data-testid="stButton"] > button[kind="secondary"] {
+    border-radius: 10px !important;
+    padding: 0.45rem 1.4rem !important;
+    min-height: 38px !important;
+}
+</style>
+""", unsafe_allow_html=True)
+
 # ── 상수 ─────────────────────────────────────────────────────
 _CONFIG_DIR       = os.path.join(ROOT, "config")
 os.makedirs(_CONFIG_DIR, exist_ok=True)

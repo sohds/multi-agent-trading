@@ -190,8 +190,8 @@ with st.sidebar:
 
     st.markdown("""
     <div style="font-size:11px;color:#9CA3AF;line-height:1.9">
-        <div>🤖 LLM: Claude API (Anthropic)</div>
-        <div>📡 데이터: yfinance · DART · 네이버</div>
+        <div>🤖 LLM: GPT-5.4 mini</div>
+        <div>📡 데이터: yfinance · DART · PyKRX · 네이버</div>
         <div>🧠 패턴: Bull/Bear 토론 에이전트</div>
     </div>
     """, unsafe_allow_html=True)

@@ -76,6 +76,34 @@ st.markdown("""
     opacity: 1;
     bottom: 115%;
 }
+/* O/X 버튼: rounded-rect, ghost-orange */
+[data-testid="stButton"] > button[kind="primary"] {
+    background: #FFFFFF !important;
+    color: #EA580C !important;
+    border: 1px solid #FED7AA !important;
+    border-radius: 10px !important;
+    padding: 0.45rem 1.4rem !important;
+    min-height: 38px !important;
+    letter-spacing: 0.2px !important;
+    transition: background 150ms ease, border-color 150ms ease, color 150ms ease !important;
+}
+[data-testid="stButton"] > button[kind="primary"],
+[data-testid="stButton"] > button[kind="primary"] * {
+    font-size: 14px !important;
+    font-weight: 700 !important;
+}
+[data-testid="stButton"] > button[kind="primary"]:hover {
+    background: #FFF7ED !important;
+    border-color: #F97316 !important;
+    color: #C2410C !important;
+    filter: none !important;
+}
+/* 뒤로가기·보조 버튼: rounded-rect, neutral */
+[data-testid="stButton"] > button[kind="secondary"],
+[data-testid="stButton"] > button[kind="secondary"] * {
+    font-size: 13px !important;
+    font-weight: 500 !important;
+}
 </style>
 """, unsafe_allow_html=True)
 

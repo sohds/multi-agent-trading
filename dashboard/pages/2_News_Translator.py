@@ -17,7 +17,49 @@ inject_css()
 
 st.markdown("""
 <style>
-/* ... (기존 CSS 코드 유지) ... */
+/* 분석 보기 버튼: rounded-rect, ghost-orange */
+[data-testid="stButton"] > button[kind="primary"] {
+    background: #FFFFFF !important;
+    color: #EA580C !important;
+    border: 1px solid #FED7AA !important;
+    border-radius: 10px !important;
+    padding: 0.3rem 1.2rem !important;
+    min-height: 28px !important;
+    letter-spacing: 0.2px !important;
+    transition: background 150ms ease, border-color 150ms ease, color 150ms ease !important;
+}
+[data-testid="stButton"] > button[kind="primary"],
+[data-testid="stButton"] > button[kind="primary"] * {
+    font-size: 11px !important;
+    font-weight: 700 !important;
+}
+[data-testid="stButton"] > button[kind="primary"]:hover {
+    background: #FFF7ED !important;
+    border-color: #F97316 !important;
+    color: #C2410C !important;
+    filter: none !important;
+}
+[data-testid="stLinkButton"] a {
+    background: #FFFFFF !important;
+    color: #EA580C !important;
+    border: 1px solid #FED7AA !important;
+    border-radius: 10px !important;
+    padding: 0.3rem 1.2rem !important;
+    min-height: 28px !important;
+    letter-spacing: 0.2px !important;
+    transition: background 150ms ease, border-color 150ms ease, color 150ms ease !important;
+}
+[data-testid="stLinkButton"] a,
+[data-testid="stLinkButton"] a * {
+    font-size: 11px !important;
+    font-weight: 700 !important;
+}
+[data-testid="stLinkButton"] a:hover {
+    background: #FFF7ED !important;
+    border-color: #F97316 !important;
+    color: #C2410C !important;
+    filter: none !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
