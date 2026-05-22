@@ -19,17 +19,60 @@ inject_css()
 
 st.markdown("""
 <style>
+/* O/X 답변 버튼: rounded-rect, ghost-orange */
 [data-testid="stButton"] > button[kind="primary"] {
     background: #FFFFFF !important;
     color: #EA580C !important;
     border: 1px solid #FED7AA !important;
-    border-radius: 7px !important;
-    font-weight: 500 !important;
+    border-radius: 10px !important;
+    padding: 0.45rem 1.4rem !important;
+    min-height: 38px !important;
+    letter-spacing: 0.2px !important;
+    transition: background 150ms ease, border-color 150ms ease, color 150ms ease !important;
+}
+[data-testid="stButton"] > button[kind="primary"],
+[data-testid="stButton"] > button[kind="primary"] * {
+    font-size: 14px !important;
+    font-weight: 700 !important;
 }
 [data-testid="stButton"] > button[kind="primary"]:hover {
     background: #FFF7ED !important;
     border-color: #F97316 !important;
     color: #C2410C !important;
+    filter: none !important;
+}
+/* 네비·보조 버튼: rounded-rect, neutral */
+[data-testid="stButton"] > button[kind="secondary"] {
+    border-radius: 10px !important;
+    padding: 0.45rem 1.4rem !important;
+    min-height: 38px !important;
+    letter-spacing: 0.2px !important;
+}
+[data-testid="stButton"] > button[kind="secondary"],
+[data-testid="stButton"] > button[kind="secondary"] * {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+}
+/* 기사 원문 읽기 링크 버튼: neutral */
+[data-testid="stLinkButton"] a {
+    background: #FFFFFF !important;
+    color: #374151 !important;
+    border: 1px solid #E5E7EB !important;
+    border-radius: 10px !important;
+    padding: 0.45rem 1.4rem !important;
+    min-height: 38px !important;
+    letter-spacing: 0.2px !important;
+    transition: background 150ms ease, border-color 150ms ease, color 150ms ease !important;
+}
+[data-testid="stLinkButton"] a,
+[data-testid="stLinkButton"] a * {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+}
+[data-testid="stLinkButton"] a:hover {
+    background: #F9FAFB !important;
+    border-color: #D1D5DB !important;
+    color: #111827 !important;
     filter: none !important;
 }
 </style>
@@ -180,7 +223,7 @@ with main_col:
                 <strong style="color:#374151">{meta['title']}</strong>
             </div>
             """, unsafe_allow_html=True)
-            
+            st.markdown("<div style='height:12px'></div>", unsafe_allow_html=True)
             col_btn1, col_btn2 = st.columns(2)
             with col_btn1:
                 # 기사 상세 분석 페이지로 넘어가기
