@@ -809,23 +809,13 @@ for tab, debate in [(tab_stock, stock_d), (tab_theme, theme_d)]:
         # ── 토론 컨트롤 ────────────────────────────────────────
         sec_title("에이전트 토론")
 
-        ctrl1, ctrl2, _ = st.columns([1, 1, 4])
-        with ctrl1:
-            rounds = st.select_slider(
-                "토론 라운드",
-                options=[2, 3],
-                value=2,
-                key=f"rounds_{d_type}",
-                help="Bull ↔ Bear 토론을 몇 라운드 반복할지 선택합니다.",
-            )
-        with ctrl2:
-            st.markdown("<div style='height:28px'></div>", unsafe_allow_html=True)
-            do_debate = st.button(
-                "🚀 토론 시작",
-                key=f"start_{d_type}",
-                type="primary",
-                disabled=not _AGENTS_OK,
-            )
+        rounds = 2
+        do_debate = st.button(
+            "🚀 토론 시작",
+            key=f"start_{d_type}",
+            type="primary",
+            disabled=not _AGENTS_OK,
+        )
 
         # ── 토론 실행 ───────────────────────────────────────────
         if do_debate:
