@@ -95,6 +95,81 @@ SUPPORT_JSON      = os.path.join(_CONFIG_DIR, "support_data.json")
 MODEL             = os.getenv("OPENAI_MODEL", "gpt-5.4-mini")
 NEUTRAL_THRESHOLD = 0.05
 
+# ── 사이드바: 기술적 지표 가이드 ──────────────────────────────
+with st.sidebar:
+    st.markdown("""
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;
+                letter-spacing:1.2px;color:#F97316;margin-bottom:4px">
+        Technical Guide
+    </div>
+    <div style="font-size:18px;font-weight:800;color:#111827;margin-bottom:14px">
+        기술적 지표 설명
+    </div>
+    """, unsafe_allow_html=True)
+
+    _INDICATOR_GROUPS = [
+        ("📈 추세 지표", [
+            ("이동평균선", "MA 5/20/60/120/200",
+             "일정 기간 종가 평균. 단기(5·20일)와 장기(60·120·200일)를 비교해 추세 방향을 파악합니다."),
+            ("골든크로스", "MA20 ↑ MA60",
+             "단기 MA20이 장기 MA60을 상향 돌파할 때 발생. 상승 전환 신호로 해석됩니다."),
+            ("데드크로스", "MA20 ↓ MA60",
+             "단기 MA20이 장기 MA60을 하향 돌파할 때 발생. 하락 전환 신호로 해석됩니다."),
+        ]),
+        ("⚡ 모멘텀 지표", [
+            ("RSI", "14일 기준",
+             "과매수·과매도 측정. RSI > 70이면 과매수(하락 경계), RSI < 30이면 과매도(반등 기대) 구간입니다."),
+            ("MACD", "12·26·9일",
+             "단기·장기 지수이동평균 차이로 추세 변화를 포착. MACD선이 시그널선을 상향 돌파하면 매수 신호, 하향 돌파하면 매도 신호입니다."),
+        ]),
+        ("🎯 변동성 지표", [
+            ("볼린저 밴드", "20일, ±2σ",
+             "중심선(MA20) ± 표준편차 2배로 가격 범위를 표시. 상단 근접 시 과열, 하단 근접 시 과매도 가능성을 나타냅니다."),
+            ("이격도", "20일 기준",
+             "현재가 ÷ MA20 × 100. 100 초과면 평균 대비 고평가, 100 미만이면 저평가 상태입니다."),
+        ]),
+        ("📊 거래량 지표", [
+            ("거래량 변화율", "5일 이동 비교",
+             "최근 5일 평균 거래량을 직전 5일과 비교. 양수일수록 거래 참여도가 증가하는 추세입니다."),
+            ("거래량 급등", "20일 평균 × 2배",
+             "당일 거래량이 20일 평균의 2배를 초과하면 급등 판정. 강한 수급 변화나 이슈 발생을 시사합니다."),
+        ]),
+        ("🛡️ 지지·저항", [
+            ("지지선", "최근 20일 저가",
+             "최근 20거래일 중 최저가 기반. 주가가 이 수준에서 반등할 가능성이 있는 가격대입니다."),
+            ("저항선", "최근 20일 고가",
+             "최근 20거래일 중 최고가 기반. 주가가 이 수준에서 상승 둔화될 가능성이 있는 가격대입니다."),
+        ]),
+    ]
+
+    for _group_title, _items in _INDICATOR_GROUPS:
+        with st.expander(_group_title, expanded=False):
+            for _name, _param, _desc in _items:
+                st.markdown(f"""
+                <div style="margin-bottom:10px">
+                    <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:2px">
+                        <span style="font-size:13px;font-weight:700;color:#1F2937">{_name}</span>
+                        <span style="font-size:10px;font-weight:600;color:#F97316;
+                                     background:#FFF7ED;padding:1px 6px;border-radius:4px;
+                                     border:1px solid #FED7AA">{_param}</span>
+                    </div>
+                    <div style="font-size:12px;color:#6B7280;line-height:1.5">{_desc}</div>
+                </div>
+                """, unsafe_allow_html=True)
+
+    st.markdown("""
+    <div style="margin-top:16px;padding:10px 12px;background:#F0FDF4;border-radius:8px;
+                border-left:3px solid #22C55E">
+        <div style="font-size:11px;font-weight:700;color:#15803D;margin-bottom:4px">
+            💡 에이전트 활용 방식
+        </div>
+        <div style="font-size:11px;color:#166534;line-height:1.5">
+            Bull / Bear 에이전트는 위 지표를 입력 패키지로 받아 매수·매도 논거를 구성합니다.
+            동일 지표도 에이전트 관점에 따라 상반된 해석이 가능합니다.
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
 # ── 세션 상태 초기화 ─────────────────────────────────────────
 for _k in ("debate_stock", "debate_theme"):
     if _k not in st.session_state:
