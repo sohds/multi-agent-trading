@@ -1,195 +1,294 @@
 # multi-agent-trading
 
-[BITAmin] 1학기 프로젝트 - 멀티에이전트 교차 토론 기반 데일리 주식 시황 브리핑 시스템
-
-# 📈 AI 주식 뉴스레터 — 멀티에이전트 투자 브리핑 서비스
-
-> 한국 주식시장을 대상으로 하는 AI 기반 투자 뉴스레터 생성 플랫폼.
-> 여러 전문 에이전트가 협력·토론하여 투자 판단 콘텐츠를 자동 생성한다.
-> **매매 실행이 아닌 콘텐츠 생성**이 목적이며, 투자 교육 및 의사결정 보조에 초점을 맞춘다.
+[BITAmin] 2026 1학기 프로젝트 — 멀티에이전트 교차 토론 기반 AI 주식 브리핑 시스템
 
 ---
 
-## 🗂️ 프로젝트 개요
+## 프로젝트 개요
 
-### 핵심 개념
+한국 주식시장을 대상으로 Bull(매수) 에이전트와 Bear(매도) 에이전트가 실시간 시장 데이터를 바탕으로 교차 토론하고, 그 결과를 Streamlit 대시보드로 제공하는 AI 투자 브리핑 시스템입니다.
 
-- **멀티에이전트 토론 구조**: 매크로·섹터·심리 전문 에이전트가 각자의 관점을 분석한 뒤, 오케스트레이터 에이전트가 결론을 종합한다.
-- **배포 주기**: 매일 발행하는 코어 콘텐츠 + 주간 인사이트 + 온디맨드 도구로 구성된다.
-- **투명성 원칙**: 에이전트 합의 강도(예: 2/3), 신뢰도 등급, 판정 근거를 독자에게 공개한다.
+**매매 실행이 아닌 콘텐츠 생성**이 목적이며, 에이전트의 논거·신뢰도·반박 근거를 모두 공개해 투자 교육 및 의사결정 보조에 초점을 맞춥니다.
 
-### 아키텍처 핵심 패턴
+---
+
+## 시스템 아키텍처
 
 ```
-[전문 에이전트들] → [오케스트레이터] → [구조화된 콘텐츠 출력]
-  매크로 에이전트              ↑
-  섹터 에이전트         (합의 조율 + 결론 도출)
-  심리 에이전트
-  팩트체크 에이전트
+외부 데이터 소스
+├── pykrx               OHLCV, 수급 (외국인·기관·개인)
+├── yfinance            KOSPI·KOSDAQ·S&P 500·달러원·금 등 주요 지수
+├── 한국은행 ECOS API   장단기 금리차·신용 스프레드·CP 스프레드·은행채 스프레드
+├── Naver Finance       종목 밸류에이션 (PER·PBR·EPS), 뉴스 헤드라인
+└── VKOSPI              공포지수·심리 지표
+        │
+        ▼
+┌─────────────────────────────────────┐
+│          전문 데이터 에이전트         │
+│  macro/     거시경제 지표 수집·FSI·  │
+│             마코프 국면 전환 모형     │
+│  sector/    밸류에이션·수급·         │
+│             섹터 상대강도            │
+│  market/    심리 지표·VKOSPI·        │
+│             외국인 수급              │
+└──────────────┬──────────────────────┘
+               │  통합 입력 패키지
+               ▼
+┌─────────────────────────────────────┐
+│        Bull / Bear 교차 토론         │
+│  bull-bear/agents/bull_agent.py      │
+│  bull-bear/agents/bear_agent.py      │
+│  (OpenAI API, 2라운드 토론)          │
+└──────────────┬──────────────────────┘
+               │  stance · confidence · arguments · rebuttal
+               ▼
+┌─────────────────────────────────────┐
+│       Streamlit 대시보드             │
+│  dashboard/app.py       홈 (시장현황)│
+│  pages/1_Debate.py      토론 페이지  │
+│  pages/2_News_Translator.py 뉴스번역 │
+│  pages/3_Quiz.py        투자 퀴즈    │
+│  pages/4_News_Detail.py 뉴스 상세    │
+└─────────────────────────────────────┘
 ```
 
 ---
 
-## 📦 기능 목록
+## 폴더 구조
 
-### 🗓️ 매일 — 뉴스레터 코어
-
-| 기능명                   | 설명                                                                                           | 관련 에이전트                      |
-| ------------------------ | ---------------------------------------------------------------------------------------------- | ---------------------------------- |
-| **오늘 시장 한 줄 판정** | 글로벌 지표·뉴스를 흡수해 오늘 시장을 한 문장으로 요약. 신뢰도 낮으면 "불확실성 높음"으로 표기 | 매크로, 섹터, 심리, 오케스트레이터 |
-| **뉴스 번역기**          | 금융 전문용어를 일상 언어로 번역. 에이전트와 팩트체크 에이전트가 교차 검증, 원문 링크 제공     | 번역, 팩트체크                     |
-| **오늘의 투자 퀴즈**     | 당일 뉴스 기반 OX 퀴즈 1개. 정답 해설로 금융 리터러시 학습 유도                                | 뉴스 요약, 퀴즈 생성               |
-
-### 📅 주간 — 깊이 있는 인사이트
-
-| 기능명                              | 설명                                                                                                      | 관련 에이전트                           |
-| ----------------------------------- | --------------------------------------------------------------------------------------------------------- | --------------------------------------- |
-| **이번 주 경제 흐름 스토리로 읽기** | 금리·환율·고용·물가를 수치가 아닌 하나의 서사로 전환. 초보자 난이도로 조정                                | 매크로 수집, 스토리텔링                 |
-| **이번 주 주목할 ETF·상품 카드**    | 거시·섹터·심리 데이터를 기반으로 에이전트가 합의한 ETF·채권·예금 상품 3개 추천. 합의 강도 표시            | 매크로, 섹터, 상품 스캔, 오케스트레이터 |
-| **지난 주 예측 성적표**             | 지난주 에이전트 판정이 실제로 맞았는지 사후 검증. 이유 분석 및 투명 공개                                  | 사후 검증, 결과 비교, 가중치 피드백     |
-| **에이전트 토론 브리핑** ⭐         | 매주 핵심 주제 1개를 선정, 에이전트들이 3~4개 의견을 내고 오케스트레이터가 결론 도출. 토론 과정 전체 공개 | 매크로, 섹터, 심리, 오케스트레이터      |
-
-### 🔧 온디맨드 — 필요할 때 쓰는 도구
-
-| 기능명                 | 등급 | 설명                                                                                |
-| ---------------------- | ---- | ----------------------------------------------------------------------------------- |
-| **매수 전 3초 체크**   | 무료 | 종목명 입력 시 오늘 시장 맥락에 맞는 경고 자동 생성. 심리·매크로·섹터 분석          |
-| **증권사 리포트 번역** | 유료 | 기관 리포트 → 목표 주가·핵심 근거·위험 요인 3문단 요약. 팩트체크 에이전트 교차 검증 |
-| **AI 투자 멘토 1:1**   | 유료 | 오늘 뉴스·거시·상품 데이터를 컨텍스트로 주입, 개인화 질문에 실시간 답변             |
+```
+multi-agent-trading/
+├── bull-bear/                   Bull/Bear 에이전트 + 기술적 지표
+│   ├── agents/
+│   │   ├── _base.py             LLM 호출 레이어 (OpenAI API, JSON 파싱, 후처리)
+│   │   ├── bull_agent.py        Bull 에이전트 (낙관 프레임)
+│   │   ├── bear_agent.py        Bear 에이전트 (비관 프레임)
+│   │   └── field_glossary.json  필드명 → 한국어 해석 가이드 (LLM 주입용)
+│   ├── collectors/
+│   │   └── technical_indicators.py  pykrx + pandas_ta 기반 기술적 지표
+│   ├── backtest/                백테스트 프레임워크 (다중 신호 ablation)
+│   ├── experiments/             성능 검증 보고서 및 실험 결과 JSON
+│   ├── package_builder.py       매크로·섹터·심리 데이터를 통합 입력 패키지로 조립
+│   └── bull_bear_main.py        CLI 실행 진입점
+│
+├── macro/                       거시경제 에이전트
+│   ├── macro_collectors/
+│   │   ├── ecos_api.py          한국은행 ECOS API (금리·환율·스프레드)
+│   │   └── quant_models.py      FSI (PCA 기반) + 마코프 국면 전환 모형
+│   └── macro_agents/
+│       └── macro_agent.py       거시 데이터를 구조화 JSON으로 변환
+│
+├── sector/                      섹터 에이전트
+│   ├── sector_collectors/
+│   │   ├── valuation.py         PER·PBR·EPS (Naver Finance 크롤링)
+│   │   ├── supply_demand.py     외국인·기관·개인 수급 (pykrx)
+│   │   ├── relative_strength.py 종목·섹터·KOSPI 상대강도
+│   │   └── earnings.py          실적 데이터
+│   └── sector_agents/
+│       └── sector_agent.py      섹터 데이터 통합 분석
+│
+├── market/                      시장 심리 에이전트
+│   ├── market_collectors/
+│   │   └── sentiment_collector.py  VKOSPI·외국인 수급·시장 모멘텀
+│   └── market_agents/
+│       └── sentiment_agent.py   심리 점수·패닉·FOMO 신호 산출
+│
+├── debate/                      토론 주제 선정
+│   ├── naver_headline_crawler.py  네이버 금융 헤드라인 수집
+│   ├── debate_topic_agent.py    LLM 기반 토론 주제 생성
+│   └── debate_runner.py         토론 오케스트레이션
+│
+├── news-translator/             금융 뉴스 번역기
+│   ├── news_helper/             FastAPI 앱 + LLM 번역 로직
+│   └── data/terms_800_preprocessed.json  금융 용어 800개 사전
+│
+├── news-quiz/                   투자 퀴즈 생성기
+│   └── quiz_engine.py
+│
+├── dashboard/                   Streamlit 대시보드
+│   ├── app.py                   홈 (시장 현황 + 뉴스 미리보기)
+│   ├── pages/
+│   │   ├── 1_Debate.py          Bull/Bear 토론 메인 페이지
+│   │   ├── 2_News_Translator.py 뉴스 번역기
+│   │   ├── 3_Quiz.py            투자 퀴즈
+│   │   └── 4_News_Detail.py     뉴스 상세
+│   └── utils/
+│       └── styles.py            공통 CSS 인젝션
+│
+├── config/                      런타임 세션 상태 저장 (자동 생성)
+│   ├── session.json             토론 결과 캐시
+│   └── support_data.json        입력 패키지 캐시
+│
+└── requirements.txt
+```
 
 ---
 
-## 🤖 에이전트 구조
+## 핵심 기능
 
-### 전문 에이전트 (Specialist Agents)
+### Bull / Bear 교차 토론
 
-```python
-# 각 에이전트의 역할 분담
-agents = {
-    "macro_agent":    "금리, 환율, 고용, 물가 등 거시경제 지표 분석",
-    "sector_agent":   "산업별 실적 모멘텀, 섹터 로테이션 분석",
-    "sentiment_agent":"공포·탐욕 지수, 개인투자자 수급, 심리 지표 분석",
-    "factcheck_agent":"에이전트 간 주장 교차 검증, 오류 필터링",
-}
+- 동일한 입력 패키지(기술적 지표·거시·섹터·심리)를 Bull·Bear 에이전트가 각자의 프레임으로 해석
+- **2라운드** 구조: 1라운드에서 초기 논거 제시 → 2라운드에서 상대 주장을 직접 인용·반박
+- `confidence` 값은 주관적 자신감이 아닌 **신호 강도** 기준으로 산출 (0.8+ = 3개 이상 신호 일치)
+- LLM 출력 후처리(`_sanitize_output`)로 내부 필드명(`regime_probabilities`, `rsi_14` 등)을 자연어로 강제 치환
+
+### 거시 모델
+
+- **FSI (금융스트레스지수)**: KOSPI·환율·금리·스프레드 5개 지표의 PCA 합성 지수
+- **마코프 국면 전환 모형**: 정상(state_0) / 주의(state_1) / 위기(state_2) 국면 확률 실시간 산출
+
+### 섹터 분석
+
+| 분류 | 지표 |
+|------|------|
+| 밸류에이션 | PER·PBR 3년 히스토리 백분위, EPS YoY 변화율 |
+| 수급 | 외국인·기관 20일 누적 순매수, 연속 매수/매도 일수 |
+| 상대강도 | 1개월·3개월·6개월·1년 종목 vs 섹터 vs KOSPI |
+
+### 시장 심리
+
+- VKOSPI 공포지수, 외국인 순매수 흐름, KOSPI 당일 등락률
+- 심리 점수 0~1 (0=극단적 공포, 1=극단적 탐욕), 패닉·FOMO 신호 자동 감지
+
+### 대시보드
+
+- **홈**: yfinance 기반 주요 지수(KOSPI·KOSDAQ·S&P 500·나스닥·닛케이·달러원·금) SVG 스파크라인 + 5일 추이
+- **토론 페이지**: 종목 코드 입력 → 실시간 Bull/Bear 토론 → 채팅·카드 2가지 UI 전환
+- **뉴스 번역기**: 금융 전문용어 800개 매핑 기반 LLM 번역
+- **투자 퀴즈**: 당일 뉴스 기반 OX 퀴즈 자동 생성
+
+---
+
+## 백테스트 결과 요약
+
+`bull-bear/backtest/`에서 신호 조합(매크로·섹터·심리) ablation 실험을 수행했습니다.
+
+| 실험 | 신호 조합 | 비고 |
+|------|----------|------|
+| phase3a | macro | 기저선 |
+| phase3b | macro + sector | 섹터 수급·밸류에이션 추가 |
+| phase3c | macro + sector + sentiment | 심리 지표 추가 |
+| round2/3 | 전체 신호 반복 검증 | 안정성 확인 |
+
+- 좋은 지표 종목(SK하이닉스): Bull confidence 0.91 > Bear confidence 0.86 ✓
+- 나쁜 지표 종목(틱톡): Bear confidence 0.88 > Bull confidence 0.81 ✓
+- 2라운드에서 rebuttal이 상대 주장의 구체적 수치를 명시적으로 인용하는 품질 개선 확인
+
+자세한 결과는 [`bull-bear/experiments/FINAL_SUMMARY.md`](bull-bear/experiments/FINAL_SUMMARY.md) 참조.
+
+---
+
+## 환경 설정 및 실행
+
+### 1. 의존성 설치
+
+```bash
+# Python 3.11 이상 권장
+pip install -r requirements.txt
 ```
 
-### 오케스트레이터 에이전트 (Orchestrator)
+> **Python 3.13 주의**: `pykrx`가 내부적으로 `pkg_resources`를 사용합니다.
+> `requirements.txt`에 `setuptools==69.5.1`이 고정되어 있으므로 별도 조치 불필요.
 
-- 전문 에이전트 출력을 취합하여 최종 판정 생성
-- 에이전트 합의 강도 계산 (예: `2/3 · 중간`)
-- 결론과 근거를 구조화된 포맷으로 출력
+### 2. 환경변수 설정
 
-### 에이전트 토론 브리핑 예시 출력 구조
+프로젝트 루트에 `.env` 파일을 생성합니다:
+
+```dotenv
+# 필수
+OPENAI_API_KEY=sk-...
+
+# 한국은행 ECOS API (거시 데이터)
+ECOS_API_KEY=...
+
+# 선택 (기본값 사용 가능)
+TARGET_TICKER=005930       # 분석 종목 코드
+TARGET_NAME=삼성전자         # 분석 종목명
+SECTOR_ETF_TICKER=091160   # 섹터 ETF 코드
+OPENAI_MODEL=gpt-4o        # LLM 모델
+USE_MACRO=true
+USE_SECTOR=true
+USE_MARKET=true
+```
+
+### 3. 대시보드 실행
+
+```bash
+streamlit run dashboard/app.py
+```
+
+브라우저에서 `http://localhost:8501` 접속.
+
+### 4. CLI로 Bull/Bear 토론만 실행
+
+```bash
+cd bull-bear
+python bull_bear_main.py
+
+# 환경변수로 종목·라운드 지정
+TARGET_TICKER=000660 TARGET_NAME=SK하이닉스 python bull_bear_main.py
+```
+
+결과는 `bull-bear/output/debate_<종목코드>_<날짜시간>.json`으로 저장됩니다.
+
+---
+
+## 기술 스택
+
+| 분류 | 기술 |
+|------|------|
+| 언어 | Python 3.11+ |
+| LLM | OpenAI API (`gpt-4o` / `gpt-4o-mini`) |
+| 대시보드 | Streamlit |
+| 주식 데이터 | pykrx, yfinance |
+| 기술적 지표 | pandas_ta |
+| 거시 모델 | scikit-learn (PCA), statsmodels (HMM) |
+| 크롤링 | requests, BeautifulSoup4, Selenium |
+| 뉴스 번역 백엔드 | FastAPI, uvicorn |
+
+---
+
+## 에이전트 인터페이스
+
+Bull/Bear 에이전트 입출력 스펙 전체는 [`bull-bear/agent_interface_spec.md`](bull-bear/agent_interface_spec.md)에 정의되어 있습니다.
+
+**입력 패키지 구조:**
 
 ```json
 {
-  "topic": "지금 미국 나스닥에 투자해도 될까?",
-  "agent_opinions": [
-    {
-      "agent": "macro",
-      "stance": "bearish_short_term",
-      "summary": "CPI 예상치 상회 → 연준 금리 인하 지연 → 달러 강세 지속"
-    },
-    {
-      "agent": "sector",
-      "stance": "bullish_long_term",
-      "summary": "AI 빅테크 실적 가이던스가 시장 기대 상회, 실적 모멘텀 유효"
-    },
-    {
-      "agent": "sentiment",
-      "stance": "caution",
-      "summary": "공포·탐욕 74(탐욕 구간), 과거 유사 구간 단기 조정 확률 61%"
-    }
-  ],
-  "orchestrator": {
-    "verdict": "장기 보유라면 지금도 괜찮지만, 단기 목적이라면 2~3주 기다리는 게 낫습니다.",
-    "agreement_score": "2/3",
-    "agreement_level": "중간"
-  }
+  "topic":    "분석 주제",
+  "topic_type": "종목 | 시장전체 | 테마",
+  "technical": { "price": ..., "rsi_14": ..., "macd_signal": ..., ... },
+  "macro":     { "raw_indicators": ..., "quantitative_models": ..., ... },
+  "sector":    { "valuation": ..., "supply_demand": ..., "relative_strength": ... },
+  "sentiment": { "analysis": ..., "raw_data": ... },
+  "news_events": { "news_available": false }
+}
+```
+
+**에이전트 출력 구조:**
+
+```json
+{
+  "stance":     "bullish | bearish",
+  "confidence": 0.0,
+  "arguments":  [{ "claim": "...", "data_ref": "technical.rsi_14" }],
+  "rebuttal":   "상대 논거에 대한 토론 말투 반박 (null 가능)",
+  "summary":    "한 줄 요약"
 }
 ```
 
 ---
 
-## 🗄️ 데이터 파이프라인
+## 참고 논문
 
-### 데이터 소스
-
-```
-실시간 시장 데이터 (~70-80%, 직접 API 호출)
-├── pykrx                     # 한국 주식 OHLCV
-├── FinanceDataReader          # 국내외 지수, ETF
-├── pandas_ta / TA-Lib         # 기술적 지표 계산
-├── Alternative.me API         # 공포·탐욕 지수
-├── DART OpenAPI               # 기업 공시
-└── Naver Finance              # 뉴스, 종목 정보
-
-거시경제 데이터 (~15-20%, 내부 DB 캐싱)
-├── FRED API (fredapi)         # 미국 거시경제 지표
-└── 한국은행 ECOS API           # 국내 거시경제 지표
-
-비정형 문서 (~5-10%, RAG)
-├── 증권사 리서치 리포트
-├── 기업 실적 발표 자료 (earnings transcript)
-└── 중앙은행 의사록
-```
-
-### 데이터 흐름
-
-```
-외부 API → [데이터 수집 레이어] → [전문 에이전트 입력 포맷팅]
-                                          ↓
-                               [에이전트 병렬 분석]
-                                          ↓
-                               [오케스트레이터 종합]
-                                          ↓
-                               [콘텐츠 생성 & DB 저장]
-                                          ↓
-                               [뉴스레터 / UI 출력]
-```
-
----
-
-## 🗓️ 개발 로드맵 (Phase 0 → 4)
-
-| Phase       | 목표          | 핵심 산출물                                              |
-| ----------- | ------------- | -------------------------------------------------------- |
-| **Phase 0** | 기반 인프라   | 예측 이력 DB 스키마 설계 (⚠️ 이후 모든 기능의 선행 조건) |
-| **Phase 1** | 매일 코어     | 오늘 시장 한 줄 판정, 뉴스 번역기, 투자 퀴즈             |
-| **Phase 2** | 주간 인사이트 | 경제 흐름 스토리, ETF 상품 카드                          |
-| **Phase 3** | 토론 브리핑   | 에이전트 토론 브리핑, 온디맨드 도구                      |
-| **Phase 4** | 검증 시스템   | 지난 주 예측 성적표, 가중치 피드백 루프                  |
-
-> ⚠️ **Phase 0 우선 설계 필수**: 예측 이력 DB는 Phase 4 성적표 기능의 선행 의존성이므로, Phase 1 구현 전에 반드시 스키마를 확정해야 한다.
-
----
-
-## 🛠️ 기술 스택
-
-```
-Language   : Recommended Python version: 3.11
-LLM        : Claude API (Anthropic) — 멀티에이전트 오케스트레이션
-Agent Arch : Bull/Bear 토론 → 오케스트레이터 패턴 (TradingAgents 논문 참고)
-Protocol   : MCP (Model Context Protocol) — 외부 API 표준화 레이어
-Vector DB  : RAG용 (증권사 리포트, 공시 문서 등 비정형 데이터)
-Database   : 예측 이력, 에이전트 판정 로그 저장용 RDB
-```
-
----
-
-## 📐 설계 원칙
-
-1. **매매 실행 없음**: 이 시스템은 콘텐츠 생성 전용이다. 자동 주문·거래 기능은 포함하지 않는다.
-2. **투명성**: 에이전트 합의 강도, 신뢰도 등급, 판정 근거를 항상 함께 출력한다.
-3. **팩트체크 레이어**: 모든 주요 출력은 팩트체크 에이전트의 교차 검증을 거친다.
-4. **DB 선설계**: 예측 이력 DB 스키마는 Phase 0에서 확정한다. 이후 변경 시 전체 로그 일관성이 깨진다.
-5. **RAG는 비정형 문서 전용**: 실시간·정형 데이터는 직접 API 호출을 사용하고, RAG는 리서치 리포트·공시 문서 등 장문 비정형 문서에만 적용한다.
-
----
-
-## 📚 참고 논문 및 레퍼런스
-
-- **TradingAgents** (arXiv: 2412.20138, UCLA + MIT, 2024) — Bull/Bear 토론 파이프라인의 학술적 선행 연구
+- **TradingAgents** (arXiv: 2412.20138, UCLA + MIT, 2024) — Bull/Bear 교차 토론 파이프라인의 학술적 선행 연구
 - **TradingGPT** (Li et al., 2023) — 멀티에이전트 금융 분석 프레임워크
 - **Heterogeneous LLM Agents for Financial Sentiment Analysis** (Xing, 2024)
-- **MiroFish** — 멀티 페르소나 추론 개념 참고 (대규모 시뮬레이션 규모는 미채택)
+
+---
+
+## 주의사항
+
+이 시스템은 **투자 판단 참고용 콘텐츠 생성 도구**입니다. 자동 매매·주문 실행 기능은 포함하지 않으며, 에이전트의 판단이 실제 수익을 보장하지 않습니다.
