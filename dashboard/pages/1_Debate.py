@@ -367,7 +367,8 @@ def _chat_bubble_html(msg_type: str, rnd: int, data: dict) -> str:
         args_html = ""
         if args:
             items = "".join(
-                f'<li style="margin-bottom:4px">{a.get("claim","")}</li>'
+                f'<li style="margin-bottom:4px">{a.get("claim","")}'
+                f'<br><span style="color:#9E9E9E;font-size:11px">{a.get("data_ref","")}</span></li>'
                 for a in args
             )
             args_html = (
@@ -377,10 +378,12 @@ def _chat_bubble_html(msg_type: str, rnd: int, data: dict) -> str:
 
         rebuttal_html = ""
         if data.get("rebuttal"):
+            opp_lbl = "🐻 Bear 반박" if is_bull else "🐂 Bull 반박"
             rebuttal_html = (
-                f'<div style="margin-top:8px;font-size:12px;color:#757575;'
-                f'border-top:1px solid rgba(0,0,0,.08);padding-top:6px">'
-                f'↩ {data["rebuttal"]}</div>'
+                f'<div style="margin-top:8px;border-top:1px solid rgba(0,0,0,.08);padding-top:6px">'
+                f'<div style="font-size:10px;font-weight:700;color:#9E9E9E;margin-bottom:2px">{opp_lbl}</div>'
+                f'<div style="font-size:12px;color:#424242;line-height:1.6">{data["rebuttal"]}</div>'
+                f'</div>'
             )
 
         body = (
@@ -434,13 +437,18 @@ def _agent_card_html(is_bull: bool, data: dict | None) -> str:
     else:
         conf = float(data.get("confidence") or 0)
         args_html = "".join(
-            f'<li style="margin-bottom:3px;font-size:12px;color:#374151">{a.get("claim","")}</li>'
+            f'<li style="margin-bottom:3px;font-size:12px;color:#374151">{a.get("claim","")}'
+            f'<br><span style="color:#9CA3AF;font-size:10px">{a.get("data_ref","")}</span></li>'
             for a in (data.get("arguments") or [])
         )
         rebuttal = data.get("rebuttal") or ""
+        opponent_label = "🐻 Bear 논거에 대한 반박" if is_bull else "🐂 Bull 논거에 대한 반박"
         rebuttal_html = (
-            f'<div style="margin-top:10px;padding-top:8px;border-top:1px solid #F3F4F6;'
-            f'font-size:11px;color:#9CA3AF">↩ {rebuttal}</div>'
+            f'<div style="margin-top:10px;padding-top:8px;border-top:1px solid #F3F4F6">'
+            f'<div style="font-size:10px;font-weight:700;color:#9CA3AF;margin-bottom:3px">'
+            f'{opponent_label}</div>'
+            f'<div style="font-size:11px;color:#374151;line-height:1.6">{rebuttal}</div>'
+            f'</div>'
         ) if rebuttal else ""
         body = (
             f'<div style="padding:16px">'
