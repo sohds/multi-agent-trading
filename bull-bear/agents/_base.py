@@ -12,6 +12,24 @@ from dotenv import find_dotenv, load_dotenv
 
 load_dotenv(find_dotenv())
 
+_GLOSSARY_PATH = os.path.join(os.path.dirname(__file__), "field_glossary.json")
+
+
+def _load_glossary_section() -> str:
+    """field_glossary.json을 읽어 시스템 프롬프트용 compact 텍스트로 변환."""
+    try:
+        with open(_GLOSSARY_PATH, encoding="utf-8") as f:
+            g = json.load(f)
+        lines = []
+        for group, fields in g.items():
+            if group.startswith("_"):
+                continue
+            for key, desc in fields.items():
+                lines.append(f"  {group}.{key}: {desc}")
+        return "\n[데이터 필드 해석 가이드]\n아래 필드명의 의미를 참고해 claim을 자연어로 작성하세요.\n" + "\n".join(lines) + "\n"
+    except Exception:
+        return ""
+
 
 def _json_default(obj):
     """numpy scalar 등 비직렬화 타입을 Python 기본 타입으로 변환"""
@@ -45,6 +63,8 @@ def _call_llm(
     if not api_key:
         return {"error": "OPENAI_API_KEY가 설정되지 않았습니다. .env 파일을 확인하세요."}
 
+    full_system_prompt = system_prompt + _load_glossary_section()
+
     opponent_section = (
         json.dumps(opponent_argument, ensure_ascii=False, indent=2)
         if opponent_argument
@@ -66,7 +86,7 @@ def _call_llm(
             model=model,
             max_completion_tokens=1024,
             messages=[
-                {"role": "system", "content": system_prompt},
+                {"role": "system", "content": full_system_prompt},
                 {"role": "user", "content": user_message},
             ],
         )
