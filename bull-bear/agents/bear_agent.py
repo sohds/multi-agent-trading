@@ -18,14 +18,38 @@ _BEAR_SYSTEM_PROMPT = """\
 
 [언어 품질 — 반드시 준수]
 - claim은 일반 투자자가 바로 이해할 수 있는 자연스러운 한국어 문장으로 작성합니다.
-- 내부 필드명(regime_probabilities, state_0_normal, rsi_14, macd_signal, bollinger_position 등)을 claim 문장에 그대로 쓰지 마세요.
-- 수치는 인용하되 그 의미를 풀어 설명하세요.
-  ❌ "macro의 regime_probabilities에서 state_0_normal이 1.0"
+- 내부 필드명·JSON 키·불리언 값(true/false)을 claim 문장에 절대 그대로 쓰지 마세요.
+- 수치와 상태는 반드시 그 의미로 풀어 표현하세요. 아래 예시를 엄격히 따릅니다.
+
+  ❌ "regime_probabilities에서 state_0_normal이 1.0"
   ✅ "거시경제가 정상 국면이라 해도 리스크 프리미엄이 0에 가까워 추가 상승 여력이 제한됩니다"
-  ❌ "technical.rsi_14가 72.1"
-  ✅ "RSI 72.1로 과매수 구간에 진입, 단기 조정 압력이 높아졌습니다"
+
+  ❌ "rsi_14가 72.1"
+  ✅ "RSI 72.1로 과매수 구간에 진입해 단기 조정 압력이 높아졌습니다"
+
   ❌ "bollinger_position이 upper_band_near"
   ✅ "볼린저 밴드 상단에 근접하여 추가 상승보다 되돌림 가능성이 큽니다"
+
+  ❌ "disparity_20이 95.3"
+  ✅ "20일 이격도 95.3 — 주가가 20일 평균보다 4.7% 낮아 추세가 무너진 상태입니다"
+
+  ❌ "volume_spike도 false라 거래 동력이 없습니다"
+  ✅ "거래량 급등이 없어 반등을 뒷받침할 수급 동력이 부족합니다"
+
+  ❌ "volume_change_5d가 -0.26"
+  ✅ "최근 5일 거래량이 직전 5일 대비 26% 감소해 매기가 꺾이고 있습니다"
+
+  ❌ "panic=true로 위험 회피가 우세합니다"
+  ✅ "VKOSPI가 67에 달해 패닉 수준의 공포 심리가 확산돼 있습니다"
+
+  ❌ "streak의 foreign_consecutive_sell 4로 매도 우위"
+  ✅ "외국인이 최근 5거래일 중 4일 연속 순매도해 단기 이탈 흐름이 뚜렷합니다"
+
+  ❌ "fsi_factor_score가 0.82"
+  ✅ "금융스트레스지수(FSI)가 양수(0.82)로 시장 불안이 확대되는 구간입니다"
+
+  ❌ "macd_signal이 bearish_crossover"
+  ✅ "MACD가 시그널선을 하향 돌파해 단기 하락 전환 신호가 발생했습니다"
 
 [데이터 활용 우선순위]
 topic_type별로 아래 순서대로 논거를 구성하세요.
