@@ -325,18 +325,25 @@ with side_col:
         st.link_button("네이버 기사 원문 보기 →", url, use_container_width=True)
         
     st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
-    
-    st.markdown("""
+
+    difficulty_low_color = get_difficulty_color(0.5)
+    difficulty_mid_color = get_difficulty_color(0.75)
+    difficulty_high_color = get_difficulty_color(1.0)
+
+    st.markdown(f"""
     <div style="font-size:13px; font-weight:700; color:#374151; margin-bottom:10px;">난이도 색상 안내</div>
-    <div style="display:flex; flex-direction:column; gap:6px; font-size:12px; color:#6B7280;">
-        <div style="display:flex; align-items:center; gap:8px;">
-            <div style="width:14px; height:14px; border-radius:3px; background-color:hsl(60, 100%, 85%); border:1px solid #E5E7EB;"></div> 일반 (0.5)
+    <div style="display:flex; align-items:stretch; gap:12px; font-size:12px; color:#6B7280;">
+        <div style="position:relative; width:26px; height:124px; border-radius:6px;
+                    background:linear-gradient(to top, {difficulty_low_color} 0%, {difficulty_mid_color} 50%, {difficulty_high_color} 100%);
+                    border:1px solid #E5E7EB; box-shadow:inset 0 0 0 1px rgba(255,255,255,0.45);">
+            <div style="position:absolute; left:100%; top:0; width:7px; border-top:1px solid #9CA3AF;"></div>
+            <div style="position:absolute; left:100%; top:50%; width:7px; border-top:1px solid #9CA3AF;"></div>
+            <div style="position:absolute; left:100%; bottom:0; width:7px; border-top:1px solid #9CA3AF;"></div>
         </div>
-        <div style="display:flex; align-items:center; gap:8px;">
-            <div style="width:14px; height:14px; border-radius:3px; background-color:hsl(30, 100%, 85%); border:1px solid #E5E7EB;"></div> 심화 (0.75)
-        </div>
-        <div style="display:flex; align-items:center; gap:8px;">
-            <div style="width:14px; height:14px; border-radius:3px; background-color:hsl(0, 100%, 85%); border:1px solid #E5E7EB;"></div> 고난도 (1.0)
+        <div style="height:124px; display:flex; flex-direction:column; justify-content:space-between; padding:0 0 1px 0;">
+            <div><span style="font-weight:700; color:#374151;">고난도</span> <span style="color:#9CA3AF;">1.0</span></div>
+            <div><span style="font-weight:700; color:#374151;">심화</span> <span style="color:#9CA3AF;">0.75</span></div>
+            <div><span style="font-weight:700; color:#374151;">일반</span> <span style="color:#9CA3AF;">0.5</span></div>
         </div>
     </div>
     """, unsafe_allow_html=True)
