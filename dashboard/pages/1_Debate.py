@@ -807,7 +807,10 @@ for tab, debate in [(tab_stock, stock_d), (tab_theme, theme_d)]:
             if sector_data:
                 streak   = (sector_data.get("supply_demand") or {}).get("streak") or {}
                 sd_trend = streak.get("institutional_5d_trend", "—")
-                per_lbl  = ((sector_data.get("valuation") or {}).get("per_label") or "—")[:12]
+                _per_raw = (sector_data.get("valuation") or {}).get("per_label") or "—"
+                per_lbl  = {"역사적 저평가 구간 (하위 20%)": "저평가 (하위 20%)",
+                            "역사적 고평가 구간 (상위 20%)": "고평가 (상위 20%)",
+                            "역사적 중간 구간": "중간 구간"}.get(_per_raw, _per_raw)
                 yoy_v    = ((sector_data.get("earnings") or {}).get("yoy") or {}).get("op_income_chg")
                 yoy_op   = f"{yoy_v:+.1f}%" if yoy_v is not None else "—"
             st.markdown(f"""
