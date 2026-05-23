@@ -337,8 +337,7 @@ def _chat_bubble_html(msg_type: str, rnd: int, data: dict) -> str:
         args_html = ""
         if args:
             items = "".join(
-                f'<li style="margin-bottom:4px">{a.get("claim","")}'
-                f'<br><span style="color:#9E9E9E;font-size:11px">{a.get("data_ref","")}</span></li>'
+                f'<li style="margin-bottom:4px">{a.get("claim","")}</li>'
                 for a in args
             )
             args_html = (
@@ -405,8 +404,7 @@ def _agent_card_html(is_bull: bool, data: dict | None) -> str:
     else:
         conf = float(data.get("confidence") or 0)
         args_html = "".join(
-            f'<li style="margin-bottom:3px;font-size:12px;color:#374151">{a.get("claim","")}'
-            f'<br><span style="color:#9CA3AF;font-size:10px">{a.get("data_ref","")}</span></li>'
+            f'<li style="margin-bottom:3px;font-size:12px;color:#374151">{a.get("claim","")}</li>'
             for a in (data.get("arguments") or [])
         )
         rebuttal = data.get("rebuttal") or ""
