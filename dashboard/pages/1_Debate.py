@@ -51,6 +51,11 @@ inject_css()
 
 st.markdown("""
 <style>
+/* 사이드바 expander 제목 폰트 크기 */
+section[data-testid="stSidebar"] details summary p,
+section[data-testid="stSidebar"] [data-testid="stExpander"] summary p {
+    font-size: 13px !important;
+}
 /* 토론 시작·주제 생성 버튼: rounded-rect, ghost-orange */
 [data-testid="stButton"] > button[kind="primary"] {
     background: #FFFFFF !important;
@@ -387,7 +392,7 @@ def _chat_bubble_html(msg_type: str, rnd: int, data: dict) -> str:
             )
 
         body = (
-            f'<div style="font-size:13.5px;color:#212121;line-height:1.7">{summary}</div>'
+            f'<div style="font-size:15px;color:#212121;line-height:1.7">{summary}</div>'
             f'<div style="margin-top:8px">'
             f'  <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:#757575">'
             f'    <span>confidence</span>'

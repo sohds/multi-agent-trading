@@ -214,11 +214,31 @@ USE_MARKET=true
 
 ### 3. 대시보드 실행
 
+프로젝트 루트에서 실행:
+
 ```bash
 streamlit run dashboard/app.py
 ```
 
-브라우저에서 `http://localhost:8501` 접속.
+특정 포트로 실행하거나 외부 접속을 허용할 경우:
+
+```bash
+# 포트 지정
+streamlit run dashboard/app.py --server.port 8502
+
+# 외부 네트워크 접속 허용
+streamlit run dashboard/app.py --server.address 0.0.0.0
+```
+
+실행 후 브라우저에서 `http://localhost:8501` 접속.
+
+| 경로 | 페이지 |
+|------|--------|
+| `/` | 홈 — 주요 지수 현황 + 뉴스 미리보기 |
+| `/1_Debate` | 토론 브리핑 — Bull/Bear 에이전트 교차 토론 |
+| `/2_News_Translator` | 뉴스 번역기 — 금융 전문용어 번역 |
+| `/3_Quiz` | 투자 퀴즈 — 당일 뉴스 기반 OX 퀴즈 |
+| `/4_News_Detail` | 뉴스 상세 |
 
 ### 4. CLI로 Bull/Bear 토론만 실행
 
